@@ -1,0 +1,19 @@
+{
+  "name": "@zbigiman/constrjs.dom.module",
+  "version": "1.0.0",
+  "description": "ES6+ DOM elements manipulation, constrjs project",
+  "main": "dom.module.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ES6+",
+    "DOM",
+    "elements",
+    "manipulation",
+    "Javascript",
+    "constrjs"
+  ],
+  "author": "Zbigi Man Zbigniew Stępniewski",
+  "license": "ISC"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@zbigiman/constrjs.router.module",
+  "version": "1.0.0",
+  "description": "ES6+ client router, constrjs project",
+  "main": "router.module.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ES6+",
+    "router",
+    "Javascript",
+    "constrjs"
+  ],
+  "author": "Zbigi Man Zbigniew Stępniewski",
+  "license": "ISC"
+}
