@@ -15,5 +15,8 @@
     "constrjs"
   ],
   "author": "Zbigi Man Zbigniew Stępniewski",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }
