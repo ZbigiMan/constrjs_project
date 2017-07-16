@@ -1,0 +1,17 @@
+h1 {
+    font-size: em($font-size-h1);
+}
+
+h2 {
+    font-size: em($font-size-h2);
+}
+
+a {
+    color: $color-blue;
+    text-decoration: none;
+    &:hover,
+    &.active {
+        opacity: 0.7;
+    }
+    transition: all 0.4s ease;
+}

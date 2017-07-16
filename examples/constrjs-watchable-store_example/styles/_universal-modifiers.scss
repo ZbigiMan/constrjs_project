@@ -1,0 +1,27 @@
+.--text-center {
+    text-align: center;
+}
+
+.--text-right {
+    text-align: right;
+}
+
+.--text-bold {
+    font-weight: $bold;
+}
+
+.--visible-xs{
+    @media(min-width: $xs+1){
+        display: none;
+    }
+}
+.--hide-xs{
+    @media(max-width: $xs){
+        display: none;
+    }
+}
+.--hidden-alpha{
+    z-index: -999 !important;    
+    opacity: 0;
+    top: -100px !important;   
+}

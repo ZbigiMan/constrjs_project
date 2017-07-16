@@ -1,0 +1,77 @@
+<section class="profile">
+    <header class="container container__header">
+        <div class="content">
+            <div class="row --text-right row__logout">
+                <button type="button" class="btn btn--outline btn--outline-blue btn--secondary btn--secondary-bold btn--outline-blue__logout">Log out</button>
+            </div>
+            <div class="row --text-center row__upload-cover-img">
+                <button class="btn btn--outline btn--with-icon btn--outline__upload-cover-img">
+                    <i class="icon ion-android-camera"></i> <span class="text">Upload Cover Image</span>
+                </button>
+            </div>
+            <div class="row row--flex row__profile-image-and-info">
+                <div class="col col__profile-image">
+                    <div class="profile-img-continer">
+                        <div class="profile-img-continer profile-img-continer__image"></div>
+                    </div>
+                </div>
+                <div class="col col__profile-info">
+                    <div class="row row__profile-info">
+                        <h2 class="flex-item name">
+                            <span class="value">Jessica Parker</span>
+                        </h2>
+                        <h4 class="flex-item address"><i class="icon ion-ios-location-outline"></i>
+                            <span class="value">Newport Beach, CA</span>
+                        </h4>
+                        <h4 class="flex-item phone"><i class="icon ion-ios-telephone-outline"></i>
+                            <span class="value">(949) 325 - 68594</span>
+                        </h4>
+                    </div>
+                </div>
+                <div class="col col__reviews">
+                    <div class="row">
+                        <span class="stars">
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star-outline"></i>
+                        </span><br class="--visible-xs" />
+                        <span class="reviews-count">6</span>
+                        <span class="reviews">Reviews</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container container--shadow container__profile-navbar" id="profile-nav">
+        <div class="row row--flex">
+            <div class="col col__navbar">
+                <nav class="navbar navbar__profile">
+                    <div class="shadow-left"></div>
+                    <ul class="navbar-content content content__profile-navbar">
+                        <li class="navbar-item"><a data-router-link href="/profile/about">About</a></li>
+                        <li class="navbar-item"><a data-router-link href="/profile/settings">Settings</a></li>
+                        <li class="navbar-item"><a data-router-link href="/profile/option1">Option 1</a></li>
+                        <li class="navbar-item"><a data-router-link href="/profile/option2">Option 2</a></li>
+                        <li class="navbar-item"><a data-router-link href="/profile/option3">Option 3</a></li>
+                    </ul>
+                    <div class="shadow-right --visible-xs"></div>
+                </nav>
+            </div>
+            <div class="col col__followers">
+                <div class="content content__followers">
+                    <div class="row row--flex">
+                        <span class="flex-item __followers-plus"><i class="icon ion-ios-plus"></i></span>
+                        <span class="flex-item __folowers-count">15</span>
+                        <span class="flex-item __folowers">Followers</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <main class="container container--shadow container--subpage">
+        <div id="profile-route-output" class="content content--subpage"></div>
+    </main>
+</section>
