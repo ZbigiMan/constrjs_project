@@ -28,9 +28,11 @@ class App {
 
         app.store.set(app, 'searchTable.searchInput', 'test');
 
-        app.store.watch(app,'searchTable.searchInput',() =>{
-            console.log('watch');
-        });
+        app.store.watch(app,'searchTable.searchInput','search');
+
+        app.search = (data)=>{
+            console.log(data);
+        }        
 
         console.log(app.store.getAll());
 
