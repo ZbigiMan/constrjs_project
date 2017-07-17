@@ -23,20 +23,18 @@ class App {
                     searchInput: String,
                     searchResults: Object
                 }
-            }
+            },
+            console: true
+        });
+
+        app.store.watch(app, 'searchTable.searchInput', (data) => {
+            console.log('data', data);
         });
 
         app.store.set(app, 'searchTable.searchInput', 'test');
 
-        app.store.watch(app,'searchTable.searchInput','search');
 
-        app.search = (data)=>{
-            console.log(data);
-        }        
-
-        console.log(app.store.getAll());
-
-    }    
+    }
 }
 
 var app = new App();
