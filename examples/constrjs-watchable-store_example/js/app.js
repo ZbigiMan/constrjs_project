@@ -7,10 +7,7 @@ import { StoreModule } from '../../../source/constrjs.store.module/store.module'
 
 import { RouterModule } from '@zbigiman/constrjs.router.module';
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
-import loginTemplate from '../templates/login.html';
-import profileTemplate from '../templates/profile.html';
-import profileAboutTemplate from '../templates/profile-about.html';
-import profileSettingsTemplate from '../templates/profile-settings.html';
+
 
 class App {
     constructor() {
