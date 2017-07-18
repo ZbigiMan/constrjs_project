@@ -1,4 +1,4 @@
 // function to convert px to em
-@function em($pixels, $context: $medium) {
+@function em($pixels, $context: $font-size-medium) {
     @return #{$pixels/$context}em
 }

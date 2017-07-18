@@ -6,13 +6,13 @@
         border: 0 none;
         padding: em(10) 0;
         outline: none;
-        font-size: em($medium);
+        font-size: em($font-size-medium);
         color: $color-dark-gray;
         background: transparent;
     }
     label {
         text-transform: uppercase;
-        font-size: em($smaller);
+        font-size: em($font-size-smaller);
         color: $color-ligth-gray;
     }
     input+label {

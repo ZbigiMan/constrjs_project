@@ -2,7 +2,7 @@
     border: 0 none;
     outline: none;
     border-radius: em(3);
-    padding: em($medium);
+    padding: em($font-size-medium);
     text-align: center;
     line-height: 100%;
     cursor: pointer;
@@ -15,16 +15,16 @@
 .btn--primary {
     background: $color-blue;
     color: #fff;
-    font-size: em($small);
-    font-weight: $bold;
+    font-size: em($font-size-small);
+    font-weight: $font-weight-bold;
     text-transform: uppercase;
 }
 
 .btn--secondary {
-    font-size: em($smaller);
+    font-size: em($font-size-smaller);
     min-width: 100px;
     text-align: center;
-    padding: em($small);
+    padding: em($font-size-small);
 }
 
 .btn--wide {

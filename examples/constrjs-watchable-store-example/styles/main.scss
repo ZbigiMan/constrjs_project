@@ -8,46 +8,70 @@
 @import 'layout-form-elements';
 @import 'layout-buttons';
 
-.top{
+.logotype {
+    font-family: $font-logo;
+    font-weight: $font-weight-light;
+    background: $color-blue;
+    border-top: em(4) solid $color-blue;
+    border-bottom: em(5) solid $color-blue;
+    border-left: em(7) solid $color-blue;
+    border-right: em(7) solid $color-blue;
+    border-radius: em(3);
+    margin-right: em(7);
+}
+
+.logotype--outline{
+    box-shadow: 0px 0px 0px 1px $color-almost-white;
+}
+
+.logo {
+    font-family: $font-logo;
+    font-weight: $font-weight-light;
+    font-size: em($font-size-medium);
+    letter-spacing: em(1);
+}
+
+.top {
     background: $color-dark-gray;
     color: $color-almost-white;
-    .col__left{
-        width:50%;
+    .col__left {
+        width: 50%;
     }
-    .col__right{
-        width:50%;
+    .col__right {
+        width: 50%;
     }
 }
 
-.main{
+.main {
     color: $color-gray;
-    padding: em(20) 0;   
-   
-    .col__left{
-        width:70%;
+    padding: em(20) 0;
+    .col__left {
+        width: 70%;
         padding-right: em(10);
-         @media (max-width: $sm){
-             padding-right: em(5);
+        @media (max-width: $sm) {
+            padding-right: em(5);
             width: 50%;
         }
     }
-    .col__right{
-        width:30%;     
-        padding-left: em(10);   
-         @media (max-width: $sm){
-             padding-left: em(5);  
+    .col__right {
+        width: 30%;
+        padding-left: em(10);
+        @media (max-width: $sm) {
+            padding-left: em(5);
             width: 50%;
         }
     }
-    .content{
+    .content {
         border-radius: em(4);
-        min-height: 65vh;       
-    }    
+        min-height: 62vh;
+    }
 }
 
-.footer{
-    background: $color-blue;   
-    font-size: em($small); 
+.footer {
+    background: $color-blue;    
     color: $color-white;
     min-height: em(120);
+}
+.footer__logo{
+    margin-top: em(10);
 }

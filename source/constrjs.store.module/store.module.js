@@ -1,5 +1,5 @@
 // StoreModule
-// ES6+ watchable store, constrjs project
+// ES6+ watchable store | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 import _ from 'lodash';
 export class StoreModule {

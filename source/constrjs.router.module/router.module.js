@@ -1,5 +1,5 @@
 // RouterModule
-// ES6+ client router, constrjs project
+// ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
 export class RouterModule {

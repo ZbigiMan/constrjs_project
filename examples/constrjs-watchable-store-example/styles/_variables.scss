@@ -17,17 +17,21 @@ $color-green: #1cac78;
 
 //fonts
 $font-primary: 'Open Sans', sans-serif;
+$font-logo: 'Roboto', sans-serif;
 
 //fonts sizes
-$medium: 16;
-$small: 14;
-$smaller: 12;
+$font-size-medium: 16;
+$font-size-small: 14;
+$font-size-smaller: 12;
 $font-size-h1: 26;
 $font-size-h2: 22;
 $font-size-h3: 18;
 $font-size-h4: 16;
+$font-size-h5: 14;
 
 //font styles
-$regular: 400;
-$bold: 700;
-$semibold: 600;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+$font-weight-medium: 500;
+$font-weight-smibold: 600;

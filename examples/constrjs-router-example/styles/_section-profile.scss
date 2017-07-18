@@ -82,7 +82,7 @@ section.profile {
                     }
                 }
                 .name {
-                    font-weight: $semibold;
+                    font-weight: $font-weight-smibold;
                     margin-bottom: 10px;
                     @media(max-width: $xs) {
                         text-align: center;
@@ -108,7 +108,7 @@ section.profile {
                 }
                 .reviews-count {
                     font-size: em(14);
-                    font-weight: $semibold;
+                    font-weight: $font-weight-smibold;
                     margin-right: 10px;
                 }
                 .reviews {
