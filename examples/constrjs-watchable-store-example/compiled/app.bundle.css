@@ -1,0 +1,273 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.\--padding-standard {
+  padding: 1.25em; }
+
+.\--color-blue {
+  color: #1f75fe; }
+
+.\--color-red {
+  color: #ee204d; }
+
+.\--color-green {
+  color: #1cac78; }
+
+.\--background-white {
+  background: #fff; }
+
+.\--text-center {
+  text-align: center; }
+
+.\--text-right {
+  text-align: right; }
+
+.\--text-bold {
+  font-weight: 700; }
+
+@media (min-width: 681px) {
+  .\--visible-xs {
+    display: none; } }
+
+@media (max-width: 680px) {
+  .\--hide-xs {
+    display: none; } }
+
+h1 {
+  font-size: 1.625em;
+  padding-bottom: 0.625em; }
+
+h2 {
+  font-size: 1.375em;
+  padding-bottom: 0.625em; }
+
+a {
+  color: #1f75fe;
+  text-decoration: none;
+  transition: all 0.4s ease; }
+  a:hover, a.active {
+    opacity: 0.7; }
+
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.5em;
+  font-size: 1em;
+  background: #ededed; }
+
+/*
+The layout structure:
+
+.container
+    .content        
+        .row .row--flex
+            .col
+                .content            
+*/
+.container {
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto; }
+  @media (max-width: 680px) {
+    .container {
+      width: 100%; } }
+  @media (min-width: 768px) {
+    .container {
+      width: 95%; } }
+  @media (min-width: 1024px) {
+    .container {
+      width: 90%; } }
+  @media (min-width: 1200px) {
+    .container {
+      width: 1170px; } }
+
+.container--fullwidth {
+  width: 100%; }
+
+.container--fullscreen {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  box-sizing: border-box;
+  overflow: hidden; }
+
+.content {
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto; }
+
+.content--vertival-center {
+  top: 50%;
+  transform: translateY(-50%); }
+
+.row {
+  position: relative;
+  box-sizing: border-box; }
+
+.row--flex {
+  display: flex;
+  flex-wrap: wrap; }
+
+.col {
+  box-sizing: border-box; }
+  @media (max-width: 680px) {
+    .col {
+      width: 100%; } }
+
+/* 
+End of the layout structrue
+*/
+/*
+The layout elements:
+*/
+.hr {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  border-top: 1px solid #ededed; }
+
+.navbar .navbar-content {
+  display: inline-flex; }
+  .navbar .navbar-content .navbar-item a {
+    white-space: nowrap; }
+
+.form-field {
+  overflow: hidden; }
+  .form-field input {
+    display: block;
+    clear: both;
+    border: 0 none;
+    padding: 0.625em 0;
+    outline: none;
+    font-size: 1em;
+    color: #333;
+    background: transparent; }
+  .form-field label {
+    text-transform: uppercase;
+    font-size: 0.75em;
+    color: #cdc5c2; }
+  .form-field input + label {
+    transition: all 0.4s ease;
+    position: absolute;
+    opacity: 0; }
+  .form-field input:focus + label {
+    transform: translateY(-230%);
+    opacity: 1; }
+
+.btn {
+  border: 0 none;
+  outline: none;
+  border-radius: 0.1875em;
+  padding: 1em;
+  text-align: center;
+  line-height: 100%;
+  cursor: pointer;
+  transition: all 0.4s ease; }
+  .btn:hover {
+    opacity: 0.8; }
+
+.btn--primary {
+  background: #1f75fe;
+  color: #fff;
+  font-size: 0.875em;
+  font-weight: 700;
+  text-transform: uppercase; }
+
+.btn--secondary {
+  font-size: 0.75em;
+  min-width: 100px;
+  text-align: center;
+  padding: 0.875em; }
+
+.btn--wide {
+  width: 100%;
+  text-align: center; }
+
+.btn--outline {
+  border: 1px solid #ededed;
+  color: #95918c;
+  background: transparent; }
+
+.btn--outline-blue {
+  border-color: #1f75fe;
+  color: #1f75fe; }
+
+.top {
+  background: #333;
+  color: #ededed; }
+  .top .col__left {
+    width: 50%; }
+  .top .col__right {
+    width: 50%; }
+
+.main {
+  color: #95918c;
+  padding: 1.25em 0; }
+  .main .col__left {
+    width: 70%;
+    padding-right: 0.625em; }
+    @media (max-width: 768px) {
+      .main .col__left {
+        padding-right: 0.3125em;
+        width: 50%; } }
+  .main .col__right {
+    width: 30%;
+    padding-left: 0.625em; }
+    @media (max-width: 768px) {
+      .main .col__right {
+        padding-left: 0.3125em;
+        width: 50%; } }
+  .main .content {
+    border-radius: 0.25em;
+    min-height: 65vh; }
+
+.footer {
+  background: #1f75fe;
+  font-size: 0.875em;
+  color: #fff;
+  min-height: 7.5em; }

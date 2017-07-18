@@ -1,0 +1,43 @@
+.btn {
+    border: 0 none;
+    outline: none;
+    border-radius: em(3);
+    padding: em($medium);
+    text-align: center;
+    line-height: 100%;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+    transition: all 0.4s ease;
+}
+
+.btn--primary {
+    background: $color-blue;
+    color: #fff;
+    font-size: em($small);
+    font-weight: $bold;
+    text-transform: uppercase;
+}
+
+.btn--secondary {
+    font-size: em($smaller);
+    min-width: 100px;
+    text-align: center;
+    padding: em($small);
+}
+
+.btn--wide {
+    width: 100%;
+    text-align: center;
+}
+
+.btn--outline {
+    border: 1px solid $color-almost-white;
+    color: $color-gray;
+    background: transparent;    
+}
+.btn--outline-blue{
+    border-color: $color-blue;
+    color: $color-blue;
+}

@@ -1,3 +1,23 @@
+.--padding-standard{
+    padding: em(20);
+}
+
+.--color-blue{
+    color: $color-blue
+}
+
+.--color-red{
+    color: $color-red;
+}
+
+.--color-green{
+    color: $color-green;
+}
+
+.--background-white{
+    background: #fff;
+}
+
 .--text-center {
     text-align: center;
 }
@@ -19,9 +39,4 @@
     @media(max-width: $xs){
         display: none;
     }
-}
-.--hidden-alpha{
-    z-index: -999 !important;    
-    opacity: 0;
-    top: -100px !important;   
 }

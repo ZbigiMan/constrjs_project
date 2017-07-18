@@ -1,0 +1,10 @@
+.navbar {
+    .navbar-content {
+        display: inline-flex;
+        .navbar-item {
+            a {
+                white-space: nowrap;
+            }
+        }
+    }
+}

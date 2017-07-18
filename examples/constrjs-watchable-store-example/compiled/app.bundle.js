@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -132,6 +132,15 @@ var DOMModule = exports.DOMModule = function () {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -269,7 +278,185 @@ var RouterModule = exports.RouterModule = function () {
 }();
 
 /***/ }),
-/* 2 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.StoreModule = undefined;
+
+var _lodash = __webpack_require__(7);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // StoreModule
+// ES6+ watchable store, constrjs project
+// Author: Zbigi Man Zbigniew Stępniewski 2017
+
+
+var StoreModule = exports.StoreModule = function StoreModule(settings) {
+    var _this = this;
+
+    _classCallCheck(this, StoreModule);
+
+    //prototypes
+    Object.prototype.str = function () {
+        return JSON.stringify(this);
+    };
+
+    //settings
+    var storeModule = this,
+        store = settings.store,
+        watched = new Array();
+
+    //console
+    if (settings.console != true) {
+        console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = function () {
+            return false;
+        };
+    } else {
+        console.logStore = function (log) {
+            console.log(log);
+        };
+        console.logTime = function (log) {
+            console.time(log);
+        };
+        console.logTimeEnd = function (log) {
+            console.timeEnd(log);
+        };
+        console.logGroup = function (log) {
+            console.group(log);
+        };
+        console.logGroupEnd = function () {
+            console.groupEnd();
+        };
+    }
+    //\console    
+
+    var onWatch = function onWatch(caller, path, value) {
+        var parts = path.split('.');
+        var table = parts[0];
+        if (watched[table] !== undefined) {
+            watched[table].forEach(function (fullpath) {
+                var parts = fullpath.split('~');
+                var watchedPath = parts[1],
+                    watcherName = parts[0];
+                if (watched[table][fullpath] !== undefined) {
+                    var reaction = watched[table][fullpath]['reaction'],
+                        watcher = watched[table][fullpath]['watcher'],
+                        data = storeModule.get({ name: '~store' }, watchedPath),
+                        logWatch = 'Store => Watch ',
+                        logWatcher = 'Watcher: ' + watcherName,
+                        logAction = 'Reaction: ' + reaction,
+                        log = 'done in';
+                    console.logGroup(logWatch);
+                    console.logTime(log);
+                    console.logStore(logWatcher);
+                    console.logStore(logAction);
+                    if (watcher[reaction] !== undefined) {
+                        watcher[reaction].apply(watcher, [data]);
+                    } else if (typeof reaction == 'function') {
+                        reaction.apply(watcher, [data]);
+                    }
+                    console.logTimeEnd(log);
+                    console.logGroupEnd();
+                }
+            });
+            console.logGroupEnd();
+        } else {
+            console.logGroupEnd();
+        }
+    };
+
+    //GET ALL STORE
+    this.getAll = function () {
+        return JSON.parse(store.str());
+    };
+
+    //GET
+    this.get = function (caller, path) {
+        var log = 'Done in',
+            callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        if (caller.name !== '~store') {
+            console.logGroup('Store => GET');
+            console.logTime(log);
+        }
+        var value = _lodash2.default.get(JSON.parse(store.str()), path);
+        if (value === undefined) {
+            return;
+        }
+        if (caller.name !== '~store') {
+            console.logTimeEnd(log);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+        }
+        return value;
+    };
+
+    //SET
+    this.set = function (caller, path, value) {
+        var log = 'Done in',
+            callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        console.logGroup('Store => SET');
+        console.logTime(log);
+        var prevValue = _this.get({ name: '~store' }, path) || {};
+        if (prevValue.str() == value.str() && app.ready !== true) {
+            console.logTimeEnd(log);
+            console.logStore(logcaller);
+            console.logStore('Skipped: nothig changed');
+            console.logGroupEnd();
+            return;
+        }
+        _lodash2.default.set(store, path, value);
+        console.logTimeEnd(log);
+        console.logStore(logcaller);
+        console.logStore(logPath);
+        console.logStore('Value:');
+        console.logStore(value);
+        console.logGroupEnd();
+        onWatch(caller, path, value);
+    };
+
+    //WATCH
+    this.watch = function (watcher, path, reaction) {
+        var watcherName = watcher.name || watcher.constructor.name,
+            paths = path;
+        if (Array.isArray(path) === false) {
+            paths = [path];
+        }
+        paths.forEach(function (path) {
+            var fullpath = watcherName + "~" + path;
+            var parts = path.split('.');
+            var table = parts[0];
+            if (watched[table] === undefined) {
+                watched[table] = [];
+            }
+            if (watched[table].indexOf(fullpath) == -1) {
+                watched[table].push(fullpath);
+                watched[table][fullpath] = {
+                    reaction: reaction,
+                    watcher: watcher
+                };
+            }
+        });
+    };
+};
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -285,497 +472,36 @@ var RouterModule = exports.RouterModule = function () {
 }();
 
 /***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-// StoreModule
-// ES6+ watchable store, constrjs project
-// Author: Zbigi Man Zbigniew Stępniewski 2017
-
-class StoreModule {
-    constructor(settings) {
-
-        //prototypes
-        Object.prototype.str = function () {
-            return JSON.stringify(this);
-        };
-
-        //settings
-        var storeModule = this,
-            store = settings.store,
-            watched = new Array();
-
-        //console
-        if (settings.console != true) {
-            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = () => {
-                return false;
-            };
-        } else {
-            console.logStore = log => {
-                console.log(log);
-            };
-            console.logTime = log => {
-                console.time(log);
-            };
-            console.logTimeEnd = log => {
-                console.timeEnd(log);
-            };
-            console.logGroup = log => {
-                console.group(log);
-            };
-            console.logGroupEnd = () => {
-                console.groupEnd();
-            };
-        }
-        //\console    
-
-        var onWatch = (caller, path, value) => {
-            let parts = path.split('.');
-            let table = parts[0];
-            if (watched[table] !== undefined) {
-                watched[table].forEach(fullpath => {
-                    let parts = fullpath.split('~');
-                    let watchedPath = parts[1],
-                        watcherName = parts[0];
-                    if (watched[table][fullpath] !== undefined) {
-                        let reaction = watched[table][fullpath]['reaction'],
-                            watcher = watched[table][fullpath]['watcher'],
-                            data = storeModule.get({ name: '~store' }, watchedPath),
-                            logWatch = 'Store => Watch ',
-                            logWatcher = 'Watcher: ' + watcherName,
-                            logAction = 'Reaction: ' + reaction,
-                            log = 'done in';
-                        console.logGroup(logWatch);
-                        console.logTime(log);
-                        console.logStore(logWatcher);
-                        console.logStore(logAction);
-                        if (watcher[reaction] !== undefined) {
-                            watcher[reaction].apply(watcher, [data]);
-                        } else if (typeof reaction == 'function') {
-                            reaction.apply(watcher, [data]);
-                        }
-                        console.logTimeEnd(log);
-                        console.logGroupEnd();
-                    }
-                });
-                console.logGroupEnd();
-            } else {
-                console.logGroupEnd();
-            }
-        };
-
-        //GET ALL STORE
-        this.getAll = () => {
-            return JSON.parse(store.str());
-        };
-
-        //GET
-        this.get = (caller, path) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            if (caller.name !== '~store') {
-                console.logGroup('Store => GET');
-                console.logTime(log);
-            }
-            let value = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.get(JSON.parse(store.str()), path);
-            if (value === undefined) {
-                return;
-            }
-            if (caller.name !== '~store') {
-                console.logTimeEnd(log);
-                console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
-                console.logGroupEnd();
-            }
-            return value;
-        };
-
-        //SET
-        this.set = (caller, path, value) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => SET');
-            console.logTime(log);
-            let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str() && app.ready !== true) {
-                console.logTimeEnd(log);
-                console.logStore(logcaller);
-                console.logStore('Skipped: nothig changed');
-                console.logGroupEnd();
-                return;
-            }
-            __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.set(store, path, value);
-            console.logTimeEnd(log);
-            console.logStore(logcaller);
-            console.logStore(logPath);
-            console.logStore('Value:');
-            console.logStore(value);
-            console.logGroupEnd();
-            onWatch(caller, path, value);
-        };
-
-        //WATCH
-        this.watch = (watcher, path, reaction) => {
-            let watcherName = watcher.name || watcher.constructor.name,
-                paths = path;
-            if (Array.isArray(path) === false) {
-                paths = [path];
-            }
-            paths.forEach(path => {
-                let fullpath = watcherName + "~" + path;
-                let parts = path.split('.');
-                let table = parts[0];
-                if (watched[table] === undefined) {
-                    watched[table] = [];
-                }
-                if (watched[table].indexOf(fullpath) == -1) {
-                    watched[table].push(fullpath);
-                    watched[table][fullpath] = {
-                        reaction: reaction,
-                        watcher: watcher
-                    };
-                }
-            });
-        };
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["StoreModule"] = StoreModule;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _template() {return `<section class="login">
-    <div class="container container--fullscreen container__login-bg">
-        <div class="content content--vertival-center content__login">
-            <h1 class="--text-center">Login</h1>
-            <div class="hr hr__login --hide-xs"></div>
-            <div class="form-field">
-                <input id="email" name="name" type="email" placeholder="Email" required>
-                <label for="email">Email</label>
-            </div>
-            <div class="hr hr__login"></div>
-            <div class="form-field">
-                <input id="password" name="password" type="password" placeholder="Password" required>
-                <label for="password">Password</label>
-            </div>
-            <div class="hr hr__login"></div>
-            <div class="dsc --text-center">
-                By signing up or clicking continue, I confirm that I have read and agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
-            </div>
-            <button id="login-button" class="btn btn--primary btn--wide btn__login-button">Login</button>
-        </div>
-    </div>
-</section>`;}/* harmony default export */ __webpack_exports__["default"] = (function (ctx) {return _template.call(ctx, ctx);});;
-
-/***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _template() {return `<section class="subpage subpage__aubout">
-    <!-- Mobile content -->
-    <form class="form form--subpage form__change-first-name --visible-xs">
-        <div class="row row--flex row__title">
-            <h1 class="flex-item">Profile info</h1>
-            <div class="flex-tem flex-item__buttons --visible-xs">
-                <button type="button" class="btn btn--primary btn--secondary btn--secondary-mobile">Cancel</button>
-                <button type="button" class="btn btn--primary btn--secondary btn--secondary-mobile">Save</button>
-            </div>
-        </div>
-        <div class="form-field">
-            <input type="text" name="first-name" id="first-name" placeholder="First Name">
-            <label for="first-name">First Name</label>
-        </div>
-        <div class="form-field">
-            <input type="text" name="last-name" id="last-name" placeholder="Last Name">
-            <label for="last-name">Last Name</label>
-        </div>
-        <div class="form-field">
-            <input type="text" name="website" id="website" placeholder="Website">
-            <label for="website">Website</label>
-        </div>
-        <div class="form-field">
-            <input type="text" name="phone" id="phone" placeholder="Phone Number">
-            <label for="phone">Phone Number</label>
-        </div>
-        <div class="form-field">
-            <input type="text" name="address" id="address" placeholder="City, State &amp; ZIP">
-            <label for="address">City, State &amp; ZIP</label>
-        </div>
-        <button type="button" class="btn btn--primary btn--secondary --hide-xs">Save</button>
-    </form>
-    <!-- Desktop content -->
-    <div class="about__desktop --hide-xs">
-        <div class="row__title">
-            <h1>Profile info</h1>
-        </div>
-        <div class="row row__profile-info --hide-xs">
-            <div class="row row--flex row__name">
-                <span class="flex-item value">Jesica Parker</span>
-                <button class="flex-item btn btn--tool btn__edit" data-target="row__name">
-                    <i class="icon ion-edit"></i>                
-                </button>
-                <!-- pop up -->
-                <div class="flex-item popup-edit popup-edit__name --hidden-alpha">
-                    <div class="content content--popup">
-                        <form class="form--subpage">
-                            <div class="form-field">
-                                <input type="text" name="name" id="name" placeholder="First Name">
-                                <label for="name">First Name</label>
-                            </div>
-                            <button type="button" class="btn btn--primary btn--secondary">Save</button>
-                            <button type="button" class="btn btn--outline btn--outline-blue btn--primary btn--secondary btn__cancel">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /pop up -->
-            </div>
-            <div class="row row--flex row__www">
-                <i class="flex-item icon ion-earth"></i>
-                <span class="flex-item value">www.seller.com</span>
-                <button class="flex-item btn btn--tool btn__edit" data-target="row__www">
-                <i class="icon ion-edit"></i>
-            </button>
-            <!-- pop up -->
-                <div class="flex-item popup-edit popup-edit__website --hidden-alpha">
-                    <div class="content content--popup">
-                        <form class="form--subpage">
-                            <div class="form-field">
-                                <input type="text" name="website" id="website" placeholder="Website">
-                                <label for="website">Website</label>
-                            </div>
-                            <button type="button" class="btn btn--primary btn--secondary">Save</button>
-                            <button type="button" class="btn btn--outline btn--outline-blue btn--primary btn--secondary btn__cancel">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /pop up -->
-            </div>
-            <div class="row row--flex row__phone">
-                <i class="flex-item icon ion-ios-telephone-outline"></i>
-                <span class="flex-item value">(949) 325 - 68594</span>
-                <button class="flex-item btn btn--tool btn__edit" data-target="row__phone">
-                <i class="icon ion-edit"></i>
-            </button>
-            <!-- pop up -->
-                <div class="flex-item popup-edit popup-edit__phone --hidden-alpha">
-                    <div class="content content--popup">
-                        <form class="form--subpage">
-                            <div class="form-field">
-                                <input type="text" name="phone" id="phone" placeholder="Phone Number">
-                                <label for="phone">Phone Number</label>
-                            </div>
-                            <button type="button" class="btn btn--primary btn--secondary">Save</button>
-                            <button type="button" class="btn btn--outline btn--outline-blue btn--primary btn--secondary btn__cancel">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /pop up -->
-            </div>
-            <div class="row row--flex row__address">
-                <i class="flex-item icon ion-ios-home-outline"></i>
-                <span class="flex-item value">Newport Beach, CA</span>
-                <button class="flex-item btn btn--tool btn__edit" data-target="row__address">
-                <i class="icon ion-edit"></i>
-            </button>
-            <!-- pop up -->
-                <div class="flex-item popup-edit popup-edit__address --hidden-alpha">
-                    <div class="content content--popup">
-                        <form class="form--subpage">
-                            <div class="form-field">
-                                <input type="text" name="address" id="address" placeholder="City, State &amp; ZIP">
-                                <label for="address">City, State &amp; ZIP</label>
-                            </div>
-                            <button type="button" class="btn btn--primary btn--secondary">Save</button>
-                            <button type="button" class="btn btn--outline btn--outline-blue btn--primary btn--secondary btn__cancel">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /pop up -->
-            </div>
-        </div>
-    </div>
-</section>`;}/* harmony default export */ __webpack_exports__["default"] = (function (ctx) {return _template.call(ctx, ctx);});;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _template() {return `<section class="subpage subpage__settings">
-    <form class="form form--subpage form__change-password">
-        <div class="row row--flex row__title">
-            <h1 class="flex-item">Settings</h1>
-            <div class="flex-tem flex-item__buttons --visible-xs">
-                <button type="button" class="btn btn--primary btn--secondary btn--secondary-mobile">Cancel</button>
-                <button type="button" class="btn btn--primary btn--secondary btn--secondary-mobile">Save</button>
-            </div>
-        </div>        
-        <div class="form-field">
-            <input type="password" name="existing-password" id="existing-password" placeholder="Existing Password">
-            <label for="existing-password">Existing Password</label>
-        </div>
-        <div class="form-field">
-            <input type="password" name="new-password" id="new-password" placeholder="New Password">
-            <label for="new-password">Existing Password</label>
-        </div>
-        <div class="form-field">
-            <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password">
-            <label for="confirm-password">Confirm Password</label>
-        </div>
-        <button type="button" class="btn btn--primary btn--secondary --hide-xs">Save</button>
-    </form>
-</section>`;}/* harmony default export */ __webpack_exports__["default"] = (function (ctx) {return _template.call(ctx, ctx);});;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _template() {return `<section class="profile">
-    <header class="container container__header">
-        <div class="content">
-            <div class="row --text-right row__logout">
-                <button type="button" class="btn btn--outline btn--outline-blue btn--secondary btn--secondary-bold btn--outline-blue__logout">Log out</button>
-            </div>
-            <div class="row --text-center row__upload-cover-img">
-                <button class="btn btn--outline btn--with-icon btn--outline__upload-cover-img">
-                    <i class="icon ion-android-camera"></i> <span class="text">Upload Cover Image</span>
-                </button>
-            </div>
-            <div class="row row--flex row__profile-image-and-info">
-                <div class="col col__profile-image">
-                    <div class="profile-img-continer">
-                        <div class="profile-img-continer profile-img-continer__image"></div>
-                    </div>
-                </div>
-                <div class="col col__profile-info">
-                    <div class="row row__profile-info">
-                        <h2 class="flex-item name">
-                            <span class="value">Jessica Parker</span>
-                        </h2>
-                        <h4 class="flex-item address"><i class="icon ion-ios-location-outline"></i>
-                            <span class="value">Newport Beach, CA</span>
-                        </h4>
-                        <h4 class="flex-item phone"><i class="icon ion-ios-telephone-outline"></i>
-                            <span class="value">(949) 325 - 68594</span>
-                        </h4>
-                    </div>
-                </div>
-                <div class="col col__reviews">
-                    <div class="row">
-                        <span class="stars">
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star-outline"></i>
-                        </span><br class="--visible-xs" />
-                        <span class="reviews-count">6</span>
-                        <span class="reviews">Reviews</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="container container--shadow container__profile-navbar" id="profile-nav">
-        <div class="row row--flex">
-            <div class="col col__navbar">
-                <nav class="navbar navbar__profile">
-                    <div class="shadow-left"></div>
-                    <ul class="navbar-content content content__profile-navbar">
-                        <li class="navbar-item"><a data-router-link href="/profile/about">About</a></li>
-                        <li class="navbar-item"><a data-router-link href="/profile/settings">Settings</a></li>
-                        <li class="navbar-item"><a data-router-link href="/profile/option1">Option 1</a></li>
-                        <li class="navbar-item"><a data-router-link href="/profile/option2">Option 2</a></li>
-                        <li class="navbar-item"><a data-router-link href="/profile/option3">Option 3</a></li>
-                    </ul>
-                    <div class="shadow-right --visible-xs"></div>
-                </nav>
-            </div>
-            <div class="col col__followers">
-                <div class="content content__followers">
-                    <div class="row row--flex">
-                        <span class="flex-item __followers-plus"><i class="icon ion-ios-plus"></i></span>
-                        <span class="flex-item __folowers-count">15</span>
-                        <span class="flex-item __folowers">Followers</span>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <main class="container container--shadow container--subpage">
-        <div id="profile-route-output" class="content content--subpage"></div>
-    </main>
-</section>`;}/* harmony default export */ __webpack_exports__["default"] = (function (ctx) {return _template.call(ctx, ctx);});;
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 9 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(2);
-
-var _store = __webpack_require__(3);
-
-var _constrjsRouter = __webpack_require__(1);
+__webpack_require__(4);
 
 var _constrjsDom = __webpack_require__(0);
 
-var _login = __webpack_require__(4);
+var _constrjsStore = __webpack_require__(3);
 
-var _login2 = _interopRequireDefault(_login);
-
-var _profile = __webpack_require__(7);
-
-var _profile2 = _interopRequireDefault(_profile);
-
-var _profileAbout = __webpack_require__(5);
-
-var _profileAbout2 = _interopRequireDefault(_profileAbout);
-
-var _profileSettings = __webpack_require__(6);
-
-var _profileSettings2 = _interopRequireDefault(_profileSettings);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _constrjsRouter = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(8);
+__webpack_require__(5);
 
 var App = function App() {
     _classCallCheck(this, App);
 
     var app = this;
 
-    app.store = new _store.StoreModule({
+    app.store = new _constrjsStore.StoreModule({
         store: {
             searchTable: {
                 searchInput: String,
@@ -792,73 +518,14 @@ var App = function App() {
     app.store.set(app, 'searchTable.searchInput', 'test');
 };
 
-var app = new App();
+new App();
 
 /***/ }),
-/* 10 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function (module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function () {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function get() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function get() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
+/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};/**
  * @license
  * Lodash <https://lodash.com/>
  * Copyright JS Foundation and other contributors <https://js.foundation/>
@@ -871,12 +538,12 @@ module.exports = function (module) {
    */var reRegExpChar=/[\\^$.*+?()[\]{}|]/g,reHasRegExpChar=RegExp(reRegExpChar.source);/** Used to match leading and trailing whitespace. */var reTrim=/^\s+|\s+$/g,reTrimStart=/^\s+/,reTrimEnd=/\s+$/;/** Used to match wrap detail comments. */var reWrapComment=/\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,reWrapDetails=/\{\n\/\* \[wrapped with (.+)\] \*/,reSplitDetails=/,? & /;/** Used to match words composed of alphanumeric characters. */var reAsciiWord=/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;/** Used to match backslashes in property paths. */var reEscapeChar=/\\(\\)?/g;/**
    * Used to match
    * [ES template delimiters](http://ecma-international.org/ecma-262/7.0/#sec-template-literal-lexical-components).
-   */var reEsTemplate=/\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;/** Used to match `RegExp` flags from their coerced string values. */var reFlags=/\w*$/;/** Used to detect bad signed hexadecimal string values. */var reIsBadHex=/^[-+]0x[0-9a-f]+$/i;/** Used to detect binary string values. */var reIsBinary=/^0b[01]+$/i;/** Used to detect host constructors (Safari). */var reIsHostCtor=/^\[object .+?Constructor\]$/;/** Used to detect octal string values. */var reIsOctal=/^0o[0-7]+$/i;/** Used to detect unsigned integer values. */var reIsUint=/^(?:0|[1-9]\d*)$/;/** Used to match Latin Unicode letters (excluding mathematical operators). */var reLatin=/[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;/** Used to ensure capturing order of template delimiters. */var reNoMatch=/($^)/;/** Used to match unescaped characters in compiled string literals. */var reUnescapedString=/['\n\r\u2028\u2029\\]/g;/** Used to compose unicode character classes. */var rsAstralRange='\\ud800-\\udfff',rsComboMarksRange='\\u0300-\\u036f',reComboHalfMarksRange='\\ufe20-\\ufe2f',rsComboSymbolsRange='\\u20d0-\\u20ff',rsComboRange=rsComboMarksRange+reComboHalfMarksRange+rsComboSymbolsRange,rsDingbatRange='\\u2700-\\u27bf',rsLowerRange='a-z\\xdf-\\xf6\\xf8-\\xff',rsMathOpRange='\\xac\\xb1\\xd7\\xf7',rsNonCharRange='\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf',rsPunctuationRange='\\u2000-\\u206f',rsSpaceRange=' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',rsUpperRange='A-Z\\xc0-\\xd6\\xd8-\\xde',rsVarRange='\\ufe0e\\ufe0f',rsBreakRange=rsMathOpRange+rsNonCharRange+rsPunctuationRange+rsSpaceRange;/** Used to compose unicode capture groups. */var rsApos="['\u2019]",rsAstral='['+rsAstralRange+']',rsBreak='['+rsBreakRange+']',rsCombo='['+rsComboRange+']',rsDigits='\\d+',rsDingbat='['+rsDingbatRange+']',rsLower='['+rsLowerRange+']',rsMisc='[^'+rsAstralRange+rsBreakRange+rsDigits+rsDingbatRange+rsLowerRange+rsUpperRange+']',rsFitz='\\ud83c[\\udffb-\\udfff]',rsModifier='(?:'+rsCombo+'|'+rsFitz+')',rsNonAstral='[^'+rsAstralRange+']',rsRegional='(?:\\ud83c[\\udde6-\\uddff]){2}',rsSurrPair='[\\ud800-\\udbff][\\udc00-\\udfff]',rsUpper='['+rsUpperRange+']',rsZWJ='\\u200d';/** Used to compose unicode regexes. */var rsMiscLower='(?:'+rsLower+'|'+rsMisc+')',rsMiscUpper='(?:'+rsUpper+'|'+rsMisc+')',rsOptContrLower='(?:'+rsApos+'(?:d|ll|m|re|s|t|ve))?',rsOptContrUpper='(?:'+rsApos+'(?:D|LL|M|RE|S|T|VE))?',reOptMod=rsModifier+'?',rsOptVar='['+rsVarRange+']?',rsOptJoin='(?:'+rsZWJ+'(?:'+[rsNonAstral,rsRegional,rsSurrPair].join('|')+')'+rsOptVar+reOptMod+')*',rsOrdLower='\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',rsOrdUpper='\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',rsSeq=rsOptVar+reOptMod+rsOptJoin,rsEmoji='(?:'+[rsDingbat,rsRegional,rsSurrPair].join('|')+')'+rsSeq,rsSymbol='(?:'+[rsNonAstral+rsCombo+'?',rsCombo,rsRegional,rsSurrPair,rsAstral].join('|')+')';/** Used to match apostrophes. */var reApos=RegExp(rsApos,'g');/**
+   */var reEsTemplate=/\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;/** Used to match `RegExp` flags from their coerced string values. */var reFlags=/\w*$/;/** Used to detect bad signed hexadecimal string values. */var reIsBadHex=/^[-+]0x[0-9a-f]+$/i;/** Used to detect binary string values. */var reIsBinary=/^0b[01]+$/i;/** Used to detect host constructors (Safari). */var reIsHostCtor=/^\[object .+?Constructor\]$/;/** Used to detect octal string values. */var reIsOctal=/^0o[0-7]+$/i;/** Used to detect unsigned integer values. */var reIsUint=/^(?:0|[1-9]\d*)$/;/** Used to match Latin Unicode letters (excluding mathematical operators). */var reLatin=/[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;/** Used to ensure capturing order of template delimiters. */var reNoMatch=/($^)/;/** Used to match unescaped characters in compiled string literals. */var reUnescapedString=/['\n\r\u2028\u2029\\]/g;/** Used to compose unicode character classes. */var rsAstralRange='\\ud800-\\udfff',rsComboMarksRange='\\u0300-\\u036f',reComboHalfMarksRange='\\ufe20-\\ufe2f',rsComboSymbolsRange='\\u20d0-\\u20ff',rsComboRange=rsComboMarksRange+reComboHalfMarksRange+rsComboSymbolsRange,rsDingbatRange='\\u2700-\\u27bf',rsLowerRange='a-z\\xdf-\\xf6\\xf8-\\xff',rsMathOpRange='\\xac\\xb1\\xd7\\xf7',rsNonCharRange='\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf',rsPunctuationRange='\\u2000-\\u206f',rsSpaceRange=' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',rsUpperRange='A-Z\\xc0-\\xd6\\xd8-\\xde',rsVarRange='\\ufe0e\\ufe0f',rsBreakRange=rsMathOpRange+rsNonCharRange+rsPunctuationRange+rsSpaceRange;/** Used to compose unicode capture groups. */var rsApos='[\'\u2019]',rsAstral='['+rsAstralRange+']',rsBreak='['+rsBreakRange+']',rsCombo='['+rsComboRange+']',rsDigits='\\d+',rsDingbat='['+rsDingbatRange+']',rsLower='['+rsLowerRange+']',rsMisc='[^'+rsAstralRange+rsBreakRange+rsDigits+rsDingbatRange+rsLowerRange+rsUpperRange+']',rsFitz='\\ud83c[\\udffb-\\udfff]',rsModifier='(?:'+rsCombo+'|'+rsFitz+')',rsNonAstral='[^'+rsAstralRange+']',rsRegional='(?:\\ud83c[\\udde6-\\uddff]){2}',rsSurrPair='[\\ud800-\\udbff][\\udc00-\\udfff]',rsUpper='['+rsUpperRange+']',rsZWJ='\\u200d';/** Used to compose unicode regexes. */var rsMiscLower='(?:'+rsLower+'|'+rsMisc+')',rsMiscUpper='(?:'+rsUpper+'|'+rsMisc+')',rsOptContrLower='(?:'+rsApos+'(?:d|ll|m|re|s|t|ve))?',rsOptContrUpper='(?:'+rsApos+'(?:D|LL|M|RE|S|T|VE))?',reOptMod=rsModifier+'?',rsOptVar='['+rsVarRange+']?',rsOptJoin='(?:'+rsZWJ+'(?:'+[rsNonAstral,rsRegional,rsSurrPair].join('|')+')'+rsOptVar+reOptMod+')*',rsOrdLower='\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',rsOrdUpper='\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',rsSeq=rsOptVar+reOptMod+rsOptJoin,rsEmoji='(?:'+[rsDingbat,rsRegional,rsSurrPair].join('|')+')'+rsSeq,rsSymbol='(?:'+[rsNonAstral+rsCombo+'?',rsCombo,rsRegional,rsSurrPair,rsAstral].join('|')+')';/** Used to match apostrophes. */var reApos=RegExp(rsApos,'g');/**
    * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
    * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
    */var reComboMark=RegExp(rsCombo,'g');/** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */var reUnicode=RegExp(rsFitz+'(?='+rsFitz+')|'+rsSymbol+rsSeq,'g');/** Used to match complex or compound words. */var reUnicodeWord=RegExp([rsUpper+'?'+rsLower+'+'+rsOptContrLower+'(?='+[rsBreak,rsUpper,'$'].join('|')+')',rsMiscUpper+'+'+rsOptContrUpper+'(?='+[rsBreak,rsUpper+rsMiscLower,'$'].join('|')+')',rsUpper+'?'+rsMiscLower+'+'+rsOptContrLower,rsUpper+'+'+rsOptContrUpper,rsOrdUpper,rsOrdLower,rsDigits,rsEmoji].join('|'),'g');/** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */var reHasUnicode=RegExp('['+rsZWJ+rsAstralRange+rsComboRange+rsVarRange+']');/** Used to detect strings that need a more robust regexp to match words. */var reHasUnicodeWord=/[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;/** Used to assign default `context` object properties. */var contextProps=['Array','Buffer','DataView','Date','Error','Float32Array','Float64Array','Function','Int8Array','Int16Array','Int32Array','Map','Math','Object','Promise','RegExp','Set','String','Symbol','TypeError','Uint8Array','Uint8ClampedArray','Uint16Array','Uint32Array','WeakMap','_','clearTimeout','isFinite','parseInt','setTimeout'];/** Used to make template sourceURLs easier to identify. */var templateCounter=-1;/** Used to identify `toStringTag` values of typed arrays. */var typedArrayTags={};typedArrayTags[float32Tag]=typedArrayTags[float64Tag]=typedArrayTags[int8Tag]=typedArrayTags[int16Tag]=typedArrayTags[int32Tag]=typedArrayTags[uint8Tag]=typedArrayTags[uint8ClampedTag]=typedArrayTags[uint16Tag]=typedArrayTags[uint32Tag]=true;typedArrayTags[argsTag]=typedArrayTags[arrayTag]=typedArrayTags[arrayBufferTag]=typedArrayTags[boolTag]=typedArrayTags[dataViewTag]=typedArrayTags[dateTag]=typedArrayTags[errorTag]=typedArrayTags[funcTag]=typedArrayTags[mapTag]=typedArrayTags[numberTag]=typedArrayTags[objectTag]=typedArrayTags[regexpTag]=typedArrayTags[setTag]=typedArrayTags[stringTag]=typedArrayTags[weakMapTag]=false;/** Used to identify `toStringTag` values supported by `_.clone`. */var cloneableTags={};cloneableTags[argsTag]=cloneableTags[arrayTag]=cloneableTags[arrayBufferTag]=cloneableTags[dataViewTag]=cloneableTags[boolTag]=cloneableTags[dateTag]=cloneableTags[float32Tag]=cloneableTags[float64Tag]=cloneableTags[int8Tag]=cloneableTags[int16Tag]=cloneableTags[int32Tag]=cloneableTags[mapTag]=cloneableTags[numberTag]=cloneableTags[objectTag]=cloneableTags[regexpTag]=cloneableTags[setTag]=cloneableTags[stringTag]=cloneableTags[symbolTag]=cloneableTags[uint8Tag]=cloneableTags[uint8ClampedTag]=cloneableTags[uint16Tag]=cloneableTags[uint32Tag]=true;cloneableTags[errorTag]=cloneableTags[funcTag]=cloneableTags[weakMapTag]=false;/** Used to map Latin Unicode letters to basic Latin letters. */var deburredLetters={// Latin-1 Supplement block.
 '\xc0':'A','\xc1':'A','\xc2':'A','\xc3':'A','\xc4':'A','\xc5':'A','\xe0':'a','\xe1':'a','\xe2':'a','\xe3':'a','\xe4':'a','\xe5':'a','\xc7':'C','\xe7':'c','\xd0':'D','\xf0':'d','\xc8':'E','\xc9':'E','\xca':'E','\xcb':'E','\xe8':'e','\xe9':'e','\xea':'e','\xeb':'e','\xcc':'I','\xcd':'I','\xce':'I','\xcf':'I','\xec':'i','\xed':'i','\xee':'i','\xef':'i','\xd1':'N','\xf1':'n','\xd2':'O','\xd3':'O','\xd4':'O','\xd5':'O','\xd6':'O','\xd8':'O','\xf2':'o','\xf3':'o','\xf4':'o','\xf5':'o','\xf6':'o','\xf8':'o','\xd9':'U','\xda':'U','\xdb':'U','\xdc':'U','\xf9':'u','\xfa':'u','\xfb':'u','\xfc':'u','\xdd':'Y','\xfd':'y','\xff':'y','\xc6':'Ae','\xe6':'ae','\xde':'Th','\xfe':'th','\xdf':'ss',// Latin Extended-A block.
-'\u0100':'A','\u0102':'A','\u0104':'A','\u0101':'a','\u0103':'a','\u0105':'a','\u0106':'C','\u0108':'C','\u010a':'C','\u010c':'C','\u0107':'c','\u0109':'c','\u010b':'c','\u010d':'c','\u010e':'D','\u0110':'D','\u010f':'d','\u0111':'d','\u0112':'E','\u0114':'E','\u0116':'E','\u0118':'E','\u011a':'E','\u0113':'e','\u0115':'e','\u0117':'e','\u0119':'e','\u011b':'e','\u011c':'G','\u011e':'G','\u0120':'G','\u0122':'G','\u011d':'g','\u011f':'g','\u0121':'g','\u0123':'g','\u0124':'H','\u0126':'H','\u0125':'h','\u0127':'h','\u0128':'I','\u012a':'I','\u012c':'I','\u012e':'I','\u0130':'I','\u0129':'i','\u012b':'i','\u012d':'i','\u012f':'i','\u0131':'i','\u0134':'J','\u0135':'j','\u0136':'K','\u0137':'k','\u0138':'k','\u0139':'L','\u013b':'L','\u013d':'L','\u013f':'L','\u0141':'L','\u013a':'l','\u013c':'l','\u013e':'l','\u0140':'l','\u0142':'l','\u0143':'N','\u0145':'N','\u0147':'N','\u014a':'N','\u0144':'n','\u0146':'n','\u0148':'n','\u014b':'n','\u014c':'O','\u014e':'O','\u0150':'O','\u014d':'o','\u014f':'o','\u0151':'o','\u0154':'R','\u0156':'R','\u0158':'R','\u0155':'r','\u0157':'r','\u0159':'r','\u015a':'S','\u015c':'S','\u015e':'S','\u0160':'S','\u015b':'s','\u015d':'s','\u015f':'s','\u0161':'s','\u0162':'T','\u0164':'T','\u0166':'T','\u0163':'t','\u0165':'t','\u0167':'t','\u0168':'U','\u016a':'U','\u016c':'U','\u016e':'U','\u0170':'U','\u0172':'U','\u0169':'u','\u016b':'u','\u016d':'u','\u016f':'u','\u0171':'u','\u0173':'u','\u0174':'W','\u0175':'w','\u0176':'Y','\u0177':'y','\u0178':'Y','\u0179':'Z','\u017b':'Z','\u017d':'Z','\u017a':'z','\u017c':'z','\u017e':'z','\u0132':'IJ','\u0133':'ij','\u0152':'Oe','\u0153':'oe','\u0149':"'n",'\u017f':'s'};/** Used to map characters to HTML entities. */var htmlEscapes={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};/** Used to map HTML entities to characters. */var htmlUnescapes={'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'"};/** Used to escape characters for inclusion in compiled string literals. */var stringEscapes={'\\':'\\',"'":"'",'\n':'n','\r':'r','\u2028':'u2028','\u2029':'u2029'};/** Built-in method references without a dependency on `root`. */var freeParseFloat=parseFloat,freeParseInt=parseInt;/** Detect free variable `global` from Node.js. */var freeGlobal=typeof global=='object'&&global&&global.Object===Object&&global;/** Detect free variable `self`. */var freeSelf=typeof self=='object'&&self&&self.Object===Object&&self;/** Used as a reference to the global object. */var root=freeGlobal||freeSelf||Function('return this')();/** Detect free variable `exports`. */var freeExports=typeof exports=='object'&&exports&&!exports.nodeType&&exports;/** Detect free variable `module`. */var freeModule=freeExports&&typeof module=='object'&&module&&!module.nodeType&&module;/** Detect the popular CommonJS extension `module.exports`. */var moduleExports=freeModule&&freeModule.exports===freeExports;/** Detect free variable `process` from Node.js. */var freeProcess=moduleExports&&freeGlobal.process;/** Used to access faster Node.js helpers. */var nodeUtil=function(){try{return freeProcess&&freeProcess.binding&&freeProcess.binding('util');}catch(e){}}();/* Node.js helper references. */var nodeIsArrayBuffer=nodeUtil&&nodeUtil.isArrayBuffer,nodeIsDate=nodeUtil&&nodeUtil.isDate,nodeIsMap=nodeUtil&&nodeUtil.isMap,nodeIsRegExp=nodeUtil&&nodeUtil.isRegExp,nodeIsSet=nodeUtil&&nodeUtil.isSet,nodeIsTypedArray=nodeUtil&&nodeUtil.isTypedArray;/*--------------------------------------------------------------------------*//**
+'\u0100':'A','\u0102':'A','\u0104':'A','\u0101':'a','\u0103':'a','\u0105':'a','\u0106':'C','\u0108':'C','\u010A':'C','\u010C':'C','\u0107':'c','\u0109':'c','\u010B':'c','\u010D':'c','\u010E':'D','\u0110':'D','\u010F':'d','\u0111':'d','\u0112':'E','\u0114':'E','\u0116':'E','\u0118':'E','\u011A':'E','\u0113':'e','\u0115':'e','\u0117':'e','\u0119':'e','\u011B':'e','\u011C':'G','\u011E':'G','\u0120':'G','\u0122':'G','\u011D':'g','\u011F':'g','\u0121':'g','\u0123':'g','\u0124':'H','\u0126':'H','\u0125':'h','\u0127':'h','\u0128':'I','\u012A':'I','\u012C':'I','\u012E':'I','\u0130':'I','\u0129':'i','\u012B':'i','\u012D':'i','\u012F':'i','\u0131':'i','\u0134':'J','\u0135':'j','\u0136':'K','\u0137':'k','\u0138':'k','\u0139':'L','\u013B':'L','\u013D':'L','\u013F':'L','\u0141':'L','\u013A':'l','\u013C':'l','\u013E':'l','\u0140':'l','\u0142':'l','\u0143':'N','\u0145':'N','\u0147':'N','\u014A':'N','\u0144':'n','\u0146':'n','\u0148':'n','\u014B':'n','\u014C':'O','\u014E':'O','\u0150':'O','\u014D':'o','\u014F':'o','\u0151':'o','\u0154':'R','\u0156':'R','\u0158':'R','\u0155':'r','\u0157':'r','\u0159':'r','\u015A':'S','\u015C':'S','\u015E':'S','\u0160':'S','\u015B':'s','\u015D':'s','\u015F':'s','\u0161':'s','\u0162':'T','\u0164':'T','\u0166':'T','\u0163':'t','\u0165':'t','\u0167':'t','\u0168':'U','\u016A':'U','\u016C':'U','\u016E':'U','\u0170':'U','\u0172':'U','\u0169':'u','\u016B':'u','\u016D':'u','\u016F':'u','\u0171':'u','\u0173':'u','\u0174':'W','\u0175':'w','\u0176':'Y','\u0177':'y','\u0178':'Y','\u0179':'Z','\u017B':'Z','\u017D':'Z','\u017A':'z','\u017C':'z','\u017E':'z','\u0132':'IJ','\u0133':'ij','\u0152':'Oe','\u0153':'oe','\u0149':"'n",'\u017F':'s'};/** Used to map characters to HTML entities. */var htmlEscapes={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};/** Used to map HTML entities to characters. */var htmlUnescapes={'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'"};/** Used to escape characters for inclusion in compiled string literals. */var stringEscapes={'\\':'\\',"'":"'",'\n':'n','\r':'r','\u2028':'u2028','\u2029':'u2029'};/** Built-in method references without a dependency on `root`. */var freeParseFloat=parseFloat,freeParseInt=parseInt;/** Detect free variable `global` from Node.js. */var freeGlobal=(typeof global==='undefined'?'undefined':_typeof(global))=='object'&&global&&global.Object===Object&&global;/** Detect free variable `self`. */var freeSelf=(typeof self==='undefined'?'undefined':_typeof(self))=='object'&&self&&self.Object===Object&&self;/** Used as a reference to the global object. */var root=freeGlobal||freeSelf||Function('return this')();/** Detect free variable `exports`. */var freeExports=( false?'undefined':_typeof(exports))=='object'&&exports&&!exports.nodeType&&exports;/** Detect free variable `module`. */var freeModule=freeExports&&( false?'undefined':_typeof(module))=='object'&&module&&!module.nodeType&&module;/** Detect the popular CommonJS extension `module.exports`. */var moduleExports=freeModule&&freeModule.exports===freeExports;/** Detect free variable `process` from Node.js. */var freeProcess=moduleExports&&freeGlobal.process;/** Used to access faster Node.js helpers. */var nodeUtil=function(){try{return freeProcess&&freeProcess.binding&&freeProcess.binding('util');}catch(e){}}();/* Node.js helper references. */var nodeIsArrayBuffer=nodeUtil&&nodeUtil.isArrayBuffer,nodeIsDate=nodeUtil&&nodeUtil.isDate,nodeIsMap=nodeUtil&&nodeUtil.isMap,nodeIsRegExp=nodeUtil&&nodeUtil.isRegExp,nodeIsSet=nodeUtil&&nodeUtil.isSet,nodeIsTypedArray=nodeUtil&&nodeUtil.isTypedArray;/*--------------------------------------------------------------------------*//**
    * Adds the key-value `pair` to `map`.
    *
    * @private
@@ -1339,7 +1006,7 @@ set.add(value);return set;}/**
      * Used to resolve the
      * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
      * of values.
-     */var nativeObjectToString=objectProto.toString;/** Used to infer the `Object` constructor. */var objectCtorString=funcToString.call(Object);/** Used to restore the original `_` reference in `_.noConflict`. */var oldDash=root._;/** Used to detect if a method is native. */var reIsNative=RegExp('^'+funcToString.call(hasOwnProperty).replace(reRegExpChar,'\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,'$1.*?')+'$');/** Built-in value references. */var Buffer=moduleExports?context.Buffer:undefined,Symbol=context.Symbol,Uint8Array=context.Uint8Array,allocUnsafe=Buffer?Buffer.allocUnsafe:undefined,getPrototype=overArg(Object.getPrototypeOf,Object),objectCreate=Object.create,propertyIsEnumerable=objectProto.propertyIsEnumerable,splice=arrayProto.splice,spreadableSymbol=Symbol?Symbol.isConcatSpreadable:undefined,symIterator=Symbol?Symbol.iterator:undefined,symToStringTag=Symbol?Symbol.toStringTag:undefined;var defineProperty=function(){try{var func=getNative(Object,'defineProperty');func({},'',{});return func;}catch(e){}}();/** Mocked built-ins. */var ctxClearTimeout=context.clearTimeout!==root.clearTimeout&&context.clearTimeout,ctxNow=Date&&Date.now!==root.Date.now&&Date.now,ctxSetTimeout=context.setTimeout!==root.setTimeout&&context.setTimeout;/* Built-in method references for those with the same name as other `lodash` methods. */var nativeCeil=Math.ceil,nativeFloor=Math.floor,nativeGetSymbols=Object.getOwnPropertySymbols,nativeIsBuffer=Buffer?Buffer.isBuffer:undefined,nativeIsFinite=context.isFinite,nativeJoin=arrayProto.join,nativeKeys=overArg(Object.keys,Object),nativeMax=Math.max,nativeMin=Math.min,nativeNow=Date.now,nativeParseInt=context.parseInt,nativeRandom=Math.random,nativeReverse=arrayProto.reverse;/* Built-in method references that are verified to be native. */var DataView=getNative(context,'DataView'),Map=getNative(context,'Map'),Promise=getNative(context,'Promise'),Set=getNative(context,'Set'),WeakMap=getNative(context,'WeakMap'),nativeCreate=getNative(Object,'create');/** Used to store function metadata. */var metaMap=WeakMap&&new WeakMap();/** Used to lookup unminified function names. */var realNames={};/** Used to detect maps, sets, and weakmaps. */var dataViewCtorString=toSource(DataView),mapCtorString=toSource(Map),promiseCtorString=toSource(Promise),setCtorString=toSource(Set),weakMapCtorString=toSource(WeakMap);/** Used to convert symbols to primitives and strings. */var symbolProto=Symbol?Symbol.prototype:undefined,symbolValueOf=symbolProto?symbolProto.valueOf:undefined,symbolToString=symbolProto?symbolProto.toString:undefined;/*------------------------------------------------------------------------*//**
+     */var nativeObjectToString=objectProto.toString;/** Used to infer the `Object` constructor. */var objectCtorString=funcToString.call(Object);/** Used to restore the original `_` reference in `_.noConflict`. */var oldDash=root._;/** Used to detect if a method is native. */var reIsNative=RegExp('^'+funcToString.call(hasOwnProperty).replace(reRegExpChar,'\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,'$1.*?')+'$');/** Built-in value references. */var Buffer=moduleExports?context.Buffer:undefined,_Symbol=context.Symbol,Uint8Array=context.Uint8Array,allocUnsafe=Buffer?Buffer.allocUnsafe:undefined,getPrototype=overArg(Object.getPrototypeOf,Object),objectCreate=Object.create,propertyIsEnumerable=objectProto.propertyIsEnumerable,splice=arrayProto.splice,spreadableSymbol=_Symbol?_Symbol.isConcatSpreadable:undefined,symIterator=_Symbol?_Symbol.iterator:undefined,symToStringTag=_Symbol?_Symbol.toStringTag:undefined;var defineProperty=function(){try{var func=getNative(Object,'defineProperty');func({},'',{});return func;}catch(e){}}();/** Mocked built-ins. */var ctxClearTimeout=context.clearTimeout!==root.clearTimeout&&context.clearTimeout,ctxNow=Date&&Date.now!==root.Date.now&&Date.now,ctxSetTimeout=context.setTimeout!==root.setTimeout&&context.setTimeout;/* Built-in method references for those with the same name as other `lodash` methods. */var nativeCeil=Math.ceil,nativeFloor=Math.floor,nativeGetSymbols=Object.getOwnPropertySymbols,nativeIsBuffer=Buffer?Buffer.isBuffer:undefined,nativeIsFinite=context.isFinite,nativeJoin=arrayProto.join,nativeKeys=overArg(Object.keys,Object),nativeMax=Math.max,nativeMin=Math.min,nativeNow=Date.now,nativeParseInt=context.parseInt,nativeRandom=Math.random,nativeReverse=arrayProto.reverse;/* Built-in method references that are verified to be native. */var DataView=getNative(context,'DataView'),Map=getNative(context,'Map'),Promise=getNative(context,'Promise'),Set=getNative(context,'Set'),WeakMap=getNative(context,'WeakMap'),nativeCreate=getNative(Object,'create');/** Used to store function metadata. */var metaMap=WeakMap&&new WeakMap();/** Used to lookup unminified function names. */var realNames={};/** Used to detect maps, sets, and weakmaps. */var dataViewCtorString=toSource(DataView),mapCtorString=toSource(Map),promiseCtorString=toSource(Promise),setCtorString=toSource(Set),weakMapCtorString=toSource(WeakMap);/** Used to convert symbols to primitives and strings. */var symbolProto=_Symbol?_Symbol.prototype:undefined,symbolValueOf=symbolProto?symbolProto.valueOf:undefined,symbolToString=symbolProto?symbolProto.toString:undefined;/*------------------------------------------------------------------------*//**
      * Creates a `lodash` object which wraps `value` to enable implicit method
      * chain sequences. Methods that operate on and return arrays, collections,
      * and functions can be chained together. Methods that retrieve a single value
@@ -2174,7 +1841,7 @@ baseFlatten(value,depth-1,predicate,isStrict,result);}else{arrayPush(result,valu
      * @returns {Function} Returns the iteratee.
      */function baseIteratee(value){// Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
 // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
-if(typeof value=='function'){return value;}if(value==null){return identity;}if(typeof value=='object'){return isArray(value)?baseMatchesProperty(value[0],value[1]):baseMatches(value);}return property(value);}/**
+if(typeof value=='function'){return value;}if(value==null){return identity;}if((typeof value==='undefined'?'undefined':_typeof(value))=='object'){return isArray(value)?baseMatchesProperty(value[0],value[1]):baseMatches(value);}return property(value);}/**
      * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
      *
      * @private
@@ -2738,7 +2405,7 @@ return isObject(result)?result:thisBinding;};}/**
      * @private
      * @param {Function} findIndexFunc The function to find the collection index.
      * @returns {Function} Returns the new find function.
-     */function createFind(findIndexFunc){return function(collection,predicate,fromIndex){var iterable=Object(collection);if(!isArrayLike(collection)){var iteratee=getIteratee(predicate,3);collection=keys(collection);predicate=function(key){return iteratee(iterable[key],key,iterable);};}var index=findIndexFunc(collection,predicate,fromIndex);return index>-1?iterable[iteratee?collection[index]:index]:undefined;};}/**
+     */function createFind(findIndexFunc){return function(collection,predicate,fromIndex){var iterable=Object(collection);if(!isArrayLike(collection)){var iteratee=getIteratee(predicate,3);collection=keys(collection);predicate=function predicate(key){return iteratee(iterable[key],key,iterable);};}var index=findIndexFunc(collection,predicate,fromIndex);return index>-1?iterable[iteratee?collection[index]:index]:undefined;};}/**
      * Creates a `_.flow` or `_.flowRight` function.
      *
      * @private
@@ -3052,7 +2719,7 @@ if(objCtor!=othCtor&&'constructor'in object&&'constructor'in other&&!(typeof obj
      * @param {*} value The value to query.
      * @returns {string} Returns the `toStringTag`.
      */var getTag=baseGetTag;// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
-if(DataView&&getTag(new DataView(new ArrayBuffer(1)))!=dataViewTag||Map&&getTag(new Map())!=mapTag||Promise&&getTag(Promise.resolve())!=promiseTag||Set&&getTag(new Set())!=setTag||WeakMap&&getTag(new WeakMap())!=weakMapTag){getTag=function(value){var result=baseGetTag(value),Ctor=result==objectTag?value.constructor:undefined,ctorString=Ctor?toSource(Ctor):'';if(ctorString){switch(ctorString){case dataViewCtorString:return dataViewTag;case mapCtorString:return mapTag;case promiseCtorString:return promiseTag;case setCtorString:return setTag;case weakMapCtorString:return weakMapTag;}}return result;};}/**
+if(DataView&&getTag(new DataView(new ArrayBuffer(1)))!=dataViewTag||Map&&getTag(new Map())!=mapTag||Promise&&getTag(Promise.resolve())!=promiseTag||Set&&getTag(new Set())!=setTag||WeakMap&&getTag(new WeakMap())!=weakMapTag){getTag=function getTag(value){var result=baseGetTag(value),Ctor=result==objectTag?value.constructor:undefined,ctorString=Ctor?toSource(Ctor):'';if(ctorString){switch(ctorString){case dataViewCtorString:return dataViewTag;case mapCtorString:return mapTag;case promiseCtorString:return promiseTag;case setCtorString:return setTag;case weakMapCtorString:return weakMapTag;}}return result;};}/**
      * Gets the view, applying any `transforms` to the `start` and `end` positions.
      *
      * @private
@@ -3129,20 +2796,20 @@ if(length&&typeof array[0]=='string'&&hasOwnProperty.call(array,'index')){result
      * @param {*} object The potential iteratee object argument.
      * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
      *  else `false`.
-     */function isIterateeCall(value,index,object){if(!isObject(object)){return false;}var type=typeof index;if(type=='number'?isArrayLike(object)&&isIndex(index,object.length):type=='string'&&index in object){return eq(object[index],value);}return false;}/**
+     */function isIterateeCall(value,index,object){if(!isObject(object)){return false;}var type=typeof index==='undefined'?'undefined':_typeof(index);if(type=='number'?isArrayLike(object)&&isIndex(index,object.length):type=='string'&&index in object){return eq(object[index],value);}return false;}/**
      * Checks if `value` is a property name and not a property path.
      *
      * @private
      * @param {*} value The value to check.
      * @param {Object} [object] The object to query keys on.
      * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
-     */function isKey(value,object){if(isArray(value)){return false;}var type=typeof value;if(type=='number'||type=='symbol'||type=='boolean'||value==null||isSymbol(value)){return true;}return reIsPlainProp.test(value)||!reIsDeepProp.test(value)||object!=null&&value in Object(object);}/**
+     */function isKey(value,object){if(isArray(value)){return false;}var type=typeof value==='undefined'?'undefined':_typeof(value);if(type=='number'||type=='symbol'||type=='boolean'||value==null||isSymbol(value)){return true;}return reIsPlainProp.test(value)||!reIsDeepProp.test(value)||object!=null&&value in Object(object);}/**
      * Checks if `value` is suitable for use as unique object key.
      *
      * @private
      * @param {*} value The value to check.
      * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
-     */function isKeyable(value){var type=typeof value;return type=='string'||type=='number'||type=='symbol'||type=='boolean'?value!=='__proto__':value===null;}/**
+     */function isKeyable(value){var type=typeof value==='undefined'?'undefined':_typeof(value);return type=='string'||type=='number'||type=='symbol'||type=='boolean'?value!=='__proto__':value===null;}/**
      * Checks if `func` has a lazy counterpart.
      *
      * @private
@@ -4725,7 +4392,7 @@ data[0]=source[0];data[1]=newBitmask;return data;}/**
      *
      * _(object).at(['a[0].b.c', 'a[1]']).value();
      * // => [3, 4]
-     */var wrapperAt=flatRest(function(paths){var length=paths.length,start=length?paths[0]:0,value=this.__wrapped__,interceptor=function(object){return baseAt(object,paths);};if(length>1||this.__actions__.length||!(value instanceof LazyWrapper)||!isIndex(start)){return this.thru(interceptor);}value=value.slice(start,+start+(length?1:0));value.__actions__.push({'func':thru,'args':[interceptor],'thisArg':undefined});return new LodashWrapper(value,this.__chain__).thru(function(array){if(length&&!array.length){array.push(undefined);}return array;});});/**
+     */var wrapperAt=flatRest(function(paths){var length=paths.length,start=length?paths[0]:0,value=this.__wrapped__,interceptor=function interceptor(object){return baseAt(object,paths);};if(length>1||this.__actions__.length||!(value instanceof LazyWrapper)||!isIndex(start)){return this.thru(interceptor);}value=value.slice(start,+start+(length?1:0));value.__actions__.push({'func':thru,'args':[interceptor],'thisArg':undefined});return new LodashWrapper(value,this.__chain__).thru(function(array){if(length&&!array.length){array.push(undefined);}return array;});});/**
      * Creates a `lodash` wrapper instance with explicit method chain sequences enabled.
      *
      * @name chain
@@ -5932,7 +5599,7 @@ timerId=setTimeout(timerExpired,wait);return invokeFunc(lastCallTime);}}if(timer
      *
      * // Replace `_.memoize.Cache`.
      * _.memoize.Cache = WeakMap;
-     */function memoize(func,resolver){if(typeof func!='function'||resolver!=null&&typeof resolver!='function'){throw new TypeError(FUNC_ERROR_TEXT);}var memoized=function(){var args=arguments,key=resolver?resolver.apply(this,args):args[0],cache=memoized.cache;if(cache.has(key)){return cache.get(key);}var result=func.apply(this,args);memoized.cache=cache.set(key,result)||cache;return result;};memoized.cache=new(memoize.Cache||MapCache)();return memoized;}// Expose `MapCache`.
+     */function memoize(func,resolver){if(typeof func!='function'||resolver!=null&&typeof resolver!='function'){throw new TypeError(FUNC_ERROR_TEXT);}var memoized=function memoized(){var args=arguments,key=resolver?resolver.apply(this,args):args[0],cache=memoized.cache;if(cache.has(key)){return cache.get(key);}var result=func.apply(this,args);memoized.cache=cache.set(key,result)||cache;return result;};memoized.cache=new(memoize.Cache||MapCache)();return memoized;}// Expose `MapCache`.
 memoize.Cache=MapCache;/**
      * Creates a function that negates the result of the predicate `func`. The
      * `func` predicate is invoked with the `this` binding and arguments of the
@@ -6838,7 +6505,7 @@ var tag=baseGetTag(value);return tag==funcTag||tag==genTag||tag==asyncTag||tag==
      *
      * _.isObject(null);
      * // => false
-     */function isObject(value){var type=typeof value;return value!=null&&(type=='object'||type=='function');}/**
+     */function isObject(value){var type=typeof value==='undefined'?'undefined':_typeof(value);return value!=null&&(type=='object'||type=='function');}/**
      * Checks if `value` is object-like. A value is object-like if it's not `null`
      * and has a `typeof` result of "object".
      *
@@ -6861,7 +6528,7 @@ var tag=baseGetTag(value);return tag==funcTag||tag==genTag||tag==asyncTag||tag==
      *
      * _.isObjectLike(null);
      * // => false
-     */function isObjectLike(value){return value!=null&&typeof value=='object';}/**
+     */function isObjectLike(value){return value!=null&&(typeof value==='undefined'?'undefined':_typeof(value))=='object';}/**
      * Checks if `value` is classified as a `Map` object.
      *
      * @static
@@ -7167,7 +6834,7 @@ return isNumber(value)&&value!=+value;}/**
      *
      * _.isSymbol('abc');
      * // => false
-     */function isSymbol(value){return typeof value=='symbol'||isObjectLike(value)&&baseGetTag(value)==symbolTag;}/**
+     */function isSymbol(value){return(typeof value==='undefined'?'undefined':_typeof(value))=='symbol'||isObjectLike(value)&&baseGetTag(value)==symbolTag;}/**
      * Checks if `value` is classified as a typed array.
      *
      * @static
@@ -10284,7 +9951,7 @@ arrayEach(['drop','take'],function(methodName,index){LazyWrapper.prototype[metho
 arrayEach(['filter','map','takeWhile'],function(methodName,index){var type=index+1,isFilter=type==LAZY_FILTER_FLAG||type==LAZY_WHILE_FLAG;LazyWrapper.prototype[methodName]=function(iteratee){var result=this.clone();result.__iteratees__.push({'iteratee':getIteratee(iteratee,3),'type':type});result.__filtered__=result.__filtered__||isFilter;return result;};});// Add `LazyWrapper` methods for `_.head` and `_.last`.
 arrayEach(['head','last'],function(methodName,index){var takeName='take'+(index?'Right':'');LazyWrapper.prototype[methodName]=function(){return this[takeName](1).value()[0];};});// Add `LazyWrapper` methods for `_.initial` and `_.tail`.
 arrayEach(['initial','tail'],function(methodName,index){var dropName='drop'+(index?'':'Right');LazyWrapper.prototype[methodName]=function(){return this.__filtered__?new LazyWrapper(this):this[dropName](1);};});LazyWrapper.prototype.compact=function(){return this.filter(identity);};LazyWrapper.prototype.find=function(predicate){return this.filter(predicate).head();};LazyWrapper.prototype.findLast=function(predicate){return this.reverse().find(predicate);};LazyWrapper.prototype.invokeMap=baseRest(function(path,args){if(typeof path=='function'){return new LazyWrapper(this);}return this.map(function(value){return baseInvoke(value,path,args);});});LazyWrapper.prototype.reject=function(predicate){return this.filter(negate(getIteratee(predicate)));};LazyWrapper.prototype.slice=function(start,end){start=toInteger(start);var result=this;if(result.__filtered__&&(start>0||end<0)){return new LazyWrapper(result);}if(start<0){result=result.takeRight(-start);}else if(start){result=result.drop(start);}if(end!==undefined){end=toInteger(end);result=end<0?result.dropRight(-end):result.take(end-start);}return result;};LazyWrapper.prototype.takeRightWhile=function(predicate){return this.reverse().takeWhile(predicate).reverse();};LazyWrapper.prototype.toArray=function(){return this.take(MAX_ARRAY_LENGTH);};// Add `LazyWrapper` methods to `lodash.prototype`.
-baseForOwn(LazyWrapper.prototype,function(func,methodName){var checkIteratee=/^(?:filter|find|map|reject)|While$/.test(methodName),isTaker=/^(?:head|last)$/.test(methodName),lodashFunc=lodash[isTaker?'take'+(methodName=='last'?'Right':''):methodName],retUnwrapped=isTaker||/^find/.test(methodName);if(!lodashFunc){return;}lodash.prototype[methodName]=function(){var value=this.__wrapped__,args=isTaker?[1]:arguments,isLazy=value instanceof LazyWrapper,iteratee=args[0],useLazy=isLazy||isArray(value);var interceptor=function(value){var result=lodashFunc.apply(lodash,arrayPush([value],args));return isTaker&&chainAll?result[0]:result;};if(useLazy&&checkIteratee&&typeof iteratee=='function'&&iteratee.length!=1){// Avoid lazy use if the iteratee has a "length" value other than `1`.
+baseForOwn(LazyWrapper.prototype,function(func,methodName){var checkIteratee=/^(?:filter|find|map|reject)|While$/.test(methodName),isTaker=/^(?:head|last)$/.test(methodName),lodashFunc=lodash[isTaker?'take'+(methodName=='last'?'Right':''):methodName],retUnwrapped=isTaker||/^find/.test(methodName);if(!lodashFunc){return;}lodash.prototype[methodName]=function(){var value=this.__wrapped__,args=isTaker?[1]:arguments,isLazy=value instanceof LazyWrapper,iteratee=args[0],useLazy=isLazy||isArray(value);var interceptor=function interceptor(value){var result=lodashFunc.apply(lodash,arrayPush([value],args));return isTaker&&chainAll?result[0]:result;};if(useLazy&&checkIteratee&&typeof iteratee=='function'&&iteratee.length!=1){// Avoid lazy use if the iteratee has a "length" value other than `1`.
 isLazy=useLazy=false;}var chainAll=this.__chain__,isHybrid=!!this.__actions__.length,isUnwrapped=retUnwrapped&&!chainAll,onlyLazy=isLazy&&!isHybrid;if(!retUnwrapped&&useLazy){value=onlyLazy?value:new LazyWrapper(this);var result=func.apply(value,args);result.__actions__.push({'func':thru,'args':[interceptor],'thisArg':undefined});return new LodashWrapper(result,chainAll);}if(isUnwrapped&&onlyLazy){return func.apply(this,args);}result=this.thru(interceptor);return isUnwrapped?isTaker?result.value()[0]:result.value():result;};});// Add `Array` methods to `lodash.prototype`.
 arrayEach(['pop','push','shift','sort','splice','unshift'],function(methodName){var func=arrayProto[methodName],chainName=/^(?:push|sort|unshift)$/.test(methodName)?'tap':'thru',retUnwrapped=/^(?:pop|shift)$/.test(methodName);lodash.prototype[methodName]=function(){var args=arguments;if(retUnwrapped&&!this.__chain__){var value=this.value();return func.apply(isArray(value)?value:[],args);}return this[chainName](function(value){return func.apply(isArray(value)?value:[],args);});};});// Map minified method names to their real names.
 baseForOwn(LazyWrapper.prototype,function(func,methodName){var lodashFunc=lodash[methodName];if(lodashFunc){var key=lodashFunc.name+'',names=realNames[key]||(realNames[key]=[]);names.push({'name':methodName,'func':lodashFunc});}});realNames[createHybrid(undefined,WRAP_BIND_KEY_FLAG).name]=[{'name':'wrapper','func':undefined}];// Add methods to `LazyWrapper`.
@@ -10292,7 +9959,7 @@ LazyWrapper.prototype.clone=lazyClone;LazyWrapper.prototype.reverse=lazyReverse;
 lodash.prototype.at=wrapperAt;lodash.prototype.chain=wrapperChain;lodash.prototype.commit=wrapperCommit;lodash.prototype.next=wrapperNext;lodash.prototype.plant=wrapperPlant;lodash.prototype.reverse=wrapperReverse;lodash.prototype.toJSON=lodash.prototype.valueOf=lodash.prototype.value=wrapperValue;// Add lazy aliases.
 lodash.prototype.first=lodash.prototype.head;if(symIterator){lodash.prototype[symIterator]=wrapperToIterator;}return lodash;};/*--------------------------------------------------------------------------*/// Export lodash.
 var _=runInContext();// Some AMD build optimizers, like r.js, check for condition patterns like:
-if(true){// Expose Lodash on the global object to prevent errors when Lodash is
+if("function"=='function'&&_typeof(__webpack_require__(1))=='object'&&__webpack_require__(1)){// Expose Lodash on the global object to prevent errors when Lodash is
 // loaded by a script tag in the presence of an AMD loader.
 // See http://requirejs.org/docs/errors.html#mismatch for more details.
 // Use `_.noConflict` to remove Lodash from the global object.
@@ -10303,8 +9970,68 @@ root._=_;// Define as an anonymous module so, through path mapping, it can be
 else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
-root._=_;}}).call(this);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(11)(module)))
+root._=_;}}).call(undefined);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
 
 /***/ })
 /******/ ]);

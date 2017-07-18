@@ -1,4 +1,3 @@
-
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 import { RouterModule } from '@zbigiman/constrjs.router.module';
@@ -10,22 +9,26 @@ import profileSettingsTemplate from '../templates/profile-settings.html';
 
 class App {
     constructor() {
-        this.DOMModule = new DOMModule();
+
+        var app = this;
+
+        app.DOMModule = new DOMModule();
+
         //Init Router        
-        this.router = new RouterModule({
+        app.router = new RouterModule({
             base: routerModuleBase,
             SPAEmulation: true,
             error404: () => {
-                this.router.navigate('');
+                app.router.navigate('');
             }
         });
         //\Init Router
 
         //Add routes
-        this.router.add([
+        app.router.add([
             {
                 '': () => {
-                    this.router.navigate('/login');
+                    app.router.navigate('/login');
                 }
             },
             {
@@ -42,13 +45,13 @@ class App {
                 }
             }, {
                 '/profile': () => {
-                    this.router.navigate('/profile/about');
+                    app.router.navigate('/profile/about');
                 }
             }, {
                 '/profile/:route': (data) => {
                     if (document.querySelector('#profile-nav') === null) {
                         document.querySelector('#main-router-output').innerHTML = profileTemplate();
-                        this.router.activateRouterLinks('#profile-nav');
+                        app.router.activateRouterLinks('#profile-nav');
                         this.swapMenu();
                         let btnLogout = document.querySelector('.btn--outline-blue__logout');
                         let that = this;
@@ -126,4 +129,4 @@ class App {
     }
 }
 
-var app = new App();
+new App();

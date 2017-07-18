@@ -1,0 +1,53 @@
+@import 'reset';
+@import 'variables';
+@import 'functions';
+@import 'common-modifiers';
+@import 'typography';
+@import 'layout';
+@import 'layout-navbar';
+@import 'layout-form-elements';
+@import 'layout-buttons';
+
+.top{
+    background: $color-dark-gray;
+    color: $color-almost-white;
+    .col__left{
+        width:50%;
+    }
+    .col__right{
+        width:50%;
+    }
+}
+
+.main{
+    color: $color-gray;
+    padding: em(20) 0;   
+   
+    .col__left{
+        width:70%;
+        padding-right: em(10);
+         @media (max-width: $sm){
+             padding-right: em(5);
+            width: 50%;
+        }
+    }
+    .col__right{
+        width:30%;     
+        padding-left: em(10);   
+         @media (max-width: $sm){
+             padding-left: em(5);  
+            width: 50%;
+        }
+    }
+    .content{
+        border-radius: em(4);
+        min-height: 65vh;       
+    }    
+}
+
+.footer{
+    background: $color-blue;   
+    font-size: em($small); 
+    color: $color-white;
+    min-height: em(120);
+}

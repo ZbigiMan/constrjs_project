@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test App</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="./compiled/app.bundle.css">
+
+    <script>
+        var url = document.location.href;
+        var routerModuleRoot
+        if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
+            routerModuleBase = 'http://localhost:8000';
+        } else {
+            //routerModuleBase = 'http://your_project_url_base;
+        }
+    </script>
+</head>
+
+<body>
+    <section class="top">
+        <div class="container --padding-standard">
+            <div class="row row--flex">
+                <div class="col col__left">
+                    <h4>Watchable Store Example</h4>
+                </div>
+                <div class="col col__right --text-right">
+                    <h4>constrjs project</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    <main class="container main ">
+        <div class="row row--flex --padding-standard">
+            <div class="col col__left">
+                <h2 class="--color-blue">Store</h2>
+                <div class="content content__left --padding-standard --background-white">
+                    Products:
+                </div>
+            </div>
+            <div class="col col__right">
+                <h2 class="--color-green">Cart</h2>
+                 <div class="content content__right --padding-standard --background-white">
+                    Your order:
+                </div>
+            </div>
+        </div>        
+    </main>
+    <footer class="footer container container--fullwidth">
+        <div class="container --padding-standard --text-center">
+             &copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC 
+        </div>       
+    </footer>
+    <script src="./compiled/app.bundle.js"></script>
+</body>
+
+</html>

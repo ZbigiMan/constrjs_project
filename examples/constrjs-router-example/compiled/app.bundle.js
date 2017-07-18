@@ -608,21 +608,24 @@ var App = function () {
 
         _classCallCheck(this, App);
 
-        this.DOMModule = new _constrjsDom.DOMModule();
+        var app = this;
+
+        app.DOMModule = new _constrjsDom.DOMModule();
+
         //Init Router        
-        this.router = new _constrjsRouter.RouterModule({
+        app.router = new _constrjsRouter.RouterModule({
             base: routerModuleBase,
             SPAEmulation: true,
             error404: function error404() {
-                _this.router.navigate('');
+                app.router.navigate('');
             }
         });
         //\Init Router
 
         //Add routes
-        this.router.add([{
+        app.router.add([{
             '': function _() {
-                _this.router.navigate('/login');
+                app.router.navigate('/login');
             }
         }, {
             '/login': function login() {
@@ -637,13 +640,13 @@ var App = function () {
             }
         }, {
             '/profile': function profile() {
-                _this.router.navigate('/profile/about');
+                app.router.navigate('/profile/about');
             }
         }, {
             '/profile/:route': function profileRoute(data) {
                 if (document.querySelector('#profile-nav') === null) {
                     document.querySelector('#main-router-output').innerHTML = (0, _profile2.default)();
-                    _this.router.activateRouterLinks('#profile-nav');
+                    app.router.activateRouterLinks('#profile-nav');
                     _this.swapMenu();
                     var btnLogout = document.querySelector('.btn--outline-blue__logout');
                     var that = _this;
@@ -722,7 +725,7 @@ var App = function () {
     return App;
 }();
 
-var app = new App();
+new App();
 
 /***/ })
 /******/ ]);

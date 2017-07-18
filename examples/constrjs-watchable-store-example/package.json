@@ -27,7 +27,7 @@
   "dependencies": {
     "@zbigiman/constrjs.dom.module": "^1.0.0",
     "@zbigiman/constrjs.router.module": "^1.0.0",
-    "lodash": "^4.17.4",
+    "@zbigiman/constrjs.store.module": "^1.0.0",
     "mdn-polyfills": "^3.5.0",
     "style-loader": "^0.18.2"
   }

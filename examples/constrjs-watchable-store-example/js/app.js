@@ -2,12 +2,9 @@
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
-import { StoreModule } from '../../../source/constrjs.store.module/store.module';
-
-
-import { RouterModule } from '@zbigiman/constrjs.router.module';
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
-
+import { StoreModule } from '@zbigiman/constrjs.store.module';
+import { RouterModule } from '@zbigiman/constrjs.router.module';
 
 class App {
     constructor() {
@@ -34,4 +31,4 @@ class App {
     }
 }
 
-var app = new App();
+new App();
