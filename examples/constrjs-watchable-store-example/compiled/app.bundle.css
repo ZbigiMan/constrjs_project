@@ -58,7 +58,7 @@ table {
   color: #ee204d; }
 
 .\--color-green {
-  color: #22bbb5; }
+  color: #01a797; }
 
 .\--background-white {
   background: #fff; }
@@ -288,7 +288,7 @@ The layout elements:
     min-height: 62vh; }
 
 .footer {
-  background: #22bbb5;
+  background: #01a797;
   color: #fff;
   min-height: 7.5em; }
 
