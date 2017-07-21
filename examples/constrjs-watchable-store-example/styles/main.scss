@@ -7,7 +7,6 @@
 @import 'layout-navbar';
 @import 'layout-form-elements';
 @import 'layout-buttons';
-
 .logo {
     font-family: $font-logo;
     font-weight: $font-weight-light;
@@ -15,27 +14,49 @@
     letter-spacing: em(1);
 }
 
-header{
+header {
     position: fixed;
     top: 0;
     z-index: 1;
-}
-
-.top {
     background: $color-dark-gray;
     color: $color-almost-white;
     height: 50px;
-    .col__left {
-        width: 50%;
-    }
-    .col__right {
-        width: 50%;
+    .top {
+       // height: 50px;
+        padding: 0 em(20);
+        .top-content-wrapper{
+             height: 50px;  
+        }
+        .title-wrapper {
+            padding-right: em(20);                                 
+        }
+        .top__content{
+            height: 50px;
+            display: block;
+        }
+
+        .navbar{
+            .navbar-item{
+                a{
+                    height: 50px;
+                    border-left: 1px solid $color-gray;
+                    color: $color-almost-white;
+                    background: $color-gray;
+                    &:last-of-type{
+                        border-right: 1px solid $color-gray;
+                    }
+                }
+            }
+        }
+        .logo-wrapper {
+            margin-left: auto;
+        }
     }
 }
 
 .main {
     color: $color-gray;
-    padding: em(50 + 20) 0;    
+    padding: em(50 + 20) 0;
     min-height: 85%;
     .col__left {
         width: 70%;
@@ -54,14 +75,14 @@ header{
         }
     }
     .content {
-        border-radius: em(4);        
+        border-radius: em(4);
     }
 }
 
 .footer {
     background: $color-green;
     color: $color-white;
-    min-height: 15%;    
+    min-height: 15%;
 }
 
 .footer__logo {

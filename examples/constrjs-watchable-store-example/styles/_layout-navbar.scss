@@ -1,9 +1,12 @@
 .navbar {
     .navbar-content {
         display: inline-flex;
-        .navbar-item {
+        .navbar-item {            
             a {
                 white-space: nowrap;
+                padding: em(10);
+                box-sizing: border-box;
+                display: block;
             }
         }
     }

@@ -192,7 +192,10 @@ The layout elements:
 .navbar .navbar-content {
   display: inline-flex; }
   .navbar .navbar-content .navbar-item a {
-    white-space: nowrap; }
+    white-space: nowrap;
+    padding: 0.625em;
+    box-sizing: border-box;
+    display: block; }
 
 .form-field {
   overflow: hidden; }
@@ -282,16 +285,28 @@ The layout elements:
 header {
   position: fixed;
   top: 0;
-  z-index: 1; }
-
-.top {
+  z-index: 1;
   background: #333;
   color: #ededed;
   height: 50px; }
-  .top .col__left {
-    width: 50%; }
-  .top .col__right {
-    width: 50%; }
+  header .top {
+    padding: 0 1.25em; }
+    header .top .top-content-wrapper {
+      height: 50px; }
+    header .top .title-wrapper {
+      padding-right: 1.25em; }
+    header .top .top__content {
+      height: 50px;
+      display: block; }
+    header .top .navbar .navbar-item a {
+      height: 50px;
+      border-left: 1px solid #95918c;
+      color: #ededed;
+      background: #95918c; }
+      header .top .navbar .navbar-item a:last-of-type {
+        border-right: 1px solid #95918c; }
+    header .top .logo-wrapper {
+      margin-left: auto; }
 
 .main {
   color: #95918c;
