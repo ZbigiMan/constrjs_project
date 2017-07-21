@@ -11,6 +11,8 @@ class App {
 
         var app = this;
 
+        app.DOMModule = new DOMModule();
+
         app.store = new StoreModule({
             store: {
                 searchTable: {
@@ -18,7 +20,7 @@ class App {
                     searchResults: Object
                 }
             },
-            console: true
+            console: false
         });
 
         app.store.watch(app, 'searchTable.searchInput', (data) => {
@@ -27,7 +29,27 @@ class App {
 
         app.store.set(app, 'searchTable.searchInput', 'test');
 
+        console.log(document.querySelector('#search'));
 
+        app.toggleVal = (val) => {
+            return !val;
+        }
+        var showSearch = false;
+        document.querySelector('#search').addEventListener('click', (event) => {
+
+            showSearch = app.toggleVal(showSearch);
+            let searchBar = document.querySelector('.search-bar');
+
+            if (showSearch === true) {
+                app.DOMModule.addClass(searchBar, 'search-bar--visible');
+                app.DOMModule.addClass(document.body, 'search-bar--visible');
+            }else{
+                app.DOMModule.removeClass(searchBar, 'search-bar--visible');
+                app.DOMModule.removeClass(document.body, 'search-bar--visible');
+            }
+
+
+        });
     }
 }
 

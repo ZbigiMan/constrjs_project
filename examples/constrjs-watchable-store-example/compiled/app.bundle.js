@@ -501,6 +501,8 @@ var App = function App() {
 
     var app = this;
 
+    app.DOMModule = new _constrjsDom.DOMModule();
+
     app.store = new _constrjsStore.StoreModule({
         store: {
             searchTable: {
@@ -508,7 +510,7 @@ var App = function App() {
                 searchResults: Object
             }
         },
-        console: true
+        console: false
     });
 
     app.store.watch(app, 'searchTable.searchInput', function (data) {
@@ -516,6 +518,26 @@ var App = function App() {
     });
 
     app.store.set(app, 'searchTable.searchInput', 'test');
+
+    console.log(document.querySelector('#search'));
+
+    app.toggleVal = function (val) {
+        return !val;
+    };
+    var showSearch = false;
+    document.querySelector('#search').addEventListener('click', function (event) {
+
+        showSearch = app.toggleVal(showSearch);
+        var searchBar = document.querySelector('.search-bar');
+
+        if (showSearch === true) {
+            app.DOMModule.addClass(searchBar, 'search-bar--visible');
+            app.DOMModule.addClass(document.body, 'search-bar--visible');
+        } else {
+            app.DOMModule.removeClass(searchBar, 'search-bar--visible');
+            app.DOMModule.removeClass(document.body, 'search-bar--visible');
+        }
+    });
 };
 
 new App();

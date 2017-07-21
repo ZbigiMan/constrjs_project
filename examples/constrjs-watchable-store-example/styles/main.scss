@@ -7,6 +7,14 @@
 @import 'layout-navbar';
 @import 'layout-form-elements';
 @import 'layout-buttons';
+body {
+    transition: all 0.4s ease;
+    &.search-bar--visible {
+        padding-top: 50px;
+        transition: all 0.4s ease;
+    }
+}
+
 .logo {
     font-family: $font-logo;
     font-weight: $font-weight-light;
@@ -17,32 +25,32 @@
 header {
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 999;
+    height: 50px;
     background: $color-dark-gray;
     color: $color-almost-white;
     height: 50px;
     .top {
-       // height: 50px;
+        z-index: 2; // height: 50px;
         padding: 0 em(20);
-        .top-content-wrapper{
-             height: 50px;  
+        .top-content-wrapper {
+            height: 50px;
         }
         .title-wrapper {
-            padding-right: em(20);                                 
+            padding-right: em(20);
         }
-        .top__content{
+        .top__content {
             height: 50px;
             display: block;
         }
-
-        .navbar{
-            .navbar-item{
-                a{
+        .navbar {
+            .navbar-item {
+                a {
                     height: 50px;
                     border-left: 1px solid $color-gray;
                     color: $color-almost-white;
                     background: $color-gray;
-                    &:last-of-type{
+                    &:last-of-type {
                         border-right: 1px solid $color-gray;
                     }
                 }
@@ -51,6 +59,23 @@ header {
         .logo-wrapper {
             margin-left: auto;
         }
+    }
+}
+
+.search-bar {
+    padding: 0 em(20);
+    background: $color-white;
+    top: 0px;
+    height: 50px;
+    position: fixed;
+    transition: all 0.5s ease;
+    z-index: 998;
+    .btn-wrapper {
+        margin-left: auto;
+    }
+    &.search-bar--visible {
+        top: 50px;
+        transition: all 0.5s ease;
     }
 }
 

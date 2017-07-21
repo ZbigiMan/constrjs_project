@@ -1,3 +1,11 @@
+.--fixed{
+    position: fixed !important;
+}
+
+.--fixed-top{
+    top: 0px;
+}
+
 .--padding-standard{
     padding: em(20);
 }
@@ -39,7 +47,7 @@
         display: none;
     }
 }
-.--hide-xs{
+.--hidden-xs{
     @media(max-width: $xs){
         display: none;
     }

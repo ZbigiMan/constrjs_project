@@ -2,9 +2,8 @@
     border: 0 none;
     outline: none;
     border-radius: em(3);
-    padding: em($font-size-medium);
-    text-align: center;
-    line-height: 100%;
+    padding: em(10) em(20);
+    text-align: center;    
     cursor: pointer;
     &:hover {
         opacity: 0.8;
@@ -12,8 +11,9 @@
     transition: all 0.4s ease;
 }
 
-.btn--primary {    
+.btn--primary {     
     font-size: em($font-size-medium);
+    line-height: em($font-size-medium);
     font-weight: $font-weight-bold;
     text-transform: uppercase;
     min-width: 100px;
@@ -21,8 +21,7 @@
 }
 
 .btn--secondary {
-    font-size: em($font-size-smaller);    
-    padding: em($font-size-small);
+    font-size: em($font-size-smaller);     
 }
 
 .btn--wide {

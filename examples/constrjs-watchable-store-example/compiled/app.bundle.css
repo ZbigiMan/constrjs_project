@@ -45,6 +45,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
+.\--fixed {
+  position: fixed !important; }
+
+.\--fixed-top {
+  top: 0px; }
+
 .\--padding-standard {
   padding: 1.25em; }
 
@@ -77,7 +83,7 @@ table {
     display: none; } }
 
 @media (max-width: 680px) {
-  .\--hide-xs {
+  .\--hidden-xs {
     display: none; } }
 
 h1 {
@@ -224,9 +230,8 @@ The layout elements:
   border: 0 none;
   outline: none;
   border-radius: 0.1875em;
-  padding: 1em;
+  padding: 0.625em 1.25em;
   text-align: center;
-  line-height: 100%;
   cursor: pointer;
   transition: all 0.4s ease; }
   .btn:hover {
@@ -234,14 +239,14 @@ The layout elements:
 
 .btn--primary {
   font-size: 1em;
+  line-height: 1em;
   font-weight: 700;
   text-transform: uppercase;
   min-width: 100px;
   text-align: center; }
 
 .btn--secondary {
-  font-size: 0.75em;
-  padding: 0.875em; }
+  font-size: 0.75em; }
 
 .btn--wide {
   width: 100%;
@@ -276,6 +281,12 @@ The layout elements:
   border-color: #ee204d;
   color: #ee204d; }
 
+body {
+  transition: all 0.4s ease; }
+  body.search-bar--visible {
+    padding-top: 50px;
+    transition: all 0.4s ease; }
+
 .logo {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
@@ -285,11 +296,13 @@ The layout elements:
 header {
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 999;
+  height: 50px;
   background: #333;
   color: #ededed;
   height: 50px; }
   header .top {
+    z-index: 2;
     padding: 0 1.25em; }
     header .top .top-content-wrapper {
       height: 50px; }
@@ -307,6 +320,20 @@ header {
         border-right: 1px solid #95918c; }
     header .top .logo-wrapper {
       margin-left: auto; }
+
+.search-bar {
+  padding: 0 1.25em;
+  background: #fff;
+  top: 0px;
+  height: 50px;
+  position: fixed;
+  transition: all 0.5s ease;
+  z-index: 998; }
+  .search-bar .btn-wrapper {
+    margin-left: auto; }
+  .search-bar.search-bar--visible {
+    top: 50px;
+    transition: all 0.5s ease; }
 
 .main {
   color: #95918c;

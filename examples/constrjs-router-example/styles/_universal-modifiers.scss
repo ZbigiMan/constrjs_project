@@ -15,7 +15,7 @@
         display: none;
     }
 }
-.--hide-xs{
+.--hidden-xs{
     @media(max-width: $xs){
         display: none;
     }

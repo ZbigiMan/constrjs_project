@@ -22,8 +22,9 @@
 </head>
 
 <body>
-    <header class="container--wide">
-        <section class="container top">
+    <header class="container container--wide --fixed --fixed-top">
+
+        <div class="container top">
             <div class="content">
                 <div class="row row--flex">
                     <div class="top-content-wrapper title-wrapper">
@@ -31,15 +32,15 @@
                             <h4 class="--no-padding">Watchable Store Example</h4>
                         </div>
                     </div>
-                    <nav class="navbar">
+                    <nav class="navbar --hidden-xs">
                         <ul class="navbar-content">
                             <li class="navbar-item">
-                                <a href="#">Search book</a>
+                                <a href="#" id="search">Search book</a>
                             </li>
                             <li class="navbar-item">
                                 <a href="#">Sell book</a>
                             </li>
-                        </ul>                   
+                        </ul>
                     </nav>
                     <div class="top-content-wrapper logo-wrapper">
                         <div class="content content--vertival-center">
@@ -48,8 +49,22 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </header>
+
+    <div class="container container--wide search-bar row--flex">
+        <div class="form-field">
+            <div class="content content--vertival-center">
+                <input type="text" name="searchInput" id="searchInput" placeholder="Search book...">
+            </div>
+        </div>
+        <div class="form-field btn-wrapper">
+            <div class="content content--vertival-center">
+                <button class="btn btn--primary btn--outline btn--outline-blue" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+
     <main class="container main ">
         <div class="row row--flex --padding-standard">
             <div class="col col__left">
