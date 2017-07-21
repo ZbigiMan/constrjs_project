@@ -12,24 +12,37 @@
     transition: all 0.4s ease;
 }
 
-.btn--primary {
-    background: $color-blue;
-    color: #fff;
-    font-size: em($font-size-small);
+.btn--primary {    
+    font-size: em($font-size-medium);
     font-weight: $font-weight-bold;
     text-transform: uppercase;
+    min-width: 100px;
+    text-align: center;
 }
 
 .btn--secondary {
-    font-size: em($font-size-smaller);
-    min-width: 100px;
-    text-align: center;
+    font-size: em($font-size-smaller);    
     padding: em($font-size-small);
 }
 
 .btn--wide {
     width: 100%;
     text-align: center;
+}
+
+.btn--blue{
+    background: $color-blue;
+    color: #fff;
+}
+
+.btn--green{
+    background: $color-green;
+    color: #fff;
+}
+
+.btn--red{
+    background: $color-red;
+    color: #fff;
 }
 
 .btn--outline {
@@ -40,4 +53,14 @@
 .btn--outline-blue{
     border-color: $color-blue;
     color: $color-blue;
+}
+
+.btn--outline-green{
+    border-color: $color-green;
+    color: $color-green;
+}
+
+.btn--outline-green{
+    border-color: $color-red;
+    color: $color-red;
 }

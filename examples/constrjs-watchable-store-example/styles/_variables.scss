@@ -13,10 +13,8 @@ $color-blue: #1f75fe;
 $color-red: #ee204d;
 $color-green: #01a797;
 //fonts
-$font-primary: 'Open Sans',
-sans-serif;
-$font-logo: 'Roboto',
-sans-serif;
+$font-primary: 'Open Sans',sans-serif;
+$font-logo: 'Roboto',sans-serif;
 //fonts sizes
 $font-size-medium: 16;
 $font-size-small: 14;
@@ -29,6 +27,6 @@ $font-size-h5: 14;
 //font styles
 $font-weight-light: 300;
 $font-weight-regular: 400;
-$font-weight-bold: 700;
 $font-weight-medium: 500;
-$font-weight-smibold: 600;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
