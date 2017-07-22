@@ -190,7 +190,7 @@ var App = function App() {
 
     app.store = new _store.StoreModule({
         store: {
-            booksStoreTable: [{
+            booksTable: [{
                 title: 'Some Book',
                 author: 'Some Author',
                 description: 'About Some Book',
@@ -216,7 +216,7 @@ var App = function App() {
                 searchResults: Array
             }
         },
-        console: false
+        console: true
     });
 
     //Books Stroe Search
@@ -249,22 +249,34 @@ var App = function App() {
 
     //Watching Search Input
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
-        var books = app.store.get(app, 'booksStoreTable');
+        var books = app.store.get(app, 'booksTable');
         var searchResults = books.filter(function (book) {
             return book.title == searchQuery;
         });
+        if (searchResults.length === 0) {
+            searchResults = books;
+        }
         app.store.set(app, 'searchTable.searchResults', searchResults);
     });
     //\ 
 
     //Watching Search Result
-    app.store.watch(app, 'searchTable.searchResults', function (searchResults) {
-        var searchResultsList = '';
-        searchResults.forEach(function (book) {
-            searchResultsList += '<li>\n                    <h2>' + book.title + '</h2>\n                    <h3>' + book.author + '</h3>\n                    <p>' + book.description + '</p>\n                </li>';
+    app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
+    //\
+
+    //Render Books Store List
+    app.renderBooksStoreList = function (books) {
+        var booksList = '';
+        books.forEach(function (book) {
+            booksList += '<li>\n                    <h2>' + book.title + '</h2>\n                    <h3>' + book.author + '</h3>\n                    <p>' + book.description + '</p>\n                </li>';
         });
-        document.querySelector('.books-store-output').innerHTML = searchResultsList;
-    });
+        document.querySelector('.books-store-output').innerHTML = booksList;
+    };
+    //\
+
+    //Render Books Store List
+    var books = app.store.get(app, 'booksTable');
+    app.renderBooksStoreList(books);
     //\
 };
 
