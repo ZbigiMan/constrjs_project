@@ -1,7 +1,8 @@
 // StoreModule
 // ES6+ watchable store | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-import _ from 'lodash';
+//import _ from 'lodash';
+import _ from '../../examples/constrjs-watchable-store-example/node_modules/lodash'
 export class StoreModule {
     constructor(settings) {
 
@@ -113,7 +114,7 @@ export class StoreModule {
             console.logGroup('Store => SET');
             console.logTime(log);
             let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str() && app.ready !== true) {
+            if (prevValue.str() == value.str()) {
                 console.logTimeEnd(log);
                 console.logStore(logcaller);
                 console.logStore('Skipped: nothig changed');

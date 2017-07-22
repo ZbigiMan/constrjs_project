@@ -140,322 +140,8 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.RouterModule = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // RouterModule
-// ES6+ client router, constrjs project
-// Author: Zbigi Man Zbigniew Stępniewski 2017
-
-
-var _constrjsDom = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var RouterModule = exports.RouterModule = function () {
-    function RouterModule(settings) {
-        _classCallCheck(this, RouterModule);
-
-        this.base = settings.base || '/';
-        if (settings.SPAEmulation === true) {
-            this.SPAEmulationBrowserNavBtns();
-            var root = this.base;
-            this.base = this.base + '/#';
-            if (document.location.href == root + '/') {
-                document.location = this.base;
-            }
-        }
-        this.navSelector = settings.navSelector;
-        this.error404 = settings.error404 || function () {
-            console.error("Error 404\nPage not found.");
-        };
-        this.routes = [];
-        this.DOMModule = new _constrjsDom.DOMModule();
-        this.name = settings.name || 'RouterModule';
-    }
-
-    _createClass(RouterModule, [{
-        key: 'SPAEmulationBrowserNavBtns',
-        value: function SPAEmulationBrowserNavBtns() {
-            window.innerDocClick = false;
-            document.onmouseover = function () {
-                window.innerDocClick = true;
-            };
-            document.onmouseleave = function () {
-                window.innerDocClick = false;
-            };
-            window.onhashchange = function () {
-                if (!window.innerDocClick) {
-                    location.reload();
-                }
-            };
-        }
-    }, {
-        key: 'add',
-        value: function add(routesSets) {
-            var that = this;
-            routesSets.forEach(function (set) {
-                var path = Object.keys(set)[0];
-                var callback = set[path];
-                that.routes.push({
-                    _path: path,
-                    _callback: callback
-                });
-            });
-            this.init();
-        }
-    }, {
-        key: 'navigate',
-        value: function navigate(_path, e) {
-            var that = this,
-                pageNotFound = 0,
-                x = 0;
-            this.routes.forEach(function (route) {
-                var routeParts = route._path.split('/').slice(1),
-                    pathParts = _path.split('/').slice(1),
-                    match = 0,
-                    _arguments = {};
-                if (routeParts.length == pathParts.length) {
-                    x++;
-                    routeParts.forEach(function (part, i) {
-                        if (/^:[da-z]{0,255}/g.test(part) === true) {
-                            var key = part.slice(1);
-                            _arguments[key] = pathParts[i];
-                            match++;
-                        } else if (part == pathParts[i]) {
-                            match++;
-                        }
-                    });
-                    if (match == routeParts.length && match !== 0 || _path == '') {
-                        history.pushState(null, null, that.base + _path);
-                        route._callback(_arguments, e);
-                        that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
-                        var activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
-                        if (activeLink !== null) {
-                            that.DOMModule.addClass(activeLink, 'active');
-                        }
-                    } else {
-                        pageNotFound++;
-                    }
-                }
-            });
-            if (pageNotFound == x) {
-                that.error404();
-                return false;
-            }
-        }
-    }, {
-        key: 'init',
-        value: function init() {
-            var path = document.location.href.replace(this.base, '');
-            this.navigate(path);
-            this.activateRouterLinks(this.navSelector);
-        }
-    }, {
-        key: 'activateRouterLinks',
-        value: function activateRouterLinks(navSelector) {
-            var routerLinks = document.querySelectorAll(navSelector + ' *[data-router-link]'),
-                that = this;
-            routerLinks.forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var href = this.getAttribute('href');
-                    that.navigate(href, e);
-                });
-            });
-        }
-    }]);
-
-    return RouterModule;
-}();
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.StoreModule = undefined;
-
-var _lodash = __webpack_require__(7);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // StoreModule
-// ES6+ watchable store, constrjs project
-// Author: Zbigi Man Zbigniew Stępniewski 2017
-
-
-var StoreModule = exports.StoreModule = function StoreModule(settings) {
-    var _this = this;
-
-    _classCallCheck(this, StoreModule);
-
-    //prototypes
-    Object.prototype.str = function () {
-        return JSON.stringify(this);
-    };
-
-    //settings
-    var storeModule = this,
-        store = settings.store,
-        watched = new Array();
-
-    //console
-    if (settings.console != true) {
-        console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = function () {
-            return false;
-        };
-    } else {
-        console.logStore = function (log) {
-            console.log(log);
-        };
-        console.logTime = function (log) {
-            console.time(log);
-        };
-        console.logTimeEnd = function (log) {
-            console.timeEnd(log);
-        };
-        console.logGroup = function (log) {
-            console.group(log);
-        };
-        console.logGroupEnd = function () {
-            console.groupEnd();
-        };
-    }
-    //\console    
-
-    var onWatch = function onWatch(caller, path, value) {
-        var parts = path.split('.');
-        var table = parts[0];
-        if (watched[table] !== undefined) {
-            watched[table].forEach(function (fullpath) {
-                var parts = fullpath.split('~');
-                var watchedPath = parts[1],
-                    watcherName = parts[0];
-                if (watched[table][fullpath] !== undefined) {
-                    var reaction = watched[table][fullpath]['reaction'],
-                        watcher = watched[table][fullpath]['watcher'],
-                        data = storeModule.get({ name: '~store' }, watchedPath),
-                        logWatch = 'Store => Watch ',
-                        logWatcher = 'Watcher: ' + watcherName,
-                        logAction = 'Reaction: ' + reaction,
-                        log = 'done in';
-                    console.logGroup(logWatch);
-                    console.logTime(log);
-                    console.logStore(logWatcher);
-                    console.logStore(logAction);
-                    if (watcher[reaction] !== undefined) {
-                        watcher[reaction].apply(watcher, [data]);
-                    } else if (typeof reaction == 'function') {
-                        reaction.apply(watcher, [data]);
-                    }
-                    console.logTimeEnd(log);
-                    console.logGroupEnd();
-                }
-            });
-            console.logGroupEnd();
-        } else {
-            console.logGroupEnd();
-        }
-    };
-
-    //GET ALL STORE
-    this.getAll = function () {
-        return JSON.parse(store.str());
-    };
-
-    //GET
-    this.get = function (caller, path) {
-        var log = 'Done in',
-            callerName = caller.name || caller.constructor.name,
-            logPath = 'Path: store.' + path;
-        var logcaller = 'Caller: ' + callerName;
-        if (caller.name !== '~store') {
-            console.logGroup('Store => GET');
-            console.logTime(log);
-        }
-        var value = _lodash2.default.get(JSON.parse(store.str()), path);
-        if (value === undefined) {
-            return;
-        }
-        if (caller.name !== '~store') {
-            console.logTimeEnd(log);
-            console.logStore(logcaller);
-            console.logStore(logPath);
-            console.logStore('Value:');
-            console.logStore(value);
-            console.logGroupEnd();
-        }
-        return value;
-    };
-
-    //SET
-    this.set = function (caller, path, value) {
-        var log = 'Done in',
-            callerName = caller.name || caller.constructor.name,
-            logPath = 'Path: store.' + path;
-        var logcaller = 'Caller: ' + callerName;
-        console.logGroup('Store => SET');
-        console.logTime(log);
-        var prevValue = _this.get({ name: '~store' }, path) || {};
-        if (prevValue.str() == value.str() && app.ready !== true) {
-            console.logTimeEnd(log);
-            console.logStore(logcaller);
-            console.logStore('Skipped: nothig changed');
-            console.logGroupEnd();
-            return;
-        }
-        _lodash2.default.set(store, path, value);
-        console.logTimeEnd(log);
-        console.logStore(logcaller);
-        console.logStore(logPath);
-        console.logStore('Value:');
-        console.logStore(value);
-        console.logGroupEnd();
-        onWatch(caller, path, value);
-    };
-
-    //WATCH
-    this.watch = function (watcher, path, reaction) {
-        var watcherName = watcher.name || watcher.constructor.name,
-            paths = path;
-        if (Array.isArray(path) === false) {
-            paths = [path];
-        }
-        paths.forEach(function (path) {
-            var fullpath = watcherName + "~" + path;
-            var parts = path.split('.');
-            var table = parts[0];
-            if (watched[table] === undefined) {
-                watched[table] = [];
-            }
-            if (watched[table].indexOf(fullpath) == -1) {
-                watched[table].push(fullpath);
-                watched[table][fullpath] = {
-                    reaction: reaction,
-                    watcher: watcher
-                };
-            }
-        });
-    };
-};
-
-/***/ }),
+/* 2 */,
+/* 3 */,
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -488,13 +174,12 @@ __webpack_require__(4);
 
 var _constrjsDom = __webpack_require__(0);
 
-var _constrjsStore = __webpack_require__(3);
-
-var _constrjsRouter = __webpack_require__(2);
+var _store = __webpack_require__(14);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(5);
+//import { StoreModule } from '@zbigiman/constrjs.store.module';
 
 var App = function App() {
     _classCallCheck(this, App);
@@ -503,26 +188,26 @@ var App = function App() {
 
     app.DOMModule = new _constrjsDom.DOMModule();
 
-    app.store = new _constrjsStore.StoreModule({
+    app.store = new _store.StoreModule({
         store: {
             booksStoreTable: [{
                 title: 'Some Book',
-                'Author': 'Some Author',
+                author: 'Some Author',
                 description: 'About Some Book',
                 price: '$0.11'
             }, {
                 title: 'Other Book',
-                'Author': 'Other Author',
+                author: 'Other Author',
                 description: 'About Other Book',
                 price: '$0.09'
             }, {
                 title: 'Another Book',
-                'Author': 'Another Author',
+                author: 'Another Author',
                 description: 'Another Some Book',
                 price: '$0.39'
             }, {
                 title: 'Some Else Book',
-                'Author': 'Some Else Author',
+                author: 'Some Else Author',
                 description: 'About Some Else Book',
                 price: '$0.21'
             }],
@@ -565,13 +250,22 @@ var App = function App() {
     //Watching Search Input
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
         var books = app.store.get(app, 'booksStoreTable');
-        var searchResults = books.filter(function (title) {
-            return title = 'Some Book';
+        var searchResults = books.filter(function (book) {
+            return book.title == searchQuery;
         });
-        console.log(searchResults);
+        app.store.set(app, 'searchTable.searchResults', searchResults);
     });
+    //\ 
 
-    //\                
+    //Watching Search Result
+    app.store.watch(app, 'searchTable.searchResults', function (searchResults) {
+        var searchResultsList = '';
+        searchResults.forEach(function (book) {
+            searchResultsList += '<li>\n                    <h2>' + book.title + '</h2>\n                    <h3>' + book.author + '</h3>\n                    <p>' + book.description + '</p>\n                </li>';
+        });
+        document.querySelector('.books-store-output').innerHTML = searchResultsList;
+    });
+    //\
 };
 
 new App();
@@ -10088,6 +9782,179 @@ module.exports = function (module) {
 	}
 	return module;
 };
+
+/***/ }),
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
+// StoreModule
+// ES6+ watchable store | :{constrjs} project
+// Author: Zbigi Man Zbigniew Stępniewski 2017
+//import _ from 'lodash';
+
+class StoreModule {
+    constructor(settings) {
+
+        //prototypes
+        Object.prototype.str = function () {
+            return JSON.stringify(this);
+        };
+
+        //settings
+        var storeModule = this,
+            store = settings.store,
+            watched = new Array();
+
+        //console
+        if (settings.console != true) {
+            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = () => {
+                return false;
+            };
+        } else {
+            console.logStore = log => {
+                console.log(log);
+            };
+            console.logTime = log => {
+                console.time(log);
+            };
+            console.logTimeEnd = log => {
+                console.timeEnd(log);
+            };
+            console.logGroup = log => {
+                console.group(log);
+            };
+            console.logGroupEnd = () => {
+                console.groupEnd();
+            };
+        }
+        //\console    
+
+        var onWatch = (caller, path, value) => {
+            let parts = path.split('.');
+            let table = parts[0];
+            if (watched[table] !== undefined) {
+                watched[table].forEach(fullpath => {
+                    let parts = fullpath.split('~');
+                    let watchedPath = parts[1],
+                        watcherName = parts[0];
+                    if (watched[table][fullpath] !== undefined) {
+                        let reaction = watched[table][fullpath]['reaction'],
+                            watcher = watched[table][fullpath]['watcher'],
+                            data = storeModule.get({ name: '~store' }, watchedPath),
+                            logWatch = 'Store => Watch ',
+                            logWatcher = 'Watcher: ' + watcherName,
+                            logAction = 'Reaction: ' + reaction,
+                            log = 'done in';
+                        console.logGroup(logWatch);
+                        console.logTime(log);
+                        console.logStore(logWatcher);
+                        console.logStore(logAction);
+                        if (watcher[reaction] !== undefined) {
+                            watcher[reaction].apply(watcher, [data]);
+                        } else if (typeof reaction == 'function') {
+                            reaction.apply(watcher, [data]);
+                        }
+                        console.logTimeEnd(log);
+                        console.logGroupEnd();
+                    }
+                });
+                console.logGroupEnd();
+            } else {
+                console.logGroupEnd();
+            }
+        };
+
+        //GET ALL STORE
+        this.getAll = () => {
+            return JSON.parse(store.str());
+        };
+
+        //GET
+        this.get = (caller, path) => {
+            let log = 'Done in',
+                callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            if (caller.name !== '~store') {
+                console.logGroup('Store => GET');
+                console.logTime(log);
+            }
+            let value = __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.get(JSON.parse(store.str()), path);
+            if (value === undefined) {
+                return;
+            }
+            if (caller.name !== '~store') {
+                console.logTimeEnd(log);
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logGroupEnd();
+            }
+            return value;
+        };
+
+        //SET
+        this.set = (caller, path, value) => {
+            let log = 'Done in',
+                callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => SET');
+            console.logTime(log);
+            let prevValue = this.get({ name: '~store' }, path) || {};
+            if (prevValue.str() == value.str()) {
+                console.logTimeEnd(log);
+                console.logStore(logcaller);
+                console.logStore('Skipped: nothig changed');
+                console.logGroupEnd();
+                return;
+            }
+            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
+            console.logTimeEnd(log);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        };
+
+        //WATCH
+        this.watch = (watcher, path, reaction) => {
+            let watcherName = watcher.name || watcher.constructor.name,
+                paths = path;
+            if (Array.isArray(path) === false) {
+                paths = [path];
+            }
+            paths.forEach(path => {
+                let fullpath = watcherName + "~" + path;
+                let parts = path.split('.');
+                let table = parts[0];
+                if (watched[table] === undefined) {
+                    watched[table] = [];
+                }
+                if (watched[table].indexOf(fullpath) == -1) {
+                    watched[table].push(fullpath);
+                    watched[table][fullpath] = {
+                        reaction: reaction,
+                        watcher: watcher
+                    };
+                }
+            });
+        };
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["StoreModule"] = StoreModule;
+
 
 /***/ })
 /******/ ]);

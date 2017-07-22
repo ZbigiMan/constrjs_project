@@ -3,8 +3,8 @@ require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
-import { StoreModule } from '@zbigiman/constrjs.store.module';
-import { RouterModule } from '@zbigiman/constrjs.router.module';
+//import { StoreModule } from '@zbigiman/constrjs.store.module';
+import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
 class App {
     constructor() {
@@ -17,22 +17,22 @@ class App {
             store: {
                 booksStoreTable: [{
                     title: 'Some Book',
-                    'Author': 'Some Author',
+                    author: 'Some Author',
                     description: 'About Some Book',
                     price: '$0.11'
                 }, {
                     title: 'Other Book',
-                    'Author': 'Other Author',
+                    author: 'Other Author',
                     description: 'About Other Book',
                     price: '$0.09'
                 }, {
                     title: 'Another Book',
-                    'Author': 'Another Author',
+                    author: 'Another Author',
                     description: 'Another Some Book',
                     price: '$0.39'
                 }, {
                     title: 'Some Else Book',
-                    'Author': 'Some Else Author',
+                    author: 'Some Else Author',
                     description: 'About Some Else Book',
                     price: '$0.21'
                 }],
@@ -73,13 +73,29 @@ class App {
         });
 
         //Watching Search Input
-        app.store.watch(app,'searchTable.searchInput',(searchQuery)=>{
-            let books = app.store.get(app,'booksStoreTable');
-            let searchResults = books.filter(title => title = 'Some Book');
-            console.log(searchResults);
+        app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
+            let books = app.store.get(app, 'booksStoreTable');
+            let searchResults = books.filter((book) => {
+                return (book.title == searchQuery);
+            });            
+            app.store.set(app, 'searchTable.searchResults', searchResults);
         });
+        //\ 
 
-        //\                
+        //Watching Search Result
+        app.store.watch(app, 'searchTable.searchResults', (searchResults) => {
+            let searchResultsList = '';
+            searchResults.forEach((book) => {
+                searchResultsList += `<li>
+                    <h2>${book.title}</h2>
+                    <h3>${book.author}</h3>
+                    <p>${book.description}</p>
+                </li>`;
+            });
+            document.querySelector('.books-store-output').innerHTML = searchResultsList;
+        });
+        //\
+
     }
 }
 
