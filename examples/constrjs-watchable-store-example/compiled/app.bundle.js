@@ -505,28 +505,43 @@ var App = function App() {
 
     app.store = new _constrjsStore.StoreModule({
         store: {
+            booksStoreTable: [{
+                title: 'Some Book',
+                'Author': 'Some Author',
+                description: 'About Some Book',
+                price: '$0.11'
+            }, {
+                title: 'Other Book',
+                'Author': 'Other Author',
+                description: 'About Other Book',
+                price: '$0.09'
+            }, {
+                title: 'Another Book',
+                'Author': 'Another Author',
+                description: 'Another Some Book',
+                price: '$0.39'
+            }, {
+                title: 'Some Else Book',
+                'Author': 'Some Else Author',
+                description: 'About Some Else Book',
+                price: '$0.21'
+            }],
             searchTable: {
                 searchInput: String,
-                searchResults: Object
+                searchResults: Array
             }
         },
         console: false
     });
 
-    app.store.watch(app, 'searchTable.searchInput', function (data) {
-        console.log('data', data);
-    });
+    //Books Stroe Search
 
-    app.store.set(app, 'searchTable.searchInput', 'test');
-
-    console.log(document.querySelector('#search'));
-
+    //Show search bar
     app.toggleVal = function (val) {
         return !val;
     };
     var showSearch = false;
     document.querySelector('#search').addEventListener('click', function (event) {
-
         showSearch = app.toggleVal(showSearch);
         var searchBar = document.querySelector('.search-bar');
 
@@ -538,6 +553,25 @@ var App = function App() {
             app.DOMModule.removeClass(document.body, 'search-bar--visible');
         }
     });
+    //\
+
+    //Search function
+
+    //Search Input
+    document.querySelector('#searchInput').addEventListener('keyup', function (event) {
+        app.store.set(app, 'searchTable.searchInput', event.target.value);
+    });
+
+    //Watching Search Input
+    app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
+        var books = app.store.get(app, 'booksStoreTable');
+        var searchResults = books.filter(function (title) {
+            return title = 'Some Book';
+        });
+        console.log(searchResults);
+    });
+
+    //\                
 };
 
 new App();
