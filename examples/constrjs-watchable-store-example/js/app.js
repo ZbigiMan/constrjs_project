@@ -57,6 +57,7 @@ class App {
             if (showSearch === true) {
                 app.DOMModule.addClass(searchBar, 'search-bar--visible');
                 app.DOMModule.addClass(document.body, 'search-bar--visible');
+                document.querySelector('#searchInput').focus();
             } else {
                 app.DOMModule.removeClass(searchBar, 'search-bar--visible');
                 app.DOMModule.removeClass(document.body, 'search-bar--visible');
