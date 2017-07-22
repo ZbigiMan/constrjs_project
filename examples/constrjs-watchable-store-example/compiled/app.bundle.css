@@ -322,13 +322,15 @@ header {
       margin-left: auto; }
 
 .search-bar {
-  padding: 0 1.25em;
   background: #fff;
   top: 0px;
   height: 50px;
   position: fixed;
   transition: all 0.5s ease;
   z-index: 998; }
+  .search-bar .search-bar-content {
+    height: 50px;
+    padding: 0 1.25em; }
   .search-bar .btn-wrapper {
     margin-left: auto; }
   .search-bar.search-bar--visible {

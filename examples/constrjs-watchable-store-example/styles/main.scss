@@ -63,14 +63,17 @@ header {
     }
 }
 
-.search-bar {
-    padding: 0 em(20);
+.search-bar {    
     background: $color-white;
     top: 0px;
     height: 50px;
     position: fixed;
     transition: all 0.5s ease;
     z-index: 998;
+    .search-bar-content{
+        height: 50px;
+        padding: 0 em(20);
+    }
     .btn-wrapper {
         margin-left: auto;
     }
