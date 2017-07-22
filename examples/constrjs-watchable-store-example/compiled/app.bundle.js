@@ -251,7 +251,7 @@ var App = function App() {
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
         var books = app.store.get(app, 'booksTable');
         var searchResults = books.filter(function (book) {
-            return book.title == searchQuery;
+            if (book.title.indexOf(searchQuery) !== -1) return book.title;
         });
         if (searchResults.length === 0) {
             searchResults = books;
@@ -9863,18 +9863,19 @@ class StoreModule {
                             data = storeModule.get({ name: '~store' }, watchedPath),
                             logWatch = 'Store => Watch ',
                             logWatcher = 'Watcher: ' + watcherName,
-                            logAction = 'Reaction: ' + reaction,
-                            log = 'done in';
+                            logPath = 'Path: ' + watchedPath,
+                            logAction = 'Reaction: ' + reaction;
+
                         console.logGroup(logWatch);
-                        console.logTime(log);
                         console.logStore(logWatcher);
+                        console.logStore(logPath);
                         console.logStore(logAction);
                         if (watcher[reaction] !== undefined) {
                             watcher[reaction].apply(watcher, [data]);
                         } else if (typeof reaction == 'function') {
                             reaction.apply(watcher, [data]);
                         }
-                        console.logTimeEnd(log);
+
                         console.logGroupEnd();
                     }
                 });
@@ -9891,20 +9892,17 @@ class StoreModule {
 
         //GET
         this.get = (caller, path) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
+            let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             if (caller.name !== '~store') {
                 console.logGroup('Store => GET');
-                console.logTime(log);
             }
             let value = __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.get(JSON.parse(store.str()), path);
             if (value === undefined) {
                 return;
             }
             if (caller.name !== '~store') {
-                console.logTimeEnd(log);
                 console.logStore(logcaller);
                 console.logStore(logPath);
                 console.logStore('Value:');
@@ -9916,22 +9914,18 @@ class StoreModule {
 
         //SET
         this.set = (caller, path, value) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
+            let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            console.logTime(log);
             let prevValue = this.get({ name: '~store' }, path) || {};
             if (prevValue.str() == value.str()) {
-                console.logTimeEnd(log);
                 console.logStore(logcaller);
                 console.logStore('Skipped: nothig changed');
                 console.logGroupEnd();
                 return;
             }
             __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
-            console.logTimeEnd(log);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');

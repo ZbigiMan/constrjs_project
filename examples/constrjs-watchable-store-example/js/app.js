@@ -75,7 +75,8 @@ class App {
         app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
             let books = app.store.get(app, 'booksTable');
             let searchResults = books.filter((book) => {
-                return (book.title == searchQuery);
+                if(book.title.indexOf(searchQuery) !== -1)
+                return book.title;
             });
             if(searchResults.length===0){
                 searchResults = books;

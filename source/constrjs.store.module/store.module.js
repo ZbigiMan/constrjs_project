@@ -54,18 +54,19 @@ export class StoreModule {
                             data = storeModule.get({ name: '~store' }, watchedPath),
                             logWatch = 'Store => Watch ',
                             logWatcher = 'Watcher: ' + watcherName,
-                            logAction = 'Reaction: ' + reaction,
-                            log = 'done in';
-                        console.logGroup(logWatch)
-                        console.logTime(log);
+                            logPath = 'Path: ' + watchedPath,
+                            logAction = 'Reaction: ' + reaction;
+
+                        console.logGroup(logWatch);
                         console.logStore(logWatcher);
+                        console.logStore(logPath);
                         console.logStore(logAction);
                         if (watcher[reaction] !== undefined) {
                             watcher[reaction].apply(watcher, [data]);
                         } else if (typeof reaction == 'function') {
                             reaction.apply(watcher, [data]);
                         }
-                        console.logTimeEnd(log);
+
                         console.logGroupEnd();
                     }
                 });
@@ -82,20 +83,17 @@ export class StoreModule {
 
         //GET
         this.get = (caller, path) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
+            let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             if (caller.name !== '~store') {
                 console.logGroup('Store => GET');
-                console.logTime(log);
             }
             let value = _.get(JSON.parse(store.str()), path);
             if (value === undefined) {
                 return;
             }
             if (caller.name !== '~store') {
-                console.logTimeEnd(log);
                 console.logStore(logcaller);
                 console.logStore(logPath);
                 console.logStore('Value:');
@@ -107,22 +105,18 @@ export class StoreModule {
 
         //SET
         this.set = (caller, path, value) => {
-            let log = 'Done in',
-                callerName = caller.name || caller.constructor.name,
+            let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => SET');
-            console.logTime(log);
+            console.logGroup('Store => SET');            
             let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str()) {
-                console.logTimeEnd(log);
+            if (prevValue.str() == value.str()) {                
                 console.logStore(logcaller);
                 console.logStore('Skipped: nothig changed');
                 console.logGroupEnd();
                 return;
             }
-            _.set(store, path, value);
-            console.logTimeEnd(log);
+            _.set(store, path, value);           
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
