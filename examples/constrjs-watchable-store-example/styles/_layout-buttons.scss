@@ -2,7 +2,10 @@
     border: 0 none;
     outline: none;
     border-radius: em(3);
-    padding: em(10) em(20);
+    padding: em(10) em(20);    
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    min-width: 100px;
     text-align: center;    
     cursor: pointer;
     &:hover {
@@ -12,15 +15,10 @@
 }
 
 .btn--primary {     
-    font-size: em($font-size-medium);
-    line-height: em($font-size-medium);
-    font-weight: $font-weight-bold;
-    text-transform: uppercase;
-    min-width: 100px;
-    text-align: center;
+    font-size: em($font-size-medium);    
 }
 
-.btn--secondary {
+.btn--secondary {    
     font-size: em($font-size-smaller);     
 }
 

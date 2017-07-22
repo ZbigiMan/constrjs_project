@@ -193,7 +193,8 @@ The layout elements:
   position: relative;
   width: 100%;
   height: 0px;
-  border-top: 1px solid #ededed; }
+  border-bottom: 1px solid #ededed;
+  margin: 1.25em 0; }
 
 .navbar .navbar-content {
   display: inline-flex; }
@@ -231,6 +232,9 @@ The layout elements:
   outline: none;
   border-radius: 0.1875em;
   padding: 0.625em 1.25em;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-width: 100px;
   text-align: center;
   cursor: pointer;
   transition: all 0.4s ease; }
@@ -238,12 +242,7 @@ The layout elements:
     opacity: 0.8; }
 
 .btn--primary {
-  font-size: 1em;
-  line-height: 1em;
-  font-weight: 700;
-  text-transform: uppercase;
-  min-width: 100px;
-  text-align: center; }
+  font-size: 1em; }
 
 .btn--secondary {
   font-size: 0.75em; }

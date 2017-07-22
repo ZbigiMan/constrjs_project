@@ -268,7 +268,7 @@ var App = function App() {
     app.renderBooksStoreList = function (books) {
         var booksList = '';
         books.forEach(function (book) {
-            booksList += '<li>\n                    <h2>' + book.title + '</h2>\n                    <h3>' + book.author + '</h3>\n                    <p>' + book.description + '</p>\n                </li>';
+            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--blue" type="button">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
         });
         document.querySelector('.books-store-output').innerHTML = booksList;
     };

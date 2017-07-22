@@ -94,9 +94,12 @@ class App {
             let booksList = ''
             books.forEach((book) => {
                 booksList += `<li>
-                    <h2>${book.title}</h2>
-                    <h3>${book.author}</h3>
+                    <h1>${book.title}</h1>
+                    <h2>${book.author}</h2>                    
                     <p>${book.description}</p>
+                    <h3>${book.price}</h3>
+                    <button class="btn btn--secondary btn--blue" type="button">Add to cart</button>
+                    <div class="hr"></div>
                 </li>`;
             });
             document.querySelector('.books-store-output').innerHTML = booksList;
