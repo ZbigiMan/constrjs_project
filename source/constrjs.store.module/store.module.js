@@ -6,19 +6,21 @@ import _ from '../../examples/constrjs-watchable-store-example/node_modules/loda
 export class StoreModule {
     constructor(settings) {
 
-        //prototypes
+        //Prototypes
         Object.prototype.str = function () {
             return JSON.stringify(this);
         }
+        //\
 
         //settings
         var storeModule = this,
             store = settings.store,
             watched = new Array();
+        //\
 
         //console
         if (settings.console != true) {
-            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = () => {
+            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = () => {
                 return false;
             }
         } else {
@@ -37,8 +39,11 @@ export class StoreModule {
             console.logGroupEnd = () => {
                 console.groupEnd();
             }
+            console.logError = (log) => {
+                console.error(log);
+            }
         }
-        //\console    
+        //\
 
         var onWatch = (caller, path, value) => {
             let parts = path.split('.');
@@ -56,7 +61,6 @@ export class StoreModule {
                             logWatcher = 'Watcher: ' + watcherName,
                             logPath = 'Path: ' + watchedPath,
                             logAction = 'Reaction: ' + reaction;
-
                         console.logGroup(logWatch);
                         console.logStore(logWatcher);
                         console.logStore(logPath);
@@ -66,7 +70,6 @@ export class StoreModule {
                         } else if (typeof reaction == 'function') {
                             reaction.apply(watcher, [data]);
                         }
-
                         console.logGroupEnd();
                     }
                 });
@@ -108,15 +111,15 @@ export class StoreModule {
             let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => SET');            
+            console.logGroup('Store => SET');
             let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str()) {                
+            if (prevValue.str() == value.str()) {
                 console.logStore(logcaller);
                 console.logStore('Skipped: nothig changed');
                 console.logGroupEnd();
                 return;
             }
-            _.set(store, path, value);           
+            _.set(store, path, value);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
@@ -124,6 +127,43 @@ export class StoreModule {
             console.logGroupEnd();
             onWatch(caller, path, value);
         }
+
+        //PUSH
+        this.push = (caller, path, value) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => PUSH');
+            let array = this.get({ name: '~store' }, path) || {};
+            let prevValue = array;
+            if (Array.isArray(array) === false) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logError('Skipped: The path store.' + path + 'is not array');
+                console.logGroupEnd();
+                return;
+            }
+            if (prevValue.str() == value.str()) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logStore('Skipped: nothig changed');
+                console.logGroupEnd();
+                return;
+            }
+            array.push(value);
+            _.set(store, path, array);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        };
+        //\
 
         //WATCH
         this.watch = (watcher, path, reaction) => {
@@ -148,5 +188,6 @@ export class StoreModule {
                 }
             });
         }
+        //\
     }
 }

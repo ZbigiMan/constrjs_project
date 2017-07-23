@@ -63,11 +63,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -131,18 +140,7 @@ var DOMModule = exports.DOMModule = function () {
 }();
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -158,27 +156,231 @@ module.exports = __webpack_amd_options__;
 }();
 
 /***/ }),
-/* 5 */
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
+// StoreModule
+// ES6+ watchable store | :{constrjs} project
+// Author: Zbigi Man Zbigniew Stępniewski 2017
+//import _ from 'lodash';
+
+class StoreModule {
+    constructor(settings) {
+
+        //Prototypes
+        Object.prototype.str = function () {
+            return JSON.stringify(this);
+        };
+        //\
+
+        //settings
+        var storeModule = this,
+            store = settings.store,
+            watched = new Array();
+        //\
+
+        //console
+        if (settings.console != true) {
+            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = () => {
+                return false;
+            };
+        } else {
+            console.logStore = log => {
+                console.log(log);
+            };
+            console.logTime = log => {
+                console.time(log);
+            };
+            console.logTimeEnd = log => {
+                console.timeEnd(log);
+            };
+            console.logGroup = log => {
+                console.group(log);
+            };
+            console.logGroupEnd = () => {
+                console.groupEnd();
+            };
+            console.logError = log => {
+                console.error(log);
+            };
+        }
+        //\
+
+        var onWatch = (caller, path, value) => {
+            let parts = path.split('.');
+            let table = parts[0];
+            if (watched[table] !== undefined) {
+                watched[table].forEach(fullpath => {
+                    let parts = fullpath.split('~');
+                    let watchedPath = parts[1],
+                        watcherName = parts[0];
+                    if (watched[table][fullpath] !== undefined) {
+                        let reaction = watched[table][fullpath]['reaction'],
+                            watcher = watched[table][fullpath]['watcher'],
+                            data = storeModule.get({ name: '~store' }, watchedPath),
+                            logWatch = 'Store => Watch ',
+                            logWatcher = 'Watcher: ' + watcherName,
+                            logPath = 'Path: ' + watchedPath,
+                            logAction = 'Reaction: ' + reaction;
+                        console.logGroup(logWatch);
+                        console.logStore(logWatcher);
+                        console.logStore(logPath);
+                        console.logStore(logAction);
+                        if (watcher[reaction] !== undefined) {
+                            watcher[reaction].apply(watcher, [data]);
+                        } else if (typeof reaction == 'function') {
+                            reaction.apply(watcher, [data]);
+                        }
+                        console.logGroupEnd();
+                    }
+                });
+                console.logGroupEnd();
+            } else {
+                console.logGroupEnd();
+            }
+        };
+
+        //GET ALL STORE
+        this.getAll = () => {
+            return JSON.parse(store.str());
+        };
+
+        //GET
+        this.get = (caller, path) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            if (caller.name !== '~store') {
+                console.logGroup('Store => GET');
+            }
+            let value = __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.get(JSON.parse(store.str()), path);
+            if (value === undefined) {
+                return;
+            }
+            if (caller.name !== '~store') {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logGroupEnd();
+            }
+            return value;
+        };
+
+        //SET
+        this.set = (caller, path, value) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => SET');
+            let prevValue = this.get({ name: '~store' }, path) || {};
+            if (prevValue.str() == value.str()) {
+                console.logStore(logcaller);
+                console.logStore('Skipped: nothig changed');
+                console.logGroupEnd();
+                return;
+            }
+            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        };
+
+        //PUSH
+        this.push = (caller, path, value) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => PUSH');
+            let array = this.get({ name: '~store' }, path) || {};
+            let prevValue = array;
+            if (Array.isArray(array) === false) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logError('Skipped: The path store.' + path + 'is not array');
+                console.logGroupEnd();
+                return;
+            }
+            if (prevValue.str() == value.str()) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logStore('Skipped: nothig changed');
+                console.logGroupEnd();
+                return;
+            }
+            array.push(value);
+            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, array);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        };
+        //\
+
+        //WATCH
+        this.watch = (watcher, path, reaction) => {
+            let watcherName = watcher.name || watcher.constructor.name,
+                paths = path;
+            if (Array.isArray(path) === false) {
+                paths = [path];
+            }
+            paths.forEach(path => {
+                let fullpath = watcherName + "~" + path;
+                let parts = path.split('.');
+                let table = parts[0];
+                if (watched[table] === undefined) {
+                    watched[table] = [];
+                }
+                if (watched[table].indexOf(fullpath) == -1) {
+                    watched[table].push(fullpath);
+                    watched[table][fullpath] = {
+                        reaction: reaction,
+                        watcher: watcher
+                    };
+                }
+            });
+        };
+        //\
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["StoreModule"] = StoreModule;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(4);
+__webpack_require__(2);
 
-var _constrjsDom = __webpack_require__(0);
+var _constrjsDom = __webpack_require__(1);
 
-var _store = __webpack_require__(14);
+var _store = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(5);
+__webpack_require__(4);
 //import { StoreModule } from '@zbigiman/constrjs.store.module';
 
 var App = function App() {
@@ -191,33 +393,84 @@ var App = function App() {
     app.store = new _store.StoreModule({
         store: {
             booksTable: [{
+                id: 1,
                 title: 'Some Book',
                 author: 'Some Author',
                 description: 'About Some Book',
                 price: '$0.11'
             }, {
+                id: 2,
                 title: 'Other Book',
                 author: 'Other Author',
                 description: 'About Other Book',
                 price: '$0.09'
             }, {
+                id: 3,
                 title: 'Another Book',
                 author: 'Another Author',
                 description: 'Another Some Book',
                 price: '$0.39'
             }, {
+                id: 4,
                 title: 'Some Else Book',
                 author: 'Some Else Author',
                 description: 'About Some Else Book',
                 price: '$0.21'
             }],
+            cartTable: new Array(),
             searchTable: {
                 searchInput: String,
-                searchResults: Array
+                searchResults: new Array()
             }
         },
         console: true
     });
+
+    //Render Books Store List
+    app.renderBooksStoreList = function (books) {
+        var booksList = '';
+        books.forEach(function (book) {
+            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
+        });
+        var booksStoreOutput = document.querySelector('.books-store-output');
+        booksStoreOutput.innerHTML = booksList;
+
+        //Add to Cart button on click
+        booksStoreOutput.addEventListener('click', function (event) {
+            if (event.target.className.indexOf('btn__add-to-cart') != -1) {
+                var bookId = event.target.getAttribute('data-book-id');
+                app.addToCart(bookId);
+            }
+        });
+        //\
+    };
+    //\
+
+    //Render Cart List
+    app.renderCartList = function (books) {
+        var booksList = '';
+        books.forEach(function (book) {
+            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--red btn__remove-from-cart" type="button data-book-id="' + book.id + '">Remove</button>\n                    <div class="hr"></div>\n                </li>';
+        });
+        document.querySelector('.cart-output').innerHTML = booksList;
+    };
+    //\
+
+    //Add to Cart
+    app.addToCart = function (bookId) {
+        var books = app.store.get(app, 'booksTable');
+        var selectedBook = books.filter(function (book) {
+            return book.id == bookId;
+        })[0];
+
+        //app.store.push 
+        app.store.push(app, 'cartTable', selectedBook);
+    };
+    //\
+
+    //Watching the Cart
+    app.store.watch(app, 'cartTable', 'renderCartList');
+    //\        
 
     //Books Stroe Search
 
@@ -263,17 +516,7 @@ var App = function App() {
 
     //Watching Search Result
     app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
-    //\
-
-    //Render Books Store List
-    app.renderBooksStoreList = function (books) {
-        var booksList = '';
-        books.forEach(function (book) {
-            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--blue" type="button">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
-        });
-        document.querySelector('.books-store-output').innerHTML = booksList;
-    };
-    //\
+    //\        
 
     //Render Books Store List
     var books = app.store.get(app, 'booksTable');
@@ -284,7 +527,7 @@ var App = function App() {
 new App();
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9722,7 +9965,7 @@ LazyWrapper.prototype.clone=lazyClone;LazyWrapper.prototype.reverse=lazyReverse;
 lodash.prototype.at=wrapperAt;lodash.prototype.chain=wrapperChain;lodash.prototype.commit=wrapperCommit;lodash.prototype.next=wrapperNext;lodash.prototype.plant=wrapperPlant;lodash.prototype.reverse=wrapperReverse;lodash.prototype.toJSON=lodash.prototype.valueOf=lodash.prototype.value=wrapperValue;// Add lazy aliases.
 lodash.prototype.first=lodash.prototype.head;if(symIterator){lodash.prototype[symIterator]=wrapperToIterator;}return lodash;};/*--------------------------------------------------------------------------*/// Export lodash.
 var _=runInContext();// Some AMD build optimizers, like r.js, check for condition patterns like:
-if("function"=='function'&&_typeof(__webpack_require__(1))=='object'&&__webpack_require__(1)){// Expose Lodash on the global object to prevent errors when Lodash is
+if("function"=='function'&&_typeof(__webpack_require__(0))=='object'&&__webpack_require__(0)){// Expose Lodash on the global object to prevent errors when Lodash is
 // loaded by a script tag in the presence of an AMD loader.
 // See http://requirejs.org/docs/errors.html#mismatch for more details.
 // Use `_.noConflict` to remove Lodash from the global object.
@@ -9734,10 +9977,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9767,7 +10010,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9795,173 +10038,6 @@ module.exports = function (module) {
 	}
 	return module;
 };
-
-/***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
-// StoreModule
-// ES6+ watchable store | :{constrjs} project
-// Author: Zbigi Man Zbigniew Stępniewski 2017
-//import _ from 'lodash';
-
-class StoreModule {
-    constructor(settings) {
-
-        //prototypes
-        Object.prototype.str = function () {
-            return JSON.stringify(this);
-        };
-
-        //settings
-        var storeModule = this,
-            store = settings.store,
-            watched = new Array();
-
-        //console
-        if (settings.console != true) {
-            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = () => {
-                return false;
-            };
-        } else {
-            console.logStore = log => {
-                console.log(log);
-            };
-            console.logTime = log => {
-                console.time(log);
-            };
-            console.logTimeEnd = log => {
-                console.timeEnd(log);
-            };
-            console.logGroup = log => {
-                console.group(log);
-            };
-            console.logGroupEnd = () => {
-                console.groupEnd();
-            };
-        }
-        //\console    
-
-        var onWatch = (caller, path, value) => {
-            let parts = path.split('.');
-            let table = parts[0];
-            if (watched[table] !== undefined) {
-                watched[table].forEach(fullpath => {
-                    let parts = fullpath.split('~');
-                    let watchedPath = parts[1],
-                        watcherName = parts[0];
-                    if (watched[table][fullpath] !== undefined) {
-                        let reaction = watched[table][fullpath]['reaction'],
-                            watcher = watched[table][fullpath]['watcher'],
-                            data = storeModule.get({ name: '~store' }, watchedPath),
-                            logWatch = 'Store => Watch ',
-                            logWatcher = 'Watcher: ' + watcherName,
-                            logPath = 'Path: ' + watchedPath,
-                            logAction = 'Reaction: ' + reaction;
-
-                        console.logGroup(logWatch);
-                        console.logStore(logWatcher);
-                        console.logStore(logPath);
-                        console.logStore(logAction);
-                        if (watcher[reaction] !== undefined) {
-                            watcher[reaction].apply(watcher, [data]);
-                        } else if (typeof reaction == 'function') {
-                            reaction.apply(watcher, [data]);
-                        }
-
-                        console.logGroupEnd();
-                    }
-                });
-                console.logGroupEnd();
-            } else {
-                console.logGroupEnd();
-            }
-        };
-
-        //GET ALL STORE
-        this.getAll = () => {
-            return JSON.parse(store.str());
-        };
-
-        //GET
-        this.get = (caller, path) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            if (caller.name !== '~store') {
-                console.logGroup('Store => GET');
-            }
-            let value = __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.get(JSON.parse(store.str()), path);
-            if (value === undefined) {
-                return;
-            }
-            if (caller.name !== '~store') {
-                console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
-                console.logGroupEnd();
-            }
-            return value;
-        };
-
-        //SET
-        this.set = (caller, path, value) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => SET');
-            let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str()) {
-                console.logStore(logcaller);
-                console.logStore('Skipped: nothig changed');
-                console.logGroupEnd();
-                return;
-            }
-            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
-            console.logStore(logcaller);
-            console.logStore(logPath);
-            console.logStore('Value:');
-            console.logStore(value);
-            console.logGroupEnd();
-            onWatch(caller, path, value);
-        };
-
-        //WATCH
-        this.watch = (watcher, path, reaction) => {
-            let watcherName = watcher.name || watcher.constructor.name,
-                paths = path;
-            if (Array.isArray(path) === false) {
-                paths = [path];
-            }
-            paths.forEach(path => {
-                let fullpath = watcherName + "~" + path;
-                let parts = path.split('.');
-                let table = parts[0];
-                if (watched[table] === undefined) {
-                    watched[table] = [];
-                }
-                if (watched[table].indexOf(fullpath) == -1) {
-                    watched[table].push(fullpath);
-                    watched[table][fullpath] = {
-                        reaction: reaction,
-                        watcher: watcher
-                    };
-                }
-            });
-        };
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["StoreModule"] = StoreModule;
-
 
 /***/ })
 /******/ ]);

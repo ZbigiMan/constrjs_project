@@ -15,33 +15,98 @@ class App {
         app.store = new StoreModule({
             store: {
                 booksTable: [{
+                    id: 1,
                     title: 'Some Book',
                     author: 'Some Author',
                     description: 'About Some Book',
                     price: '$0.11'
                 }, {
+                    id: 2,
                     title: 'Other Book',
                     author: 'Other Author',
                     description: 'About Other Book',
                     price: '$0.09'
                 }, {
+                    id: 3,
                     title: 'Another Book',
                     author: 'Another Author',
                     description: 'Another Some Book',
                     price: '$0.39'
                 }, {
+                    id: 4,
                     title: 'Some Else Book',
                     author: 'Some Else Author',
                     description: 'About Some Else Book',
                     price: '$0.21'
                 }],
+                cartTable: new Array(),
                 searchTable: {
                     searchInput: String,
-                    searchResults: Array
+                    searchResults: new Array()
                 }
             },
             console: true
         });
+
+        //Render Books Store List
+        app.renderBooksStoreList = (books) => {
+            let booksList = ''
+            books.forEach((book) => {
+                booksList += `<li>
+                    <h1>${book.title}</h1>
+                    <h2>${book.author}</h2>                    
+                    <p>${book.description}</p>
+                    <h3>${book.price}</h3>
+                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="${book.id}">Add to cart</button>
+                    <div class="hr"></div>
+                </li>`;
+            });
+            let booksStoreOutput = document.querySelector('.books-store-output');
+            booksStoreOutput.innerHTML = booksList;
+            
+            //Add to Cart button on click
+            booksStoreOutput.addEventListener('click', (event) => {
+                if(event.target.className.indexOf('btn__add-to-cart')!=-1){
+                    let bookId = event.target.getAttribute('data-book-id');
+                    app.addToCart(bookId);
+                }
+            });
+            //\
+        }
+        //\
+
+        //Render Cart List
+        app.renderCartList = (books) => {
+            let booksList = ''
+            books.forEach((book) => {
+                booksList += `<li>
+                    <h1>${book.title}</h1>
+                    <h2>${book.author}</h2>                    
+                    <p>${book.description}</p>
+                    <h3>${book.price}</h3>
+                    <button class="btn btn--secondary btn--red btn__remove-from-cart" type="button data-book-id="${book.id}">Remove</button>
+                    <div class="hr"></div>
+                </li>`;
+            });
+            document.querySelector('.cart-output').innerHTML = booksList;
+        }
+        //\
+
+        //Add to Cart
+        app.addToCart = (bookId) =>{
+            let books = app.store.get(app, 'booksTable');
+            let selectedBook = books.filter((book)=>{
+                return book.id == bookId;
+            })[0];
+            
+            //app.store.push 
+            app.store.push(app,'cartTable',selectedBook);
+        }
+        //\
+
+        //Watching the Cart
+        app.store.watch(app,'cartTable','renderCartList');
+        //\        
 
         //Books Stroe Search
 
@@ -76,10 +141,10 @@ class App {
         app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
             let books = app.store.get(app, 'booksTable');
             let searchResults = books.filter((book) => {
-                if(book.title.indexOf(searchQuery) !== -1)
-                return book.title;
+                if (book.title.indexOf(searchQuery) !== -1)
+                    return book.title;
             });
-            if(searchResults.length===0){
+            if (searchResults.length === 0) {
                 searchResults = books;
             }
             app.store.set(app, 'searchTable.searchResults', searchResults);
@@ -88,29 +153,13 @@ class App {
 
         //Watching Search Result
         app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
-        //\
+        //\        
 
         //Render Books Store List
-        app.renderBooksStoreList = (books) => {
-            let booksList = ''
-            books.forEach((book) => {
-                booksList += `<li>
-                    <h1>${book.title}</h1>
-                    <h2>${book.author}</h2>                    
-                    <p>${book.description}</p>
-                    <h3>${book.price}</h3>
-                    <button class="btn btn--secondary btn--blue" type="button">Add to cart</button>
-                    <div class="hr"></div>
-                </li>`;
-            });
-            document.querySelector('.books-store-output').innerHTML = booksList;
-        }
-        //\
-
-        //Render Books Store List
-        let books = app.store.get(app,'booksTable');
+        let books = app.store.get(app, 'booksTable');
         app.renderBooksStoreList(books);
         //\
+
     }
 }
 
