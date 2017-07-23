@@ -45,7 +45,7 @@ class App {
                     searchResults: new Array()
                 }
             },
-            console: true
+            console: false
         });
 
         //Render Books Store List
@@ -63,15 +63,19 @@ class App {
             });
             let booksStoreOutput = document.querySelector('.books-store-output');
             booksStoreOutput.innerHTML = booksList;
-            
+
             //Add to Cart button on click
-            booksStoreOutput.addEventListener('click', (event) => {
-                if(event.target.className.indexOf('btn__add-to-cart')!=-1){
-                    let bookId = event.target.getAttribute('data-book-id');
-                    app.addToCart(bookId);
-                }
-            });
+            booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
             //\
+        }
+        //\
+
+        //Add to Cart button on click
+        app.btnAddToCartClick = (event) => {
+            if (event.target.className.indexOf('btn__add-to-cart') != -1) {
+                let bookId = event.target.getAttribute('data-book-id');
+                app.addToCart(bookId);
+            }
         }
         //\
 
@@ -81,31 +85,57 @@ class App {
             books.forEach((book) => {
                 booksList += `<li>
                     <h1>${book.title}</h1>
-                    <h2>${book.author}</h2>                    
-                    <p>${book.description}</p>
+                    <h2>${book.author}</h2>                   
                     <h3>${book.price}</h3>
-                    <button class="btn btn--secondary btn--red btn__remove-from-cart" type="button data-book-id="${book.id}">Remove</button>
+                    <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="${book.id}">Remove</button>
                     <div class="hr"></div>
                 </li>`;
             });
-            document.querySelector('.cart-output').innerHTML = booksList;
+            let cartOutput = document.querySelector('.cart-output');
+            cartOutput.innerHTML = booksList;
+            cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
+            //\
+        }
+
+        //Remove from Cart button on click 
+        app.btnRemoveFromCartClick = (event) => {
+            if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
+                let bookId = event.target.getAttribute('data-book-id');
+                app.removeFromCart(bookId);
+            }
         }
         //\
 
         //Add to Cart
-        app.addToCart = (bookId) =>{
+        app.addToCart = (bookId) => {
             let books = app.store.get(app, 'booksTable');
-            let selectedBook = books.filter((book)=>{
+            let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
-            
+
             //app.store.push 
-            app.store.push(app,'cartTable',selectedBook);
+            app.store.push(app, 'cartTable', selectedBook);
+            app.store.remove(app,'booksTable',selectedBook);
         }
         //\
 
-        //Watching the Cart
-        app.store.watch(app,'cartTable','renderCartList');
+        //Remove from Cart
+        app.removeFromCart = (bookId) => {
+            let books = app.store.get(app, 'cartTable');
+            let selectedBook = books.filter((book) => {
+                return book.id == bookId;
+            })[0];
+            app.store.remove(app, 'cartTable', selectedBook);
+            app.store.push(app,'booksTable',selectedBook);
+        }
+        //\
+
+        //Watching booksTable
+        app.store.watch(app, 'booksTable', 'renderBooksStoreList');
+        //\
+
+        //Watching cartTable 
+        app.store.watch(app, 'cartTable', 'renderCartList');
         //\        
 
         //Books Stroe Search
@@ -141,7 +171,7 @@ class App {
         app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
             let books = app.store.get(app, 'booksTable');
             let searchResults = books.filter((book) => {
-                if (book.title.indexOf(searchQuery) !== -1)
+                if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
                     return book.title;
             });
             if (searchResults.length === 0) {

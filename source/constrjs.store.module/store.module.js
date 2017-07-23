@@ -112,12 +112,14 @@ export class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str()) {
-                console.logStore(logcaller);
-                console.logStore('Skipped: nothig changed');
-                console.logGroupEnd();
-                return;
+            let prevValue = this.get({ name: '~store' }, path);
+            if (prevValue) {
+                if (prevValue.str() == value.str()) {
+                    console.logStore(logcaller);
+                    console.logStore('Skipped: nothig changed');
+                    console.logGroupEnd();
+                    return;
+                }
             }
             _.set(store, path, value);
             console.logStore(logcaller);
@@ -134,7 +136,7 @@ export class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => PUSH');
-            let array = this.get({ name: '~store' }, path) || {};
+            let array = this.get({ name: '~store' }, path);
             let prevValue = array;
             if (Array.isArray(array) === false) {
                 console.logStore(logcaller);
@@ -163,6 +165,35 @@ export class StoreModule {
             console.logGroupEnd();
             onWatch(caller, path, value);
         };
+        //\
+
+        //REMOVE 
+        this.remove = (caller, path, value) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => REMOVE');
+            let array = this.get({ name: '~store' }, path);
+            if (Array.isArray(array) === false) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logError('Skipped: The path store.' + path + 'is not array');
+                console.logGroupEnd();
+                return;
+            }
+            let newArray = array.filter((item) => {
+                if (value) return item.str() != value.str();
+            });
+            _.set(store, path, newArray);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        }
         //\
 
         //WATCH

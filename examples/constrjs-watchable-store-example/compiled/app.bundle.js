@@ -277,12 +277,14 @@ class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            let prevValue = this.get({ name: '~store' }, path) || {};
-            if (prevValue.str() == value.str()) {
-                console.logStore(logcaller);
-                console.logStore('Skipped: nothig changed');
-                console.logGroupEnd();
-                return;
+            let prevValue = this.get({ name: '~store' }, path);
+            if (prevValue) {
+                if (prevValue.str() == value.str()) {
+                    console.logStore(logcaller);
+                    console.logStore('Skipped: nothig changed');
+                    console.logGroupEnd();
+                    return;
+                }
             }
             __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
             console.logStore(logcaller);
@@ -299,7 +301,7 @@ class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => PUSH');
-            let array = this.get({ name: '~store' }, path) || {};
+            let array = this.get({ name: '~store' }, path);
             let prevValue = array;
             if (Array.isArray(array) === false) {
                 console.logStore(logcaller);
@@ -321,6 +323,35 @@ class StoreModule {
             }
             array.push(value);
             __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, array);
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logGroupEnd();
+            onWatch(caller, path, value);
+        };
+        //\
+
+        //REMOVE 
+        this.remove = (caller, path, value) => {
+            let callerName = caller.name || caller.constructor.name,
+                logPath = 'Path: store.' + path;
+            let logcaller = 'Caller: ' + callerName;
+            console.logGroup('Store => REMOVE');
+            let array = this.get({ name: '~store' }, path);
+            if (Array.isArray(array) === false) {
+                console.logStore(logcaller);
+                console.logStore(logPath);
+                console.logStore('Value:');
+                console.logStore(value);
+                console.logError('Skipped: The path store.' + path + 'is not array');
+                console.logGroupEnd();
+                return;
+            }
+            let newArray = array.filter(item => {
+                if (value) return item.str() != value.str();
+            });
+            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, newArray);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
@@ -423,7 +454,7 @@ var App = function App() {
                 searchResults: new Array()
             }
         },
-        console: true
+        console: false
     });
 
     //Render Books Store List
@@ -436,13 +467,17 @@ var App = function App() {
         booksStoreOutput.innerHTML = booksList;
 
         //Add to Cart button on click
-        booksStoreOutput.addEventListener('click', function (event) {
-            if (event.target.className.indexOf('btn__add-to-cart') != -1) {
-                var bookId = event.target.getAttribute('data-book-id');
-                app.addToCart(bookId);
-            }
-        });
+        booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
         //\
+    };
+    //\
+
+    //Add to Cart button on click
+    app.btnAddToCartClick = function (event) {
+        if (event.target.className.indexOf('btn__add-to-cart') != -1) {
+            var bookId = event.target.getAttribute('data-book-id');
+            app.addToCart(bookId);
+        }
     };
     //\
 
@@ -450,9 +485,20 @@ var App = function App() {
     app.renderCartList = function (books) {
         var booksList = '';
         books.forEach(function (book) {
-            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--red btn__remove-from-cart" type="button data-book-id="' + book.id + '">Remove</button>\n                    <div class="hr"></div>\n                </li>';
+            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                   \n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                    <div class="hr"></div>\n                </li>';
         });
-        document.querySelector('.cart-output').innerHTML = booksList;
+        var cartOutput = document.querySelector('.cart-output');
+        cartOutput.innerHTML = booksList;
+        cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
+        //\
+    };
+
+    //Remove from Cart button on click 
+    app.btnRemoveFromCartClick = function (event) {
+        if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
+            var bookId = event.target.getAttribute('data-book-id');
+            app.removeFromCart(bookId);
+        }
     };
     //\
 
@@ -465,10 +511,26 @@ var App = function App() {
 
         //app.store.push 
         app.store.push(app, 'cartTable', selectedBook);
+        app.store.remove(app, 'booksTable', selectedBook);
     };
     //\
 
-    //Watching the Cart
+    //Remove from Cart
+    app.removeFromCart = function (bookId) {
+        var books = app.store.get(app, 'cartTable');
+        var selectedBook = books.filter(function (book) {
+            return book.id == bookId;
+        })[0];
+        app.store.remove(app, 'cartTable', selectedBook);
+        app.store.push(app, 'booksTable', selectedBook);
+    };
+    //\
+
+    //Watching booksTable
+    app.store.watch(app, 'booksTable', 'renderBooksStoreList');
+    //\
+
+    //Watching cartTable 
     app.store.watch(app, 'cartTable', 'renderCartList');
     //\        
 
@@ -505,7 +567,7 @@ var App = function App() {
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
         var books = app.store.get(app, 'booksTable');
         var searchResults = books.filter(function (book) {
-            if (book.title.indexOf(searchQuery) !== -1) return book.title;
+            if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
         });
         if (searchResults.length === 0) {
             searchResults = books;
