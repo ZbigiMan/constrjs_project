@@ -417,10 +417,15 @@ __webpack_require__(4);
 var App = function App() {
     _classCallCheck(this, App);
 
+    // App instance:
     var app = this;
+    //\
 
+    // DOModule instance - DOM elements manipulation functions:
     app.DOMModule = new _constrjsDom.DOMModule();
+    //\
 
+    // *** Defining App Store ***       
     app.store = new _store.StoreModule({
         store: {
             booksTable: [{
@@ -454,25 +459,34 @@ var App = function App() {
                 searchResults: new Array()
             }
         },
-        console: false
+        console: false // show/hide StoreModule logs
     });
+    //\
 
-    //Render Books Store List
+    // ---------------------------------------------------------- //
+
+    // App functions:
+
+    // Render Books Store List:
     app.renderBooksStoreList = function (books) {
         var booksList = '';
-        books.forEach(function (book) {
-            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                    \n                    <p>' + book.description + '</p>\n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
-        });
+        if (books.length > 0) {
+            books.forEach(function (book) {
+                booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h3>' + book.author + '</h3>                    \n                    <p>' + book.description + '</p>\n                    <h4 class="--color-green">Price: ' + book.price + '</h4>\n                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
+            });
+        } else {
+            booksList = '<li><h2>Sold Out</h2></li>';
+        }
         var booksStoreOutput = document.querySelector('.books-store-output');
         booksStoreOutput.innerHTML = booksList;
 
-        //Add to Cart button on click
+        // "Add to Cart" button event delegation:
         booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
         //\
     };
     //\
 
-    //Add to Cart button on click
+    // "Add to Cart" button event delegation:
     app.btnAddToCartClick = function (event) {
         if (event.target.className.indexOf('btn__add-to-cart') != -1) {
             var bookId = event.target.getAttribute('data-book-id');
@@ -481,19 +495,27 @@ var App = function App() {
     };
     //\
 
-    //Render Cart List
+    // Render Cart List:
     app.renderCartList = function (books) {
         var booksList = '';
-        books.forEach(function (book) {
-            booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h2>' + book.author + '</h2>                   \n                    <h3>' + book.price + '</h3>\n                    <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                    <div class="hr"></div>\n                </li>';
-        });
+        if (books.length > 0) {
+            books.forEach(function (book) {
+                booksList += '<li>\n                        <h1>' + book.title + '</h1>\n                        <h2>' + book.author + '</h2>                   \n                        <h4 class="--color-green">Price: ' + book.price + '</h4>\n                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                        <div class="hr"></div>\n                    </li>';
+            });
+        } else {
+            booksList = '<li><h2>Your Cart is empty.</h1></l2>';
+        }
+
         var cartOutput = document.querySelector('.cart-output');
         cartOutput.innerHTML = booksList;
+
+        // "Remove from Cart" button event delegation:
         cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
         //\
     };
+    //\
 
-    //Remove from Cart button on click 
+    // "Remove from Cart" button event delegation:
     app.btnRemoveFromCartClick = function (event) {
         if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
             var bookId = event.target.getAttribute('data-book-id');
@@ -502,41 +524,72 @@ var App = function App() {
     };
     //\
 
-    //Add to Cart
+    // Add to Cart Function:
     app.addToCart = function (bookId) {
+
+        // *** StoreModule get ***
+        // app.store.watch(caller, table)
         var books = app.store.get(app, 'booksTable');
+        //\
+
         var selectedBook = books.filter(function (book) {
             return book.id == bookId;
         })[0];
 
-        //app.store.push 
+        // *** StoreModule push ***
+        // app.store.push(caller, table, value)
         app.store.push(app, 'cartTable', selectedBook);
+        //\
+
+        // *** StoreModule remove ***
+        // app.store.remove(caller, table, value)
         app.store.remove(app, 'booksTable', selectedBook);
+        //\
     };
     //\
 
-    //Remove from Cart
+    //Remove from Cart Function:
     app.removeFromCart = function (bookId) {
+
+        // *** StoreModule get ***
+        // app.store.watch(caller, table)
         var books = app.store.get(app, 'cartTable');
+        //\
+
         var selectedBook = books.filter(function (book) {
             return book.id == bookId;
         })[0];
+
+        // *** StoreModule remove ***
+        // app.store.remove(caller, table, value)
         app.store.remove(app, 'cartTable', selectedBook);
+        //\
+
+        // *** StoreModule push ***
+        // app.store.push(caller, table, value)
         app.store.push(app, 'booksTable', selectedBook);
+        //\
     };
     //\
 
-    //Watching booksTable
+    // Watching booksTable:
+
+    // *** StoreModule watch ***
+    // app.store.watch(caller, table , function*)
+    // *function name: string || function()
     app.store.watch(app, 'booksTable', 'renderBooksStoreList');
     //\
 
-    //Watching cartTable 
+    //Watching cartTable:
+
+    // *** StoreModule watch ***
+    // app.store.watch(caller, table , function*)
+    // *function name: string || function() 
     app.store.watch(app, 'cartTable', 'renderCartList');
     //\        
 
-    //Books Stroe Search
 
-    //Show search bar
+    //Show Search Bar:
     app.toggleVal = function (val) {
         return !val;
     };
@@ -556,35 +609,76 @@ var App = function App() {
     });
     //\
 
-    //Search function
+    //Search function:
 
-    //Search Input
+    //Search Input event listener:
     document.querySelector('#searchInput').addEventListener('keyup', function (event) {
+
+        // *** StoreModule set ***
+        // app.store.watch(caller, table , value)
         app.store.set(app, 'searchTable.searchInput', event.target.value);
+        //\
     });
 
-    //Watching Search Input
+    //Watching Search Input:
+
+    // *** StoreModule watch ***
+    // app.store.watch(caller, table , function*)
+    // *function name: string || function() 
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
+
+        // *** StoreModule get ***
+        // app.store.watch(caller, table)
         var books = app.store.get(app, 'booksTable');
+        //\
+
         var searchResults = books.filter(function (book) {
             if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
         });
         if (searchResults.length === 0) {
             searchResults = books;
         }
+
+        // *** StoreModule set ***
+        // app.store.watch(caller, table , value)
         app.store.set(app, 'searchTable.searchResults', searchResults);
+        //\
     });
     //\ 
 
-    //Watching Search Result
+    //Watching Search Result:
+
+    // *** StoreModule watch ***
+    // app.store.watch(caller, table , function*)
+    // *function name: string || function() 
     app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
     //\        
 
-    //Render Books Store List
-    var books = app.store.get(app, 'booksTable');
-    app.renderBooksStoreList(books);
+    // ---------------------------------------------------------- //
+
+    // Initial functions:
+
+    // Render Books Store List:
+
+    // *** StoreModule get ***
+    // app.store.watch(caller, table)
+    var booksTable = app.store.get(app, 'booksTable');
+
+    app.renderBooksStoreList(booksTable);
+    //\
+
+    // Render Cart List:
+
+    // *** StoreModule get ***
+    // app.store.watch(caller, table)
+    var cartTable = app.store.get(app, 'cartTable');
+
+    app.renderCartList(cartTable);
     //\
 };
+
+//Starting the App:
+
 
 new App();
 

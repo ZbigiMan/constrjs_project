@@ -88,15 +88,18 @@ table {
 
 h1 {
   font-size: 1.625em;
-  padding-bottom: 0.625em; }
+  padding-bottom: 0.625em;
+  color: #333; }
 
 h2 {
   font-size: 1.375em;
-  padding-bottom: 0.625em; }
+  padding-bottom: 0.625em;
+  color: #333; }
 
 h3 {
   font-size: 1.125em;
-  padding-bottom: 0.625em; }
+  padding-bottom: 0.625em;
+  color: #333; }
 
 h4 {
   font-size: 1em;
@@ -105,6 +108,9 @@ h4 {
 h5 {
   font-size: 0.875em;
   padding-bottom: 0.625em; }
+
+p {
+  padding-bottom: 0.3125em; }
 
 a {
   color: #1f75fe;
@@ -291,6 +297,8 @@ body {
   font-weight: 300;
   font-size: 1em;
   letter-spacing: 0.0625em; }
+  .logo sub {
+    font-size: 0.75em; }
 
 header {
   position: fixed;
@@ -306,17 +314,20 @@ header {
     header .top .top-content-wrapper {
       height: 50px; }
     header .top .title-wrapper {
-      padding-right: 1.25em; }
+      padding-right: 1.875em; }
     header .top .top__content {
       height: 50px;
       display: block; }
     header .top .navbar .navbar-item a {
       height: 50px;
-      border-left: 1px solid #95918c;
+      border-right: 1px solid #1f75fe;
       color: #ededed;
-      background: #95918c; }
-      header .top .navbar .navbar-item a:last-of-type {
-        border-right: 1px solid #95918c; }
+      background: #01a797; }
+      header .top .navbar .navbar-item a:hover {
+        opacity: 1;
+        background: #108479; }
+    header .top .navbar .navbar-item:last-of-type a {
+      border-right: 0 none; }
     header .top .logo-wrapper {
       margin-left: auto; }
 
@@ -340,6 +351,8 @@ header {
   color: #95918c;
   padding: 4.375em 0;
   min-height: 85%; }
+  .main h1 {
+    padding-bottom: 0.3125em; }
   .main .col__left {
     width: 70%;
     padding-right: 0.625em; }

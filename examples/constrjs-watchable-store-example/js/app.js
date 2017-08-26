@@ -8,10 +8,15 @@ import { StoreModule } from '../../../source/constrjs.store.module/store.module'
 class App {
     constructor() {
 
+        // App instance:
         var app = this;
+        //\
 
+        // DOModule instance - DOM elements manipulation functions:
         app.DOMModule = new DOMModule();
+        //\
 
+        // *** Defining App Store ***       
         app.store = new StoreModule({
             store: {
                 booksTable: [{
@@ -45,32 +50,41 @@ class App {
                     searchResults: new Array()
                 }
             },
-            console: false
+            console: false // show/hide StoreModule logs
         });
+        //\
 
-        //Render Books Store List
+        // ---------------------------------------------------------- //
+
+        // App functions:
+
+        // Render Books Store List:
         app.renderBooksStoreList = (books) => {
             let booksList = ''
-            books.forEach((book) => {
-                booksList += `<li>
+            if (books.length > 0) {
+                books.forEach((book) => {
+                    booksList += `<li>
                     <h1>${book.title}</h1>
-                    <h2>${book.author}</h2>                    
+                    <h3>${book.author}</h3>                    
                     <p>${book.description}</p>
-                    <h3>${book.price}</h3>
+                    <h4 class="--color-green">Price: ${book.price}</h4>
                     <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="${book.id}">Add to cart</button>
                     <div class="hr"></div>
                 </li>`;
-            });
+                });
+            } else {
+                booksList = '<li><h2>Sold Out</h2></li>';
+            }
             let booksStoreOutput = document.querySelector('.books-store-output');
             booksStoreOutput.innerHTML = booksList;
 
-            //Add to Cart button on click
+            // "Add to Cart" button event delegation:
             booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
             //\
         }
         //\
 
-        //Add to Cart button on click
+        // "Add to Cart" button event delegation:
         app.btnAddToCartClick = (event) => {
             if (event.target.className.indexOf('btn__add-to-cart') != -1) {
                 let bookId = event.target.getAttribute('data-book-id');
@@ -79,25 +93,33 @@ class App {
         }
         //\
 
-        //Render Cart List
+        // Render Cart List:
         app.renderCartList = (books) => {
-            let booksList = ''
-            books.forEach((book) => {
-                booksList += `<li>
-                    <h1>${book.title}</h1>
-                    <h2>${book.author}</h2>                   
-                    <h3>${book.price}</h3>
-                    <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="${book.id}">Remove</button>
-                    <div class="hr"></div>
-                </li>`;
-            });
+            let booksList = '';
+            if (books.length > 0) {
+                books.forEach((book) => {
+                    booksList += `<li>
+                        <h1>${book.title}</h1>
+                        <h2>${book.author}</h2>                   
+                        <h4 class="--color-green">Price: ${book.price}</h4>
+                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="${book.id}">Remove</button>
+                        <div class="hr"></div>
+                    </li>`;
+                });
+            } else {
+                booksList = '<li><h2>Your Cart is empty.</h1></l2>';
+            }
+
             let cartOutput = document.querySelector('.cart-output');
             cartOutput.innerHTML = booksList;
+
+            // "Remove from Cart" button event delegation:
             cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
             //\
         }
+        //\
 
-        //Remove from Cart button on click 
+        // "Remove from Cart" button event delegation:
         app.btnRemoveFromCartClick = (event) => {
             if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
                 let bookId = event.target.getAttribute('data-book-id');
@@ -106,41 +128,72 @@ class App {
         }
         //\
 
-        //Add to Cart
+        // Add to Cart Function:
         app.addToCart = (bookId) => {
+
+            // *** StoreModule get ***
+            // app.store.watch(caller, table)
             let books = app.store.get(app, 'booksTable');
+            //\
+
             let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
 
-            //app.store.push 
+            // *** StoreModule push ***
+            // app.store.push(caller, table, value)
             app.store.push(app, 'cartTable', selectedBook);
-            app.store.remove(app,'booksTable',selectedBook);
+            //\
+
+            // *** StoreModule remove ***
+            // app.store.remove(caller, table, value)
+            app.store.remove(app, 'booksTable', selectedBook);
+            //\
         }
         //\
 
-        //Remove from Cart
+        //Remove from Cart Function:
         app.removeFromCart = (bookId) => {
+
+            // *** StoreModule get ***
+            // app.store.watch(caller, table)
             let books = app.store.get(app, 'cartTable');
+            //\
+
             let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
+
+            // *** StoreModule remove ***
+            // app.store.remove(caller, table, value)
             app.store.remove(app, 'cartTable', selectedBook);
-            app.store.push(app,'booksTable',selectedBook);
+            //\
+
+            // *** StoreModule push ***
+            // app.store.push(caller, table, value)
+            app.store.push(app, 'booksTable', selectedBook);
+            //\
         }
         //\
 
-        //Watching booksTable
+        // Watching booksTable:
+
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function()
         app.store.watch(app, 'booksTable', 'renderBooksStoreList');
         //\
 
-        //Watching cartTable 
+        //Watching cartTable:
+
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function() 
         app.store.watch(app, 'cartTable', 'renderCartList');
         //\        
 
-        //Books Stroe Search
 
-        //Show search bar
+        //Show Search Bar:
         app.toggleVal = (val) => {
             return !val;
         }
@@ -160,16 +213,30 @@ class App {
         });
         //\
 
-        //Search function
+        //Search function:
 
-        //Search Input
+        //Search Input event listener:
         document.querySelector('#searchInput').addEventListener('keyup', (event) => {
+
+            // *** StoreModule set ***
+            // app.store.watch(caller, table , value)
             app.store.set(app, 'searchTable.searchInput', event.target.value);
+            //\
+
         });
 
-        //Watching Search Input
+        //Watching Search Input:
+
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function() 
         app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
+
+            // *** StoreModule get ***
+            // app.store.watch(caller, table)
             let books = app.store.get(app, 'booksTable');
+            //\
+
             let searchResults = books.filter((book) => {
                 if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
                     return book.title;
@@ -177,20 +244,47 @@ class App {
             if (searchResults.length === 0) {
                 searchResults = books;
             }
+
+            // *** StoreModule set ***
+            // app.store.watch(caller, table , value)
             app.store.set(app, 'searchTable.searchResults', searchResults);
+            //\
+
         });
         //\ 
 
-        //Watching Search Result
+        //Watching Search Result:
+
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function() 
         app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
         //\        
 
-        //Render Books Store List
-        let books = app.store.get(app, 'booksTable');
-        app.renderBooksStoreList(books);
+        // ---------------------------------------------------------- //
+
+        // Initial functions:
+
+        // Render Books Store List:
+
+        // *** StoreModule get ***
+        // app.store.watch(caller, table)
+        let booksTable = app.store.get(app, 'booksTable');
+
+        app.renderBooksStoreList(booksTable);
+        //\
+
+        // Render Cart List:
+
+        // *** StoreModule get ***
+        // app.store.watch(caller, table)
+        let cartTable = app.store.get(app, 'cartTable');
+
+        app.renderCartList(cartTable);
         //\
 
     }
 }
 
+//Starting the App:
 new App();

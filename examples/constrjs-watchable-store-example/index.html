@@ -4,26 +4,15 @@
 <head>
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Test App</title>
+    <title>=>{constrjs} - Watchable Store Example</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" type="text/css" href="./compiled/app.bundle.css">
-
-    <script>
-        var url = document.location.href;
-        var routerModuleRoot
-        if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
-            routerModuleBase = 'http://localhost:8000';
-        } else {
-            //routerModuleBase = 'http://your_project_url_base;
-        }
-    </script>
 </head>
 
 <body>
     <header class="container container--wide --fixed --fixed-top">
-
         <div class="container top">
             <div class="content">
                 <div class="row row--flex">
@@ -36,15 +25,12 @@
                         <ul class="navbar-content">
                             <li class="navbar-item">
                                 <a href="#" id="search">Search book</a>
-                            </li>
-                            <li class="navbar-item">
-                                <a href="#">Sell book</a>
-                            </li>
+                            </li>                            
                         </ul>
                     </nav>
                     <div class="top-content-wrapper logo-wrapper">
                         <div class="content content--vertival-center">
-                            <h5 class="--no-padding"><span class="logo">:{constrjs} project</span></h5>
+                            <h5 class="--no-padding"><span class="logo">=>{constrjs} <sub>project</sub></span></h5>
                         </div>
                     </div>
                 </div>
@@ -52,6 +38,7 @@
         </div>
     </header>
 
+    <!-- Search bar -->
     <div class="container container--wide search-bar">
         <div class="container search-bar-content row--flex">
             <div class="form-field">
@@ -61,32 +48,42 @@
             </div>
             <div class="form-field btn-wrapper">
                 <div class="content content--vertival-center">
-                    <button class="btn btn--primary btn--outline btn--outline-blue" type="button">Search</button>
+                    <button class="btn btn--primary btn--outline btn--outline-green" type="button">Search</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- /Search bar -->
 
     <main class="container main ">
         <div class="row row--flex --padding-standard">
             <div class="col col__left">
                 <h2 class="--color-blue">Books Store</h2>
                 <div class="content content__left --padding-standard --background-white">
+
+                    <!-- Books Store Output -->
                     <ul class="books-store-output"></ul>
+                    <!-- /Books Store Output -->
+
                 </div>
             </div>
             <div class="col col__right">
                 <h2 class="--color-green">Cart</h2>
                 <div class="content content__right --padding-standard --background-white">
+
+                    <!-- Cart Output -->
                     <ul class="cart-output"></ul>
+                    <!-- /Cart Output -->
+
                 </div>
             </div>
         </div>
     </main>
+
     <footer class="footer container container--wide">
         <div class="container --padding-standard --text-center">
-            <h5>&copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC</h5>
-            <h5 class="footer__logo"><span class="logo">:{constrjs} project</span></h5>
+            <h5>&copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC, use at your own risk</h5>
+            <h5 class="footer__logo"><span class="logo">=>{constrjs} <sub>project</sub></span></h5>
         </div>
     </footer>
     <script src="./compiled/app.bundle.js"></script>

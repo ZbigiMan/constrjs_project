@@ -1,16 +1,19 @@
 h1 {
     font-size: em($font-size-h1);
     padding-bottom: em(10);
+    color: $color-dark-gray;
 }
 
 h2 {
     font-size: em($font-size-h2);
     padding-bottom: em(10);
+    color: $color-dark-gray;
 }
 
 h3 {
     font-size: em($font-size-h3);
     padding-bottom: em(10);
+    color: $color-dark-gray;
 }
 
 h4 {
@@ -21,6 +24,10 @@ h4 {
 h5 {
     font-size: em($font-size-h5);
     padding-bottom: em(10);    
+}
+
+p{
+   padding-bottom: em(5);    
 }
 
 a {
