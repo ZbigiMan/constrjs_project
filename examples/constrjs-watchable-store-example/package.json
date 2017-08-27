@@ -4,7 +4,7 @@
   "description": "It's just test app",
   "main": "app.js",
   "scripts": {
-    "start": "live-server --host=localhost --port=8000 --cors"
+    "start": "live-server --host=localhost --port=8001 --cors"
   },
   "author": "Zbigi Man Zbigniew Stępniewski ",
   "license": "ISC",

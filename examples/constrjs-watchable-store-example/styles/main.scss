@@ -1,100 +1,15 @@
-@import 'reset';
-@import 'variables';
-@import 'functions';
-@import 'common-modifiers';
-@import 'typography';
-@import 'layout';
-@import 'layout-navbar';
-@import 'layout-form-elements';
-@import 'layout-buttons';
-body {
-    transition: all 0.4s ease;
-    &.search-bar--visible {
-        padding-top: 50px;
-        transition: all 0.4s ease;
-    }
-}
-
-.logo {
-    font-family: $font-logo;
-    font-weight: $font-weight-light;
-    font-size: em($font-size-medium);
-    letter-spacing: em(1);
-    sub {
-        font-size: em($font-size-smaller);
-    }
-}
-
-header {
-    position: fixed;
-    top: 0;
-    z-index: 999;
-    height: 50px;
-    background: $color-dark-gray;
-    color: $color-almost-white;
-    height: 50px;
-    .top {
-        z-index: 2; // height: 50px;
-        padding: 0 em(20);
-        .top-content-wrapper {
-            height: 50px;
-        }
-        .title-wrapper {
-            padding-right: em(30);
-        }
-        .top__content {
-            height: 50px;
-            display: block;
-        }
-        .navbar {
-            .navbar-item {
-                a {
-                    height: 50px;
-                    border-right: 1px solid $color-blue;
-                    color: $color-almost-white;
-                    background: $color-green;
-                    &:hover{
-                        opacity: 1;
-                        background: $color-green-hover;
-                    }
-                }
-                &:last-of-type {
-                    a {
-                        border-right: 0 none;
-                    }
-                }
-            }
-        }
-        .logo-wrapper {
-            margin-left: auto;
-        }
-    }
-}
-
-.search-bar {
-    background: $color-white;
-    top: 0px;
-    height: 50px;
-    position: fixed;
-    transition: all 0.5s ease;
-    z-index: 998;
-    .search-bar-content {
-        height: 50px;
-        padding: 0 em(20);
-    }
-    .btn-wrapper {
-        margin-left: auto;
-    }
-    &.search-bar--visible {
-        top: 50px;
-        transition: all 0.5s ease;
-    }
-}
+@import '../../themes/constrjs-theme/styles/reset';
+@import '../../themes/constrjs-theme/styles/variables';
+@import '../../themes/constrjs-theme/styles/functions';
+@import '../../themes/constrjs-theme/styles/common-modifiers';
+@import '../../themes/constrjs-theme/styles/typography';
+@import '../../themes/constrjs-theme/styles/layout';
+@import '../../themes/constrjs-theme/styles/layout-navbar';
+@import '../../themes/constrjs-theme/styles/layout-form-elements';
+@import '../../themes/constrjs-theme/styles/layout-buttons';
+@import '../../themes/constrjs-theme/styles/main';
 
 .main {
-    color: $color-gray;
-    padding: em(50 + 20) 0;
-    min-height: 85%;
     h1 {
         padding-bottom: em(5);
     }
@@ -113,18 +28,5 @@ header {
             padding-left: em(5);
             width: 50%;
         }
-    }
-    .content {
-        border-radius: em(4);
-    }
-}
-
-.footer {
-    background: $color-green;
-    color: $color-white;
-    min-height: 15%;
-}
-
-.footer__logo {
-    margin-top: em(10);
+    }    
 }

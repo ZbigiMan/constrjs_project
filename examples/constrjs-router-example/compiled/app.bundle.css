@@ -371,22 +371,3 @@ header {
   .footer .footer__logo-image {
     margin-top: 1.25em;
     width: 40px; }
-
-.main h1 {
-  padding-bottom: 0.3125em; }
-
-.main .col__left {
-  width: 70%;
-  padding-right: 0.625em; }
-  @media (max-width: 768px) {
-    .main .col__left {
-      padding-right: 0.3125em;
-      width: 50%; } }
-
-.main .col__right {
-  width: 30%;
-  padding-left: 0.625em; }
-  @media (max-width: 768px) {
-    .main .col__right {
-      padding-left: 0.3125em;
-      width: 50%; } }

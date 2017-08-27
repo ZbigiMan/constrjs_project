@@ -63,20 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -140,7 +131,7 @@ var DOMModule = exports.DOMModule = function () {
 }();
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -156,15 +147,15 @@ var DOMModule = exports.DOMModule = function () {
 }();
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
 // StoreModule
-// ES6+ watchable store | :{constrjs} project
+// ES6+ watchable store | constrjs project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 //import _ from 'lodash';
 
@@ -391,29 +382,30 @@ class StoreModule {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(2);
+__webpack_require__(1);
 
-var _constrjsDom = __webpack_require__(1);
+var _constrjsDom = __webpack_require__(0);
 
-var _store = __webpack_require__(3);
+var _store = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(4);
+__webpack_require__(3);
 //import { StoreModule } from '@zbigiman/constrjs.store.module';
 
+// Creating the App
 var App = function App() {
     _classCallCheck(this, App);
 
@@ -421,11 +413,11 @@ var App = function App() {
     var app = this;
     //\
 
-    // DOModule instance - DOM elements manipulation functions:
+    // DOModule instance - DOM elements manipulation methods:
     app.DOMModule = new _constrjsDom.DOMModule();
     //\
 
-    // *** Defining App Store ***       
+    // *** Creating app store: StoreModule instance ***       
     app.store = new _store.StoreModule({
         store: {
             booksTable: [{
@@ -459,13 +451,11 @@ var App = function App() {
                 searchResults: new Array()
             }
         },
-        console: false // show/hide StoreModule logs
+        console: true // show/hide StoreModule logs
     });
     //\
 
-    // ---------------------------------------------------------- //
-
-    // App functions:
+    // App methods:
 
     // Render Books Store List:
     app.renderBooksStoreList = function (books) {
@@ -528,7 +518,7 @@ var App = function App() {
     app.addToCart = function (bookId) {
 
         // *** StoreModule get ***
-        // app.store.watch(caller, table)
+        // app.store.get(caller, table)
         var books = app.store.get(app, 'booksTable');
         //\
 
@@ -552,7 +542,7 @@ var App = function App() {
     app.removeFromCart = function (bookId) {
 
         // *** StoreModule get ***
-        // app.store.watch(caller, table)
+        // app.store.get(caller, table)
         var books = app.store.get(app, 'cartTable');
         //\
 
@@ -576,7 +566,7 @@ var App = function App() {
 
     // *** StoreModule watch ***
     // app.store.watch(caller, table , function*)
-    // *function name: string || function()
+    // *function name: string || function(data){}
     app.store.watch(app, 'booksTable', 'renderBooksStoreList');
     //\
 
@@ -615,7 +605,7 @@ var App = function App() {
     document.querySelector('#searchInput').addEventListener('keyup', function (event) {
 
         // *** StoreModule set ***
-        // app.store.watch(caller, table , value)
+        // app.store.set(caller, table , value)
         app.store.set(app, 'searchTable.searchInput', event.target.value);
         //\
     });
@@ -624,11 +614,11 @@ var App = function App() {
 
     // *** StoreModule watch ***
     // app.store.watch(caller, table , function*)
-    // *function name: string || function() 
+    // *function name: string || function(data) 
     app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
 
         // *** StoreModule get ***
-        // app.store.watch(caller, table)
+        // app.store.get(caller, table)
         var books = app.store.get(app, 'booksTable');
         //\
 
@@ -640,7 +630,7 @@ var App = function App() {
         }
 
         // *** StoreModule set ***
-        // app.store.watch(caller, table , value)
+        // app.store.set(caller, table , value)
         app.store.set(app, 'searchTable.searchResults', searchResults);
         //\
     });
@@ -652,27 +642,23 @@ var App = function App() {
     // app.store.watch(caller, table , function*)
     // *function name: string || function() 
     app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
-    //\        
-
-    // ---------------------------------------------------------- //
+    //\      
 
     // Initial functions:
 
     // Render Books Store List:
 
     // *** StoreModule get ***
-    // app.store.watch(caller, table)
+    // app.store.get(caller, table)
     var booksTable = app.store.get(app, 'booksTable');
-
     app.renderBooksStoreList(booksTable);
     //\
 
     // Render Cart List:
 
     // *** StoreModule get ***
-    // app.store.watch(caller, table)
+    // app.store.get(caller, table)
     var cartTable = app.store.get(app, 'cartTable');
-
     app.renderCartList(cartTable);
     //\
 };
@@ -683,7 +669,20 @@ var App = function App() {
 new App();
 
 /***/ }),
-/* 6 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10121,7 +10120,7 @@ LazyWrapper.prototype.clone=lazyClone;LazyWrapper.prototype.reverse=lazyReverse;
 lodash.prototype.at=wrapperAt;lodash.prototype.chain=wrapperChain;lodash.prototype.commit=wrapperCommit;lodash.prototype.next=wrapperNext;lodash.prototype.plant=wrapperPlant;lodash.prototype.reverse=wrapperReverse;lodash.prototype.toJSON=lodash.prototype.valueOf=lodash.prototype.value=wrapperValue;// Add lazy aliases.
 lodash.prototype.first=lodash.prototype.head;if(symIterator){lodash.prototype[symIterator]=wrapperToIterator;}return lodash;};/*--------------------------------------------------------------------------*/// Export lodash.
 var _=runInContext();// Some AMD build optimizers, like r.js, check for condition patterns like:
-if("function"=='function'&&_typeof(__webpack_require__(0))=='object'&&__webpack_require__(0)){// Expose Lodash on the global object to prevent errors when Lodash is
+if("function"=='function'&&_typeof(__webpack_require__(9))=='object'&&__webpack_require__(9)){// Expose Lodash on the global object to prevent errors when Lodash is
 // loaded by a script tag in the presence of an AMD loader.
 // See http://requirejs.org/docs/errors.html#mismatch for more details.
 // Use `_.noConflict` to remove Lodash from the global object.
@@ -10133,10 +10132,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(12)(module)))
 
 /***/ }),
-/* 7 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10166,7 +10165,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 8 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

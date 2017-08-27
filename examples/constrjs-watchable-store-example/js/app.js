@@ -5,6 +5,7 @@ import { DOMModule } from '@zbigiman/constrjs.dom.module';
 //import { StoreModule } from '@zbigiman/constrjs.store.module';
 import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
+// Creating the App
 class App {
     constructor() {
 
@@ -12,11 +13,11 @@ class App {
         var app = this;
         //\
 
-        // DOModule instance - DOM elements manipulation functions:
+        // DOModule instance - DOM elements manipulation methods:
         app.DOMModule = new DOMModule();
         //\
 
-        // *** Defining App Store ***       
+        // *** Creating app store: StoreModule instance ***       
         app.store = new StoreModule({
             store: {
                 booksTable: [{
@@ -50,13 +51,11 @@ class App {
                     searchResults: new Array()
                 }
             },
-            console: false // show/hide StoreModule logs
+            console: true // show/hide StoreModule logs
         });
         //\
 
-        // ---------------------------------------------------------- //
-
-        // App functions:
+        // App methods:
 
         // Render Books Store List:
         app.renderBooksStoreList = (books) => {
@@ -132,7 +131,7 @@ class App {
         app.addToCart = (bookId) => {
 
             // *** StoreModule get ***
-            // app.store.watch(caller, table)
+            // app.store.get(caller, table)
             let books = app.store.get(app, 'booksTable');
             //\
 
@@ -156,7 +155,7 @@ class App {
         app.removeFromCart = (bookId) => {
 
             // *** StoreModule get ***
-            // app.store.watch(caller, table)
+            // app.store.get(caller, table)
             let books = app.store.get(app, 'cartTable');
             //\
 
@@ -180,7 +179,7 @@ class App {
 
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
-        // *function name: string || function()
+        // *function name: string || function(data){}
         app.store.watch(app, 'booksTable', 'renderBooksStoreList');
         //\
 
@@ -219,7 +218,7 @@ class App {
         document.querySelector('#searchInput').addEventListener('keyup', (event) => {
 
             // *** StoreModule set ***
-            // app.store.watch(caller, table , value)
+            // app.store.set(caller, table , value)
             app.store.set(app, 'searchTable.searchInput', event.target.value);
             //\
 
@@ -229,11 +228,11 @@ class App {
 
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
-        // *function name: string || function() 
+        // *function name: string || function(data) 
         app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
 
             // *** StoreModule get ***
-            // app.store.watch(caller, table)
+            // app.store.get(caller, table)
             let books = app.store.get(app, 'booksTable');
             //\
 
@@ -246,7 +245,7 @@ class App {
             }
 
             // *** StoreModule set ***
-            // app.store.watch(caller, table , value)
+            // app.store.set(caller, table , value)
             app.store.set(app, 'searchTable.searchResults', searchResults);
             //\
 
@@ -259,27 +258,23 @@ class App {
         // app.store.watch(caller, table , function*)
         // *function name: string || function() 
         app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
-        //\        
-
-        // ---------------------------------------------------------- //
-
+        //\      
+    
         // Initial functions:
 
         // Render Books Store List:
 
         // *** StoreModule get ***
-        // app.store.watch(caller, table)
+        // app.store.get(caller, table)
         let booksTable = app.store.get(app, 'booksTable');
-
         app.renderBooksStoreList(booksTable);
         //\
 
         // Render Cart List:
 
         // *** StoreModule get ***
-        // app.store.watch(caller, table)
+        // app.store.get(caller, table)
         let cartTable = app.store.get(app, 'cartTable');
-
         app.renderCartList(cartTable);
         //\
 

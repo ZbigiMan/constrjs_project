@@ -1,24 +1,83 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="robots" content="noindex">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Test App</title>
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
-        <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">        
-        <link rel="stylesheet" type="text/css" href="./compiled/app.bundle.css">     
-    
-        <script>            
-            var url = document.location.href;
-            var routerModuleRoot
-            if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
-                routerModuleBase = 'http://localhost:8000';
-            } else {
-                //routerModuleBase = 'http://your_project_url_base;
-            }
-        </script>
-    </head>
-    <body id="main-router-output">              
-        <script src="./compiled/app.bundle.js"></script>
-    </body>
+
+<head>
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>constrjs - RoutereModule Example</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./compiled/app.bundle.css">
+    <link rel="icon" href="favicon.ico?v=0" />
+
+    <script>
+        var url = document.location.href;
+        var routerModuleRoot
+        if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
+            routerModuleBase = 'http://localhost:8000';
+        } else {
+            //routerModuleBase = 'http://your_project_url_base;
+        }
+    </script>
+</head>
+
+<body>
+    <header class="container container--wide --fixed --fixed-top">
+        <div class="container top">
+            <div class="content">
+                <div class="row row--flex">
+                    <div class="top-content-wrapper title-wrapper">
+                        <div class="content content--vertival-center">
+                            <h4 class="--no-padding --color-light-green">RouterModule Example</h4>
+                        </div>
+                    </div>
+
+                    <!-- Router navbar -->
+                    <nav class="navbar --hidden-xs" id="main-router-navbar">
+                        <ul class="navbar-content">
+                            <li class="navbar-item">
+                                <a href="/home" id="search" data-router-link>Home</a>
+                            </li>
+                            <li class="navbar-item">
+                                <a href="/about" id="Option 1" data-router-link>About</a>
+                            </li>
+                            <li class="navbar-item">
+                                <a href="/option/1" id="Option 2" data-router-link>Option 1</a>
+                            </li>
+                            <li class="navbar-item">
+                                <a href="/option/2" id="Option 3" data-router-link>Option 2</a>
+                            </li>
+                            <li class="navbar-item">
+                                <a href="/option/3" id="Option 3" data-router-link>Option 3</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- /Router navbar -->
+
+                    <div class="top-content-wrapper logo-wrapper">
+                        <div class="content content--vertival-center">
+                            <h5 class="--no-padding">
+                                <span class="logo"><span class=" --color-light-green">constrjs</span> <sub class="--color-light-gray">project</sub></span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Router output -->
+    <main class="container main" id="main-router-output"></main>
+    <!-- /Router output -->
+
+    <footer class="footer container container--wide">
+        <div class="container --padding-standard --text-center">
+            <h5>&copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC, use at your own risk</h5>
+            <img src="assets/img/constrjs-logo-white.svg" alt="constrjs logo" class="footer__logo-image">
+            <h5 class="footer__logo"><span class="logo">constrjs <sub>project</sub></span></h5>
+        </div>
+    </footer>
+    <script src="./compiled/app.bundle.js"></script>
+</body>
+
 </html>

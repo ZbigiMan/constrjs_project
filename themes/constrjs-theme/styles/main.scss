@@ -1,0 +1,112 @@
+body {
+    transition: all 0.4s ease;
+    &.search-bar--visible {
+        padding-top: 50px;
+        transition: all 0.4s ease;
+    }
+}
+
+.logo {
+    font-family: $font-logo;
+    font-weight: $font-weight-light;   
+    letter-spacing: em(1);
+    sub {
+        font-size: em($font-size-smaller);        
+    }
+}
+
+header {
+    position: fixed;   
+    z-index: 999;
+    height: 50px;
+    background: $color-dark-gray;
+    color: $color-almost-white;
+    height: 50px;
+    .top {
+        z-index: 2; // height: 50px;
+        padding: 0 em(20);
+        .top-content-wrapper {
+            height: 50px;
+        }
+        .title-wrapper {
+            padding-right: em(30);
+        }
+        .top__content {
+            height: 50px;
+            display: block;
+        }
+        .navbar {
+            .navbar-item {
+                a {
+                    height: 50px;
+                    padding-top: 12px;
+                    border-right: 1px solid $color-darken-gray;
+                    color: $color-almost-white;
+                    background: transparent;
+                    &:hover,&.active{
+                        opacity: 1;
+                        background: $color-green-hover;
+                    }
+                }
+                &:first-of-type {
+                    a {
+                        border-left: 1px solid $color-darken-gray;
+                    }
+                }
+                &.--navbar-item-green{
+                    a{
+                        background: $color-green;
+                        &:hover,{
+                            opacity: 1;
+                            background: $color-green-hover;
+                        }
+                    }                    
+                }
+            }
+        }
+        .logo-wrapper {
+            margin-left: auto;
+        }
+    }
+}
+
+.search-bar {
+    background: $color-white;
+    top: 0px;
+    height: 50px;
+    position: fixed;
+    transition: all 0.5s ease;
+    z-index: 998;
+    .search-bar-content {
+        height: 50px;
+        padding: 0 em(20);
+    }
+    .btn-wrapper {
+        margin-left: auto;
+    }
+    &.search-bar--visible {
+        top: 50px;
+        transition: all 0.5s ease;
+    }
+}
+
+.main {
+    color: $color-gray;
+    padding: em(70) 0;
+    min-height: 85%;   
+   
+    .content {
+        border-radius: em(4);
+    }
+}
+
+.footer {
+    background: $color-green;
+    color: $color-white;
+    min-height: 15%;
+
+    .footer__logo-image{
+        margin-top: em(20);
+        width: 40px;
+    }
+}
