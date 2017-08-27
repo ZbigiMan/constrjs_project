@@ -2,8 +2,8 @@ require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
-//import { StoreModule } from '@zbigiman/constrjs.store.module';
-import { StoreModule } from '../../../source/constrjs.store.module/store.module';
+import { StoreModule } from '@zbigiman/constrjs.store.module';
+//import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
 // Creating the App
 class App {
