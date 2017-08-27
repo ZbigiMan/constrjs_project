@@ -325,6 +325,8 @@ var App = function App() {
     });
     //\Init Router
 
+    app.mainRouterOutput = document.querySelector('#main-router-output');
+
     //Add routes
     app.router.add([{
         '': function _() {
@@ -332,19 +334,19 @@ var App = function App() {
         }
     }, {
         '/home': function home() {
-            document.querySelector('#main-router-output').innerHTML = 'Home';
+            app.mainRouterOutput.innerHTML = 'Home';
         }
     }, {
         '/about': function about() {
-            document.querySelector('#main-router-output').innerHTML = 'About';
+            app.mainRouterOutput.innerHTML = 'About';
         }
     }, {
-        '/option': function option() {
-            app.router.navigate('/option/1');
-        }
-    }, {
-        '/option/:number': function optionNumber(data) {
-            document.querySelector('#main-router-output').innerHTML = 'Option ' + data.number;
+        '/option/:id': function optionId(data) {
+            if (data.id != '') {
+                app.mainRouterOutput.innerHTML = 'Option ' + data.id;
+            } else {
+                app.router.navigate('/home');
+            }
         }
     }]);
     //\Add routes        

@@ -21,6 +21,8 @@ class App {
         });
         //\Init Router
 
+        app.mainRouterOutput = document.querySelector('#main-router-output');
+
         //Add routes
         app.router.add([
             {
@@ -30,22 +32,22 @@ class App {
             },
             {
                 '/home': () => {
-                    document.querySelector('#main-router-output').innerHTML = 'Home';
+                    app.mainRouterOutput.innerHTML = 'Home';
 
                 }
             },
             {
                 '/about': () => {
-                    document.querySelector('#main-router-output').innerHTML = 'About';
+                    app.mainRouterOutput.innerHTML = 'About';
 
                 }
             }, {
-                '/option': () => {
-                    app.router.navigate('/option/1');
-                }
-            }, {
-                '/option/:number': (data) => {
-                    document.querySelector('#main-router-output').innerHTML = 'Option ' + data.number;
+                '/option/:id': (data) => {
+                    if(data.id!=''){
+                        app.mainRouterOutput.innerHTML = 'Option ' + data.id;
+                    }else{
+                        app.router.navigate('/home');
+                    }                    
                 }
             }]
         );
