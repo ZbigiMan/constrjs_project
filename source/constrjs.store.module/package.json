@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.store.module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ES6+ watchable store, constrjs project",
   "main": "store.module.js",
   "scripts": {
@@ -18,5 +18,9 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZbigiMan/constrjs_project"
   }
 }

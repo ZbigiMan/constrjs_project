@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.dom.module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ES6+ DOM elements manipulation, constrjs project",
   "main": "dom.module.js",
   "scripts": {
@@ -15,5 +15,9 @@
     "constrjs"
   ],
   "author": "Zbigi Man Zbigniew Stępniewski",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZbigiMan/constrjs_project"
+  }
 }

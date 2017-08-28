@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.router.module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ES6+ client router, constrjs project",
   "main": "router.module.js",
   "scripts": {
@@ -13,5 +13,9 @@
     "constrjs"
   ],
   "author": "Zbigi Man Zbigniew Stępniewski",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZbigiMan/constrjs_project"
+  }
 }
