@@ -11,3 +11,5 @@ This is the bundle of ES6 modules/classes helping to create JS SPA app:
 * [**DOMModule**](https://github.com/ZbigiMan/constrjs_project/wiki/DOMModule) - DOM elemets manipulation
 
 ### Read more in [Wiki](https://github.com/ZbigiMan/constrjs_project/wiki)
+
+#### Use at your own risk
