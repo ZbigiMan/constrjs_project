@@ -1,5 +1,5 @@
 // DOMModule
-// ES6+ DOM elements manipulation | :{constrjs} project
+// ES6+ DOM elements manipulation | constrjs project
 // Author Zbigi Man Zbigniew Stępniewski 2017
 export class DOMModule {
     // addClass, removeClass

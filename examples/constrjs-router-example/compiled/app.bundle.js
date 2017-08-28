@@ -301,19 +301,16 @@ __webpack_require__(2);
 
 var _constrjsRouter = __webpack_require__(1);
 
-var _constrjsDom = __webpack_require__(0);
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(3);
+
+//import { RouterModule } from '../../../source/constrjs.router.module/router.module';
 
 var App = function App() {
     _classCallCheck(this, App);
 
     var app = this;
-
-    app.DOMModule = new _constrjsDom.DOMModule();
-
     //Init Router        
     app.router = new _constrjsRouter.RouterModule({
         base: routerModuleBase,
@@ -334,19 +331,15 @@ var App = function App() {
         }
     }, {
         '/home': function home() {
-            app.mainRouterOutput.innerHTML = 'Home';
+            app.mainRouterOutput.innerHTML = '<h1>Home</h1>                    \n                    <p>\n                    Duis adipisicing velit velit laboris consequat quis sunt ullamco qui nulla cupidatat fugiat officia minim. Proident aute sint Lorem fugiat dolore consequat excepteur duis elit laboris nostrud ad irure. Dolor deserunt esse cillum pariatur fugiat culpa commodo in. Laborum deserunt occaecat ad ipsum anim. Velit amet minim ad sunt aliqua laboris sunt aute.\n                    </p>';
         }
     }, {
         '/about': function about() {
-            app.mainRouterOutput.innerHTML = 'About';
+            app.mainRouterOutput.innerHTML = '<h1>About</h1>                    \n                    <p>\n                    In sint sunt amet cillum in dolore est. Id adipisicing mollit cillum duis eiusmod aute. Deserunt sit consequat ad dolor minim sit enim fugiat cupidatat proident ea adipisicing ea occaecat.\n                    </p>';
         }
     }, {
         '/option/:id': function optionId(data) {
-            if (data.id != '') {
-                app.mainRouterOutput.innerHTML = 'Option ' + data.id;
-            } else {
-                app.router.navigate('/home');
-            }
+            app.mainRouterOutput.innerHTML = '<h1>Option ' + data.id + '</h1>                    \n                    <p>\n                    Mollit excepteur voluptate aute velit dolor ad. Proident labore reprehenderit sit aute. Officia cillum aute veniam proident irure aliquip elit elit quis ad excepteur do et nisi.\n                    </p>';
         }
     }]);
     //\Add routes        

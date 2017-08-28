@@ -2,6 +2,8 @@
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 import { DOMModule } from '@zbigiman/constrjs.dom.module';
+//import {DOMModule} from '../../examples/constrjs-router-example/node_modules/@zbigiman/constrjs.dom.module';
+
 export class RouterModule {
     constructor(settings) {
         this.base = settings.base || '/';
@@ -56,8 +58,8 @@ export class RouterModule {
                 _arguments = {}
             if (routeParts.length == pathParts.length) {
                 x++;
-                routeParts.forEach((part, i) => {
-                    if (/^:[da-z]{0,255}/g.test(part) === true) {
+                routeParts.forEach((part, i) => {                    
+                    if (/^:[da-z]{1,255}/g.test(part) === true && pathParts[i].length>0) {
                         let key = part.slice(1);
                         _arguments[key] = pathParts[i];
                         match++;

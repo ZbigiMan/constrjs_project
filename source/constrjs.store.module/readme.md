@@ -1,17 +1,16 @@
-# StoreModule
 ### ES6+ watchable store | constrjs project
 # Idea: 
 ### One watchable source of truth = controlled app flow  
 
 I know we have rxjs, observables, promises... but why do not simplify it? Just create immutable data object and watch changes of it?
 
-# Introduction:
+## Introduction:
 
-## Why?
+### Why?
 
 The **constrjs** project was started in my head during searching for new job. I had to do some test task - create simple web app without using any JS framework or lib like Angular or ReactJS. I wrote some simple ES6 code which I started to improve - I didn't get that job... 
 
-## What is the contrjs project?
+### What is the contrjs project?
 
 This is the bundle of ES6 modules/classes helping to create JS SPA app:
 
@@ -20,7 +19,7 @@ This is the bundle of ES6 modules/classes helping to create JS SPA app:
 * **DOMModule** - DOM elemets manipulation
 
 # StoreModule
-## Instalation:
+### Instalation:
 
 ```
 $ npm i @zbigiman/constrjs.store.module
@@ -85,34 +84,34 @@ class App {
 }
 ```
 
-# Methods:
+## Methods:
 
-## get 
+### get 
 
 ```javascript
 // app.store.get(caller, table)
 let books = app.store.get(app, 'booksTable');
 ```
 
-## set
+### set
 ```javascript
 // app.store.set(caller, table , value)
 app.store.set(app, 'searchTable.searchInput', event.target.value);
 ```
 
-## push
+### push
 ```javascript
  // app.store.push(caller, table, value)
 app.store.push(app, 'cartTable', selectedBook);
 ```
 
-## remove
+### remove
 ```javascript
 // app.store.remove(caller, table, value)
 app.store.remove(app, 'cartTable', selectedBook);
 ```
 
-## watch
+### watch
 #### example 1:
 ```javascript
 // app.store.watch(caller, table , function*)
