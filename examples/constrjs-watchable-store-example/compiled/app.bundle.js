@@ -63,11 +63,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -131,7 +140,7 @@ var DOMModule = exports.DOMModule = function () {
 }();
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -147,12 +156,12 @@ var DOMModule = exports.DOMModule = function () {
 }();
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
 // StoreModule
 // ES6+ watchable store | constrjs project
@@ -201,7 +210,7 @@ class StoreModule {
         }
         //\
 
-        var onWatch = (caller, path, value) => {
+        var onWatch = (caller, path, change, method) => {
             let parts = path.split('.');
             let table = parts[0];
             if (watched[table] !== undefined) {
@@ -212,19 +221,36 @@ class StoreModule {
                     if (watched[table][fullpath] !== undefined) {
                         let reaction = watched[table][fullpath]['reaction'],
                             watcher = watched[table][fullpath]['watcher'],
-                            data = storeModule.get({ name: '~store' }, watchedPath),
+                            value = storeModule.get({
+                            name: '~store'
+                        }, watchedPath),
                             logWatch = 'Store => Watch ',
                             logWatcher = 'Watcher: ' + watcherName,
                             logPath = 'Path: ' + watchedPath,
-                            logAction = 'Reaction: ' + reaction;
+                            logValue = 'Value:',
+                            logChange = 'Change',
+                            logReaction = 'Reaction: ' + reaction,
+                            logMethod = 'Method: ' + method,
+                            _return = {
+                            'caller': caller,
+                            'path': path,
+                            'value': value,
+                            'change': change,
+                            'method': method
+                        };
                         console.logGroup(logWatch);
                         console.logStore(logWatcher);
                         console.logStore(logPath);
-                        console.logStore(logAction);
+                        console.logStore(logValue);
+                        console.logStore(value);
+                        console.logStore(logChange);
+                        console.logStore(change);
+                        console.logStore(logMethod);
+                        console.logStore(logReaction);
                         if (watcher[reaction] !== undefined) {
-                            watcher[reaction].apply(watcher, [data]);
+                            watcher[reaction].apply(watcher, [_return]);
                         } else if (typeof reaction == 'function') {
-                            reaction.apply(watcher, [data]);
+                            reaction.apply(watcher, [_return]);
                         }
                         console.logGroupEnd();
                     }
@@ -268,7 +294,9 @@ class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            let prevValue = this.get({ name: '~store' }, path);
+            let prevValue = this.get({
+                name: '~store'
+            }, path);
             if (prevValue) {
                 if (prevValue.str() == value.str()) {
                     console.logStore(logcaller);
@@ -283,7 +311,7 @@ class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, value);
+            onWatch(caller, path, value, 'set');
         };
 
         //PUSH
@@ -292,7 +320,9 @@ class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => PUSH');
-            let array = this.get({ name: '~store' }, path);
+            let array = this.get({
+                name: '~store'
+            }, path);
             let prevValue = array;
             if (Array.isArray(array) === false) {
                 console.logStore(logcaller);
@@ -319,7 +349,7 @@ class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, value);
+            onWatch(caller, path, value, 'push');
         };
         //\
 
@@ -329,7 +359,9 @@ class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => REMOVE');
-            let array = this.get({ name: '~store' }, path);
+            let array = this.get({
+                name: '~store'
+            }, path);
             if (Array.isArray(array) === false) {
                 console.logStore(logcaller);
                 console.logStore(logPath);
@@ -348,7 +380,7 @@ class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, value);
+            onWatch(caller, path, value, 'remove');
         };
         //\
 
@@ -382,27 +414,27 @@ class StoreModule {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(1);
+__webpack_require__(2);
 
-var _constrjsDom = __webpack_require__(0);
+var _constrjsDom = __webpack_require__(1);
 
-var _store = __webpack_require__(2);
+var _store = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(3);
+__webpack_require__(4);
 //import { StoreModule } from '@zbigiman/constrjs.store.module';
 
 // Creating the App
@@ -458,7 +490,8 @@ var App = function App() {
     // App methods:
 
     // Render Books Store List:
-    app.renderBooksStoreList = function (books) {
+    app.renderBooksStoreList = function (data) {
+        var books = data.value;
         var booksList = '';
         if (books.length > 0) {
             books.forEach(function (book) {
@@ -486,7 +519,8 @@ var App = function App() {
     //\
 
     // Render Cart List:
-    app.renderCartList = function (books) {
+    app.renderCartList = function (data) {
+        var books = data.value;
         var booksList = '';
         if (books.length > 0) {
             books.forEach(function (book) {
@@ -615,8 +649,8 @@ var App = function App() {
     // *** StoreModule watch ***
     // app.store.watch(caller, table , function*)
     // *function name: string || function(data) 
-    app.store.watch(app, 'searchTable.searchInput', function (searchQuery) {
-
+    app.store.watch(app, 'searchTable.searchInput', function (data) {
+        var searchQuery = data.value;
         // *** StoreModule get ***
         // app.store.get(caller, table)
         var books = app.store.get(app, 'booksTable');
@@ -651,7 +685,9 @@ var App = function App() {
     // *** StoreModule get ***
     // app.store.get(caller, table)
     var booksTable = app.store.get(app, 'booksTable');
-    app.renderBooksStoreList(booksTable);
+    app.renderBooksStoreList({
+        value: booksTable
+    });
     //\
 
     // Render Cart List:
@@ -659,7 +695,9 @@ var App = function App() {
     // *** StoreModule get ***
     // app.store.get(caller, table)
     var cartTable = app.store.get(app, 'cartTable');
-    app.renderCartList(cartTable);
+    app.renderCartList({
+        value: cartTable
+    });
     //\
 };
 
@@ -669,20 +707,7 @@ var App = function App() {
 new App();
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 10 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10120,7 +10145,7 @@ LazyWrapper.prototype.clone=lazyClone;LazyWrapper.prototype.reverse=lazyReverse;
 lodash.prototype.at=wrapperAt;lodash.prototype.chain=wrapperChain;lodash.prototype.commit=wrapperCommit;lodash.prototype.next=wrapperNext;lodash.prototype.plant=wrapperPlant;lodash.prototype.reverse=wrapperReverse;lodash.prototype.toJSON=lodash.prototype.valueOf=lodash.prototype.value=wrapperValue;// Add lazy aliases.
 lodash.prototype.first=lodash.prototype.head;if(symIterator){lodash.prototype[symIterator]=wrapperToIterator;}return lodash;};/*--------------------------------------------------------------------------*/// Export lodash.
 var _=runInContext();// Some AMD build optimizers, like r.js, check for condition patterns like:
-if("function"=='function'&&_typeof(__webpack_require__(9))=='object'&&__webpack_require__(9)){// Expose Lodash on the global object to prevent errors when Lodash is
+if("function"=='function'&&_typeof(__webpack_require__(0))=='object'&&__webpack_require__(0)){// Expose Lodash on the global object to prevent errors when Lodash is
 // loaded by a script tag in the presence of an AMD loader.
 // See http://requirejs.org/docs/errors.html#mismatch for more details.
 // Use `_.noConflict` to remove Lodash from the global object.
@@ -10132,10 +10157,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(12)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
 
 /***/ }),
-/* 11 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10165,7 +10190,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
