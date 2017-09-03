@@ -33,7 +33,7 @@ import { RouterModule } from '@zbigiman/constrjs.router.module'
 
 ```javascript
 var url = document.location.href;
-var routerModuleRoot
+var routerModuleBase;
 if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
     routerModuleBase = 'http://localhost:8000';
 } else {

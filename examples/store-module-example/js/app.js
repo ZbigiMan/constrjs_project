@@ -1,9 +1,13 @@
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
-import { DOMModule } from '@zbigiman/constrjs.dom.module';
-import { StoreModule } from '@zbigiman/constrjs.store.module';
-//import { StoreModule } from '../../../source/constrjs.store.module/store.module';
+import {
+    DOMModule
+} from '@zbigiman/constrjs.dom.module';
+//import { StoreModule } from '@zbigiman/constrjs.store.module';
+import {
+    StoreModule
+} from '../../../source/constrjs.store.module/store.module';
 
 // Creating the App
 class App {
@@ -51,14 +55,15 @@ class App {
                     searchResults: new Array()
                 }
             },
-            console: true // show/hide StoreModule logs
+            console: true// show/hide StoreModule logs
         });
         //\
 
         // App methods:
 
         // Render Books Store List:
-        app.renderBooksStoreList = (books) => {
+        app.renderBooksStoreList = (data) => {           
+            let books = data.value;
             let booksList = ''
             if (books.length > 0) {
                 books.forEach((book) => {
@@ -93,7 +98,8 @@ class App {
         //\
 
         // Render Cart List:
-        app.renderCartList = (books) => {
+        app.renderCartList = (data) => {           
+            let books = data.value;
             let booksList = '';
             if (books.length > 0) {
                 books.forEach((book) => {
@@ -229,8 +235,8 @@ class App {
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
         // *function name: string || function(data) 
-        app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
-
+        app.store.watch(app, 'searchTable.searchInput', (data) => {            
+            let searchQuery = data.value;
             // *** StoreModule get ***
             // app.store.get(caller, table)
             let books = app.store.get(app, 'booksTable');
@@ -259,7 +265,7 @@ class App {
         // *function name: string || function() 
         app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
         //\      
-    
+
         // Initial functions:
 
         // Render Books Store List:
@@ -267,7 +273,9 @@ class App {
         // *** StoreModule get ***
         // app.store.get(caller, table)
         let booksTable = app.store.get(app, 'booksTable');
-        app.renderBooksStoreList(booksTable);
+        app.renderBooksStoreList({
+            value: booksTable
+        });
         //\
 
         // Render Cart List:
@@ -275,7 +283,9 @@ class App {
         // *** StoreModule get ***
         // app.store.get(caller, table)
         let cartTable = app.store.get(app, 'cartTable');
-        app.renderCartList(cartTable);
+        app.renderCartList({
+            value: cartTable
+        });
         //\
 
     }
