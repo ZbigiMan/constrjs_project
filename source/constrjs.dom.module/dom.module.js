@@ -44,7 +44,7 @@ export class DOMModule {
             elements = [elements];
         }
         elements.forEach(function (el) {
-            el.innerHTML = el.innerHTML;
+            el.innerHTML = el.innerHTML;            
         });
     }
     //\
