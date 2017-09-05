@@ -1,13 +1,9 @@
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
-import {
-    DOMModule
-} from '@zbigiman/constrjs.dom.module';
+import { DOMModule } from '@zbigiman/constrjs.dom.module';
 //import { StoreModule } from '@zbigiman/constrjs.store.module';
-import {
-    StoreModule
-} from '../../../source/constrjs.store.module/store.module';
+import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
 // Creating the App
 class App {
@@ -62,7 +58,7 @@ class App {
         // App methods:
 
         // Render Books Store List:
-        app.renderBooksStoreList = (data) => {           
+        app.renderBooksStoreList = (data) => {
             let books = data.value;
             let booksList = ''
             if (books.length > 0) {
@@ -98,7 +94,7 @@ class App {
         //\
 
         // Render Cart List:
-        app.renderCartList = (data) => {           
+        app.renderCartList = (data) => {
             let books = data.value;
             let booksList = '';
             if (books.length > 0) {
@@ -235,7 +231,7 @@ class App {
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
         // *function name: string || function(data) 
-        app.store.watch(app, 'searchTable.searchInput', (data) => {            
+        app.store.watch(app, 'searchTable.searchInput', (data) => {
             let searchQuery = data.value;
             // *** StoreModule get ***
             // app.store.get(caller, table)
