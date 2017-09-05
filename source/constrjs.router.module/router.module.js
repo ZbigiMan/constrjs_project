@@ -16,6 +16,7 @@ export class RouterModule {
             }            
         }
         this.navSelector = settings.navSelector;
+        this.aTagSelector = 'a' || settings.aTagSelector;
         this.error404 = settings.error404 || function () { console.error("Error 404\nPage not found.") };
         this.routes = [];
         this.DOMModule = new DOMModule();
@@ -91,7 +92,7 @@ export class RouterModule {
         this.activateRouterLinks(this.navSelector);
     }
     activateRouterLinks(navSelector) {
-        let routerLinks = document.querySelectorAll(navSelector + ' *[data-router-link]'),
+        let routerLinks = document.querySelectorAll(navSelector + ' ' + this.aTagSelector),
             that = this;
         routerLinks.forEach((link) => {
             link.addEventListener('click', function (e) {

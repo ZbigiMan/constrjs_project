@@ -117,16 +117,22 @@ app.store.remove(app, 'cartTable', selectedBook);
 // app.store.watch(caller, table , function*)
 // *function name: string || function(data){ ... }
 app.store.watch(app, 'booksTable', 'renderBooksStoreList');
-app.renderBooksStoreList = (books) => { ... }
+app.renderBooksStoreList = (data) => {
+    let books = data.value;
+    /*
+    ...
+    */
+}
 ```
 #### example 2:
 ```javascript
 // app.store.watch(caller, table , function*)
 // *function name: string || function(data){ ... }
-app.store.watch(app, 'searchTable.searchInput', (searchQuery) => {
-/*
-...
-*/
+app.store.watch(app, 'searchTable.searchInput', (data) => {
+    let searchQuery = data.value;
+    /*
+    ...
+    */
 });
 ```
 

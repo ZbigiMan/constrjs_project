@@ -37,4 +37,16 @@ export class DOMModule {
         });
     }
     //\ addClass, removeClass
+
+    // Refresh
+    refresh(elements) {
+        if (elements.length === undefined) {
+            elements = [elements];
+        }
+        elements.forEach(function (el) {
+            el.innerHTML = el.innerHTML;
+        });
+    }
+    //\
+    
 }
