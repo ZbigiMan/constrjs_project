@@ -63,11 +63,215 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+!function () {
+  "use strict";
+  var t = function t(_t, o) {
+    o = o || window;for (var i = 0; i < this.length; i++) {
+      _t.call(o, this[i], i, this);
+    }
+  };window.NodeList && !NodeList.prototype.forEach && (NodeList.prototype.forEach = t);
+}();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__);
+// RouterModule
+// ES6+ client router | :{constrjs} project
+// Author: Zbigi Man Zbigniew Stępniewski 2017
+//import { DOMModule } from '@zbigiman/constrjs.dom.module';
+
+
+class RouterModule {
+    constructor(settings) {
+        this.base = settings.base || '/';
+        if (settings.SPAEmulation === true) {
+            this.SPAEmulationBrowserNavBtns();
+            let root = this.base;
+            this.base = this.base + '/#';
+            if (document.location.href == root + '/') {
+                document.location = this.base;
+            }
+        }
+        this.navSelector = 'body' || settings.navSelector;
+        this.aTagSelector = 'a' || settings.aTagSelector;
+        this.error404 = settings.error404 || function () {
+            console.error("Error 404\nPage not found.");
+        };
+        this.routes = [];
+        this.DOMModule = new __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__["DOMModule"]();
+        this.name = settings.name || 'RouterModule';
+    }
+    SPAEmulationBrowserNavBtns() {
+        window.innerDocClick = false;
+        document.onmouseover = function () {
+            window.innerDocClick = true;
+        };
+        document.onmouseleave = function () {
+            window.innerDocClick = false;
+        };
+        window.onhashchange = function () {
+            if (!window.innerDocClick) {
+                location.reload();
+            }
+        };
+    }
+    add(routesSets) {
+        let that = this;
+        routesSets.forEach(set => {
+            let path = Object.keys(set)[0];
+            let callback = set[path];
+            that.routes.push({
+                _path: path,
+                _callback: callback
+            });
+        });
+        this.init();
+    }
+    navigate(_path, e) {
+        let that = this,
+            pageNotFound = 0,
+            x = 0;
+        this.routes.forEach(route => {
+            let routeParts = route._path.split('/').slice(1),
+                pathParts = _path.split('/').slice(1),
+                match = 0,
+                _arguments = {};
+            if (routeParts.length == pathParts.length) {
+                x++;
+                routeParts.forEach((part, i) => {
+                    if (/^:[da-z]{1,255}/g.test(part) === true && pathParts[i].length > 0) {
+                        let key = part.slice(1);
+                        _arguments[key] = pathParts[i];
+                        match++;
+                    } else if (part == pathParts[i]) {
+                        match++;
+                    }
+                });
+                if (match == routeParts.length && match !== 0 || _path == '') {
+                    history.pushState(null, null, that.base + _path);
+                    route._callback(_arguments, e);
+                    that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
+                    let activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
+                    if (activeLink !== null) {
+                        that.DOMModule.addClass(activeLink, 'active');
+                    }
+                } else {
+                    pageNotFound++;
+                }
+            }
+        });
+        if (pageNotFound == x) {
+            that.error404();
+            return false;
+        }
+    }
+    init() {
+        let path = document.location.href.replace(this.base, '');
+        this.navigate(path);
+        this.activateRouterLinks(this.navSelector);
+    }
+    activateRouterLinks(navSelector) {
+        let routerLinks = document.querySelectorAll(navSelector + ' ' + this.aTagSelector),
+            that = this;
+        routerLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                let href = this.getAttribute('href');
+                that.navigate(href, e);
+            });
+        });
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["RouterModule"] = RouterModule;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(0);
+
+var _router = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(2);
+
+// import { RouterModule } from '@zbigiman/constrjs.router.module';
+
+var App = function App() {
+    _classCallCheck(this, App);
+
+    var app = this;
+    //Init Router        
+    app.router = new _router.RouterModule({
+        base: routerModuleBase,
+        error404: function error404() {
+            app.router.navigate('');
+        },
+        SPAEmulation: true
+    });
+    //\Init Router
+
+    app.mainRouterOutput = document.querySelector('#main-router-output');
+
+    //Add routes
+    app.router.add([{
+        '': function _() {
+            app.router.navigate('/home');
+        }
+    }, {
+        '/home': function home() {
+            app.mainRouterOutput.innerHTML = '<h1>Home</h1>                    \n                    <p>\n                    Duis adipisicing velit velit laboris consequat quis sunt ullamco qui nulla cupidatat fugiat officia minim. Proident aute sint Lorem fugiat dolore consequat excepteur duis elit laboris nostrud ad irure. Dolor deserunt esse cillum pariatur fugiat culpa commodo in. Laborum deserunt occaecat ad ipsum anim. Velit amet minim ad sunt aliqua laboris sunt aute.\n                    </p>';
+        }
+    }, {
+        '/about': function about() {
+            app.mainRouterOutput.innerHTML = '<h1>About</h1>                    \n                    <p>\n                    In sint sunt amet cillum in dolore est. Id adipisicing mollit cillum duis eiusmod aute. Deserunt sit consequat ad dolor minim sit enim fugiat cupidatat proident ea adipisicing ea occaecat.\n                    </p>';
+        }
+    }, {
+        '/about/:option': function aboutOption(data) {
+            app.mainRouterOutput.innerHTML = '<h1>About ' + data.option + '</h1>                    \n                    <p>\n                    Velit id aliqua labore nisi ipsum amet. Aute laboris in ut velit cupidatat nisi culpa duis adipisicing fugiat. Ex nulla ea ipsum consequat dolor pariatur. Ullamco eiusmod quis sunt ut duis qui. Ut anim excepteur amet quis sit laboris minim quis. Do minim id dolor voluptate sint mollit irure minim consequat.\n                    </p>';
+        }
+    }, {
+        '/option/:id': function optionId(data) {
+            app.mainRouterOutput.innerHTML = '<h1>Option ' + data.id + '</h1>                    \n                    <p>\n                    Mollit excepteur voluptate aute velit dolor ad. Proident labore reprehenderit sit aute. Officia cillum aute veniam proident irure aliquip elit elit quis ad excepteur do et nisi.\n                    </p>';
+        }
+    }]);
+    //\Add routes        
+};
+
+new App();
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -129,223 +333,6 @@ var DOMModule = exports.DOMModule = function () {
 
     return DOMModule;
 }();
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.RouterModule = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // RouterModule
-// ES6+ client router, constrjs project
-// Author: Zbigi Man Zbigniew Stępniewski 2017
-
-
-var _constrjsDom = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var RouterModule = exports.RouterModule = function () {
-    function RouterModule(settings) {
-        _classCallCheck(this, RouterModule);
-
-        this.base = settings.base || '/';
-        if (settings.SPAEmulation === true) {
-            this.SPAEmulationBrowserNavBtns();
-            var root = this.base;
-            this.base = this.base + '/#';
-            if (document.location.href == root + '/') {
-                document.location = this.base;
-            }
-        }
-        this.navSelector = settings.navSelector;
-        this.error404 = settings.error404 || function () {
-            console.error("Error 404\nPage not found.");
-        };
-        this.routes = [];
-        this.DOMModule = new _constrjsDom.DOMModule();
-        this.name = settings.name || 'RouterModule';
-    }
-
-    _createClass(RouterModule, [{
-        key: 'SPAEmulationBrowserNavBtns',
-        value: function SPAEmulationBrowserNavBtns() {
-            window.innerDocClick = false;
-            document.onmouseover = function () {
-                window.innerDocClick = true;
-            };
-            document.onmouseleave = function () {
-                window.innerDocClick = false;
-            };
-            window.onhashchange = function () {
-                if (!window.innerDocClick) {
-                    location.reload();
-                }
-            };
-        }
-    }, {
-        key: 'add',
-        value: function add(routesSets) {
-            var that = this;
-            routesSets.forEach(function (set) {
-                var path = Object.keys(set)[0];
-                var callback = set[path];
-                that.routes.push({
-                    _path: path,
-                    _callback: callback
-                });
-            });
-            this.init();
-        }
-    }, {
-        key: 'navigate',
-        value: function navigate(_path, e) {
-            var that = this,
-                pageNotFound = 0,
-                x = 0;
-            this.routes.forEach(function (route) {
-                var routeParts = route._path.split('/').slice(1),
-                    pathParts = _path.split('/').slice(1),
-                    match = 0,
-                    _arguments = {};
-                if (routeParts.length == pathParts.length) {
-                    x++;
-                    routeParts.forEach(function (part, i) {
-                        if (/^:[da-z]{0,255}/g.test(part) === true) {
-                            var key = part.slice(1);
-                            _arguments[key] = pathParts[i];
-                            match++;
-                        } else if (part == pathParts[i]) {
-                            match++;
-                        }
-                    });
-                    if (match == routeParts.length && match !== 0 || _path == '') {
-                        history.pushState(null, null, that.base + _path);
-                        route._callback(_arguments, e);
-                        that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
-                        var activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
-                        if (activeLink !== null) {
-                            that.DOMModule.addClass(activeLink, 'active');
-                        }
-                    } else {
-                        pageNotFound++;
-                    }
-                }
-            });
-            if (pageNotFound == x) {
-                that.error404();
-                return false;
-            }
-        }
-    }, {
-        key: 'init',
-        value: function init() {
-            var path = document.location.href.replace(this.base, '');
-            this.navigate(path);
-            this.activateRouterLinks(this.navSelector);
-        }
-    }, {
-        key: 'activateRouterLinks',
-        value: function activateRouterLinks(navSelector) {
-            var routerLinks = document.querySelectorAll(navSelector + ' *[data-router-link]'),
-                that = this;
-            routerLinks.forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var href = this.getAttribute('href');
-                    that.navigate(href, e);
-                });
-            });
-        }
-    }]);
-
-    return RouterModule;
-}();
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-!function () {
-  "use strict";
-  var t = function t(_t, o) {
-    o = o || window;for (var i = 0; i < this.length; i++) {
-      _t.call(o, this[i], i, this);
-    }
-  };window.NodeList && !NodeList.prototype.forEach && (NodeList.prototype.forEach = t);
-}();
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(2);
-
-var _constrjsRouter = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-__webpack_require__(3);
-
-//import { RouterModule } from '../../../source/constrjs.router.module/router.module';
-
-var App = function App() {
-    _classCallCheck(this, App);
-
-    var app = this;
-    //Init Router        
-    app.router = new _constrjsRouter.RouterModule({
-        base: routerModuleBase,
-        navSelector: '#main-router-navbar',
-        error404: function error404() {
-            app.router.navigate('');
-        },
-        SPAEmulation: true
-    });
-    //\Init Router
-
-    app.mainRouterOutput = document.querySelector('#main-router-output');
-
-    //Add routes
-    app.router.add([{
-        '': function _() {
-            app.router.navigate('/home');
-        }
-    }, {
-        '/home': function home() {
-            app.mainRouterOutput.innerHTML = '<h1>Home</h1>                    \n                    <p>\n                    Duis adipisicing velit velit laboris consequat quis sunt ullamco qui nulla cupidatat fugiat officia minim. Proident aute sint Lorem fugiat dolore consequat excepteur duis elit laboris nostrud ad irure. Dolor deserunt esse cillum pariatur fugiat culpa commodo in. Laborum deserunt occaecat ad ipsum anim. Velit amet minim ad sunt aliqua laboris sunt aute.\n                    </p>';
-        }
-    }, {
-        '/about': function about() {
-            app.mainRouterOutput.innerHTML = '<h1>About</h1>                    \n                    <p>\n                    In sint sunt amet cillum in dolore est. Id adipisicing mollit cillum duis eiusmod aute. Deserunt sit consequat ad dolor minim sit enim fugiat cupidatat proident ea adipisicing ea occaecat.\n                    </p>';
-        }
-    }, {
-        '/option/:id': function optionId(data) {
-            app.mainRouterOutput.innerHTML = '<h1>Option ' + data.id + '</h1>                    \n                    <p>\n                    Mollit excepteur voluptate aute velit dolor ad. Proident labore reprehenderit sit aute. Officia cillum aute veniam proident irure aliquip elit elit quis ad excepteur do et nisi.\n                    </p>';
-        }
-    }]);
-    //\Add routes        
-};
-
-new App();
 
 /***/ })
 /******/ ]);

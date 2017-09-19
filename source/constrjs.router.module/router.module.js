@@ -1,8 +1,8 @@
 // RouterModule
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-import { DOMModule } from '@zbigiman/constrjs.dom.module';
-//import {DOMModule} from '../../examples/constrjs-router-example/node_modules/@zbigiman/constrjs.dom.module';
+//import { DOMModule } from '@zbigiman/constrjs.dom.module';
+import {DOMModule} from '../../examples/router-module-example/node_modules/@zbigiman/constrjs.dom.module';
 
 export class RouterModule {
     constructor(settings) {
@@ -15,7 +15,7 @@ export class RouterModule {
                 document.location = this.base;
             }            
         }
-        this.navSelector = settings.navSelector;
+        this.navSelector = 'body' || settings.navSelector;
         this.aTagSelector = 'a' || settings.aTagSelector;
         this.error404 = settings.error404 || function () { console.error("Error 404\nPage not found.") };
         this.routes = [];

@@ -1,16 +1,15 @@
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
-import { RouterModule } from '@zbigiman/constrjs.router.module';
-//import { RouterModule } from '../../../source/constrjs.router.module/router.module';
+// import { RouterModule } from '@zbigiman/constrjs.router.module';
+import { RouterModule } from '../../../source/constrjs.router.module/router.module';
 
 class App {
     constructor() {
         var app = this;    
         //Init Router        
         app.router = new RouterModule({
-            base: routerModuleBase,
-            navSelector: '#main-router-navbar',
+            base: routerModuleBase,            
             error404: () => {
                 app.router.navigate('');
             },
@@ -44,7 +43,15 @@ class App {
                     </p>`;
 
                 }
-            }, {
+            },  {
+                '/about/:option': (data) => {
+                    app.mainRouterOutput.innerHTML =  `<h1>About ${data.option}</h1>                    
+                    <p>
+                    Velit id aliqua labore nisi ipsum amet. Aute laboris in ut velit cupidatat nisi culpa duis adipisicing fugiat. Ex nulla ea ipsum consequat dolor pariatur. Ullamco eiusmod quis sunt ut duis qui. Ut anim excepteur amet quis sit laboris minim quis. Do minim id dolor voluptate sint mollit irure minim consequat.
+                    </p>`;
+                }
+            },
+            {
                 '/option/:id': (data) => {            
                     app.mainRouterOutput.innerHTML =  `<h1>Option ${data.id}</h1>                    
                     <p>
