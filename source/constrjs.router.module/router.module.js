@@ -2,7 +2,7 @@
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 //import { DOMModule } from '@zbigiman/constrjs.dom.module';
-import {DOMModule} from '../../examples/router-module-example/node_modules/@zbigiman/constrjs.dom.module';
+import {DOMModule} from '../../source/constrjs.dom.module/dom.module';
 
 export class RouterModule {
     constructor(settings) {
@@ -73,6 +73,18 @@ export class RouterModule {
                     route._callback(_arguments, e);
                     that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
                     let activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
+
+                    let href = _path;
+                    while(href.length>0){
+                        href = href.slice(0,href.lastIndexOf('/'));
+                        if(href!=''){
+                            let parent = document.querySelector('a[data-router-link][href="' + href + '"');
+                            if(parent!==null){                                
+                                that.DOMModule.addClass(parent,'active');
+                            }                            
+                        }                       
+                    }                    
+
                     if (activeLink !== null) {
                         that.DOMModule.addClass(activeLink, 'active');
                     }

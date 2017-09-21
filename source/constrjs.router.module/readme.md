@@ -106,4 +106,11 @@ app.router.add([
 );
 //\Add routes 
 ```
+
+### Router links
+
+```html
+<a href="/home" id="search" data-router-link>Home</a>
+```
+
 #### Use at your own risk

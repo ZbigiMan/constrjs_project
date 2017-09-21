@@ -38,6 +38,17 @@ export class DOMModule {
     }
     //\ addClass, removeClass
 
+    // Get parents
+    getParents(el){
+        let parents = [];
+        while (el) {
+            parents.unshift(el);
+            el = el.parentNode;
+        }
+        return parents;
+    }
+    //\
+
     // Refresh
     refresh(elements) {
         if (elements.length === undefined) {

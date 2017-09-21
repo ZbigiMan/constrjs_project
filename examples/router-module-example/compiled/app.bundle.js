@@ -88,8 +88,7 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__source_constrjs_dom_module_dom_module__ = __webpack_require__(9);
 // RouterModule
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
@@ -113,7 +112,7 @@ class RouterModule {
             console.error("Error 404\nPage not found.");
         };
         this.routes = [];
-        this.DOMModule = new __WEBPACK_IMPORTED_MODULE_0__examples_router_module_example_node_modules_zbigiman_constrjs_dom_module__["DOMModule"]();
+        this.DOMModule = new __WEBPACK_IMPORTED_MODULE_0__source_constrjs_dom_module_dom_module__["a" /* DOMModule */]();
         this.name = settings.name || 'RouterModule';
     }
     SPAEmulationBrowserNavBtns() {
@@ -167,6 +166,18 @@ class RouterModule {
                     route._callback(_arguments, e);
                     that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
                     let activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
+
+                    let href = _path;
+                    while (href.length > 0) {
+                        href = href.slice(0, href.lastIndexOf('/'));
+                        if (href != '') {
+                            let parent = document.querySelector('a[data-router-link][href="' + href + '"');
+                            if (parent !== null) {
+                                that.DOMModule.addClass(parent, 'active');
+                            }
+                        }
+                    }
+
                     if (activeLink !== null) {
                         that.DOMModule.addClass(activeLink, 'active');
                     }
@@ -271,68 +282,69 @@ new App();
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 8 */,
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 // DOMModule
-// ES6+ DOM elements manipulation, constrjs project
+// ES6+ DOM elements manipulation | constrjs project
 // Author Zbigi Man Zbigniew Stępniewski 2017
-var DOMModule = exports.DOMModule = function () {
-    function DOMModule() {
-        _classCallCheck(this, DOMModule);
+class DOMModule {
+    // addClass, removeClass
+    //Thanks to: http://jaketrent.com/post/addremove-classes-raw-javascript/
+    hasClass(el, className) {
+        if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
     }
-
-    _createClass(DOMModule, [{
-        key: 'hasClass',
-
-        // addClass, removeClass
-        //Thanks to: http://jaketrent.com/post/addremove-classes-raw-javascript/
-        value: function hasClass(el, className) {
-            if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+    addClass(elements, className) {
+        if (elements.length === undefined) {
+            elements = [elements];
         }
-    }, {
-        key: 'addClass',
-        value: function addClass(elements, className) {
-            if (elements.length === undefined) {
-                elements = [elements];
+
+        elements.forEach(function (el) {
+            if (el.classList) el.classList.add(className);else if (!this.hasClass(el, className)) el.className += " " + className;
+        });
+    }
+    removeClass(elements, className) {
+
+        if (elements.length === undefined) {
+            elements = [elements];
+        }
+
+        elements.forEach(function (el) {
+            if (el.classList) el.classList.remove(className);else if (this.hasClass(el, className)) {
+                var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                el.className = el.className.replace(reg, ' ');
             }
+        });
+    }
+    //\ addClass, removeClass
 
-            elements.forEach(function (el) {
-                if (el.classList) el.classList.add(className);else if (!this.hasClass(el, className)) el.className += " " + className;
-            });
+    // Get parents
+    getParents(el) {
+        let parents = [];
+        while (el) {
+            parents.unshift(el);
+            el = el.parentNode;
         }
-    }, {
-        key: 'removeClass',
-        value: function removeClass(elements, className) {
+        return parents;
+    }
+    //\
 
-            if (elements.length === undefined) {
-                elements = [elements];
-            }
-
-            elements.forEach(function (el) {
-                if (el.classList) el.classList.remove(className);else if (this.hasClass(el, className)) {
-                    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-                    el.className = el.className.replace(reg, ' ');
-                }
-            });
+    // Refresh
+    refresh(elements) {
+        if (elements.length === undefined) {
+            elements = [elements];
         }
-        //\ addClass, removeClass
+        elements.forEach(function (el) {
+            el.innerHTML = el.innerHTML;
+        });
+    }
+    //\
 
-    }]);
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = DOMModule;
 
-    return DOMModule;
-}();
 
 /***/ })
 /******/ ]);
