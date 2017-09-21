@@ -44,4 +44,12 @@ this.DOMModule.addClass(activeLink, 'active');
 ```javascript
  this.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
 ```
+
+#### getParents
+```javascript
+    var el = document.querySelector('target');
+    this.DOMModule.getParents(el);
+```
+returns array of parents nodes.
+
 #### Use at your own risk
