@@ -48,8 +48,8 @@ this.DOMModule.addClass(activeLink, 'active');
 #### getParents
 ```javascript
     var el = document.querySelector('target');
-    this.DOMModule.getParents(el);
+    var parents = this.DOMModule.getParents(el);
 ```
-returns array of parents nodes.
+returns array of all parents.
 
 #### Use at your own risk
