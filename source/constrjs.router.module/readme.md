@@ -110,7 +110,7 @@ app.router.add([
 ### Router links
 
 ```html
-<a href="/home" id="search" data-router-link>Home</a>
+<a href="/home" data-router-link>Home</a>
 ```
 
 #### Use at your own risk
