@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.router.module",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "ES6+ client router, constrjs project",
   "main": "router.module.js",
   "scripts": {

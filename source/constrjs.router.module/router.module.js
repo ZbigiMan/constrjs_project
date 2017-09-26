@@ -1,8 +1,8 @@
 // RouterModule
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-//import { DOMModule } from '@zbigiman/constrjs.dom.module';
-import {DOMModule} from '../../source/constrjs.dom.module/dom.module';
+import { DOMModule } from '@zbigiman/constrjs.dom.module';
+//import {DOMModule} from '../../source/constrjs.dom.module/dom.module';
 
 export class RouterModule {
     constructor(settings) {
@@ -16,7 +16,7 @@ export class RouterModule {
             }            
         }
         this.navSelector = 'body' || settings.navSelector;
-        this.aTagSelector = 'a' || settings.aTagSelector;
+        this.aTagSelector = 'a[data-router-link]' || settings.aTagSelector;
         this.error404 = settings.error404 || function () { console.error("Error 404\nPage not found.") };
         this.routes = [];
         this.DOMModule = new DOMModule();
@@ -71,14 +71,14 @@ export class RouterModule {
                 if (match == routeParts.length && match !== 0 || _path == '') {
                     history.pushState(null, null, that.base + _path);
                     route._callback(_arguments, e);
-                    that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
-                    let activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
+                    that.DOMModule.removeClass(document.querySelectorAll(this.navSelector + ' ' + this.aTagSelector), 'active');
+                    let activeLink = document.querySelector(this.navSelector + ' '+ this.aTagSelector+'[href="' + _path + '"');
 
                     let href = _path;
                     while(href.length>0){
                         href = href.slice(0,href.lastIndexOf('/'));
                         if(href!=''){
-                            let parent = document.querySelector('a[data-router-link][href="' + href + '"');
+                            let parent = document.querySelector(this.navSelector + ' ' + this.aTagSelector + '[href="' + href + '"');
                             if(parent!==null){                                
                                 that.DOMModule.addClass(parent,'active');
                             }                            

@@ -1,8 +1,8 @@
 require("../styles/main.scss");
 import 'mdn-polyfills/NodeList.forEach';
 
-// import { RouterModule } from '@zbigiman/constrjs.router.module';
-import { RouterModule } from '../../../source/constrjs.router.module/router.module';
+import { RouterModule } from '@zbigiman/constrjs.router.module';
+//import { RouterModule } from '../../../source/constrjs.router.module/router.module';
 
 class App {
     constructor() {

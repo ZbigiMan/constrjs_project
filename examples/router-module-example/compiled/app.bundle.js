@@ -88,11 +88,11 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__source_constrjs_dom_module_dom_module__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__source_constrjs_dom_module_dom_module__ = __webpack_require__(8);
 // RouterModule
 // ES6+ client router | :{constrjs} project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-//import { DOMModule } from '@zbigiman/constrjs.dom.module';
+//import { DOMMModule } from '@zbigiman/constrjs.dom.module';
 
 
 class RouterModule {
@@ -107,7 +107,7 @@ class RouterModule {
             }
         }
         this.navSelector = 'body' || settings.navSelector;
-        this.aTagSelector = 'a' || settings.aTagSelector;
+        this.aTagSelector = 'a[data-router-link]' || settings.aTagSelector;
         this.error404 = settings.error404 || function () {
             console.error("Error 404\nPage not found.");
         };
@@ -164,14 +164,14 @@ class RouterModule {
                 if (match == routeParts.length && match !== 0 || _path == '') {
                     history.pushState(null, null, that.base + _path);
                     route._callback(_arguments, e);
-                    that.DOMModule.removeClass(document.querySelectorAll('a[data-router-link]'), 'active');
-                    let activeLink = document.querySelector('a[data-router-link][href="' + _path + '"');
+                    that.DOMModule.removeClass(document.querySelectorAll(this.navSelector + ' ' + this.aTagSelector), 'active');
+                    let activeLink = document.querySelector(this.navSelector + ' ' + this.aTagSelector + '[href="' + _path + '"');
 
                     let href = _path;
                     while (href.length > 0) {
                         href = href.slice(0, href.lastIndexOf('/'));
                         if (href != '') {
-                            let parent = document.querySelector('a[data-router-link][href="' + href + '"');
+                            let parent = document.querySelector(this.navSelector + ' ' + this.aTagSelector + '[href="' + href + '"');
                             if (parent !== null) {
                                 that.DOMModule.addClass(parent, 'active');
                             }
@@ -282,8 +282,7 @@ new App();
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */,
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
