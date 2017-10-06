@@ -4,7 +4,9 @@
   "description": "It's just test app",
   "main": "app.js",
   "scripts": {
-    "start": "live-server --host=localhost --port=8001 --cors"
+    "serve": "live-server --host=localhost --ignore=node_modules --port=8081 --cors",
+    "watch": "webpack -w",
+    "start": "concurrently \"npm run watch\" \"npm run serve\""
   },
   "author": "Zbigi Man Zbigniew Stępniewski ",
   "license": "ISC",
