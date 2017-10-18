@@ -1,8 +1,8 @@
 // StoreModule
 // ES6+ watchable store | constrjs project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-//import _ from 'lodash';
-import _ from '../../examples/constrjs-watchable-store-example/node_modules/lodash'
+import _ from 'lodash';
+//import _ from '../../examples/constrjs-watchable-store-example/node_modules/lodash'
 export class StoreModule {
     constructor(settings) {
 

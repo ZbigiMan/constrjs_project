@@ -208,13 +208,31 @@ The layout elements:
   border-bottom: 1px solid #ededed;
   margin: 1.25em 0; }
 
-.navbar .navbar-content {
-  display: inline-flex; }
-  .navbar .navbar-content .navbar-item a {
-    white-space: nowrap;
-    padding: 0.625em;
-    box-sizing: border-box;
-    display: block; }
+.navbar {
+  background: inherit; }
+  .navbar .navbar-content {
+    background: inherit;
+    display: inline-flex; }
+    .navbar .navbar-content .navbar-item {
+      background: inherit; }
+      .navbar .navbar-content .navbar-item a {
+        white-space: nowrap;
+        padding: 0.625em;
+        box-sizing: border-box;
+        display: block;
+        background: inherit; }
+      .navbar .navbar-content .navbar-item:hover ul {
+        opacity: 1;
+        pointer-events: initial; }
+      .navbar .navbar-content .navbar-item ul {
+        pointer-events: none;
+        background: inherit;
+        position: absolute;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.4s ease; }
+        .navbar .navbar-content .navbar-item ul a {
+          background: inherit; }
 
 .form-field {
   overflow: hidden; }
@@ -322,22 +340,27 @@ header {
     header .top .top__content {
       height: 50px;
       display: block; }
-    header .top .navbar .navbar-item a {
-      height: 50px;
-      padding-top: 12px;
-      border-right: 1px solid #222;
-      color: #ededed;
-      background: transparent; }
-      header .top .navbar .navbar-item a:hover, header .top .navbar .navbar-item a.active {
-        opacity: 1;
-        background: #108479; }
-    header .top .navbar .navbar-item:first-of-type a {
-      border-left: 1px solid #222; }
-    header .top .navbar .navbar-item.\--navbar-item-green a {
-      background: #01a797; }
-      header .top .navbar .navbar-item.\--navbar-item-green a:hover {
-        opacity: 1;
-        background: #108479; }
+    header .top .navbar {
+      background: #333; }
+      header .top .navbar .navbar-item a {
+        height: 50px;
+        padding-top: 12px;
+        border-right: 1px solid #222;
+        color: #ededed;
+        background: transparent; }
+        header .top .navbar .navbar-item a:hover, header .top .navbar .navbar-item a.active {
+          opacity: 1;
+          background: #108479; }
+      header .top .navbar .navbar-item:first-of-type a {
+        border-left: 1px solid #222; }
+      header .top .navbar .navbar-item.\--navbar-item-green a {
+        background: #01a797; }
+        header .top .navbar .navbar-item.\--navbar-item-green a:hover {
+          opacity: 1;
+          background: #108479; }
+      header .top .navbar .navbar-item ul .navbar-item a {
+        border: 0 none;
+        border-top: 1px solid #222; }
     header .top .logo-wrapper {
       margin-left: auto; }
 

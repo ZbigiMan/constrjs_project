@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -91,7 +91,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // DOMModule
-// ES6+ DOM elements manipulation, constrjs project
+// ES6+ DOM elements manipulation | constrjs project
 // Author Zbigi Man Zbigniew Stępniewski 2017
 var DOMModule = exports.DOMModule = function () {
     function DOMModule() {
@@ -134,6 +134,34 @@ var DOMModule = exports.DOMModule = function () {
         }
         //\ addClass, removeClass
 
+        // Get parents
+
+    }, {
+        key: 'getParents',
+        value: function getParents(el) {
+            var parents = [];
+            while (el) {
+                parents.unshift(el);
+                el = el.parentNode;
+            }
+            return parents;
+        }
+        //\
+
+        // Refresh
+
+    }, {
+        key: 'refresh',
+        value: function refresh(elements) {
+            if (elements.length === undefined) {
+                elements = [elements];
+            }
+            elements.forEach(function (el) {
+                el.innerHTML = el.innerHTML;
+            });
+        }
+        //\
+
     }]);
 
     return DOMModule;
@@ -146,296 +174,290 @@ var DOMModule = exports.DOMModule = function () {
 "use strict";
 
 
-!function () {
-  "use strict";
-  var t = function t(_t, o) {
-    o = o || window;for (var i = 0; i < this.length; i++) {
-      _t.call(o, this[i], i, this);
-    }
-  };window.NodeList && !NodeList.prototype.forEach && (NodeList.prototype.forEach = t);
-}();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.StoreModule = undefined;
 
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+var _lodash = __webpack_require__(5);
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash__);
-// StoreModule
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // StoreModule
 // ES6+ watchable store | constrjs project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-//import _ from 'lodash';
 
-class StoreModule {
-    constructor(settings) {
 
-        //Prototypes
-        Object.prototype.str = function () {
-            return JSON.stringify(this);
+//import _ from '../../examples/constrjs-watchable-store-example/node_modules/lodash'
+var StoreModule = exports.StoreModule = function StoreModule(settings) {
+    var _this = this;
+
+    _classCallCheck(this, StoreModule);
+
+    //Prototypes
+    Object.prototype.str = function () {
+        return JSON.stringify(this);
+    };
+    //\
+
+    //settings
+    var storeModule = this,
+        store = settings.store,
+        watched = new Array();
+    //\
+
+    //console
+    if (settings.console != true) {
+        console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = function () {
+            return false;
         };
-        //\
+    } else {
+        console.logStore = function (log) {
+            console.log(log);
+        };
+        console.logTime = function (log) {
+            console.time(log);
+        };
+        console.logTimeEnd = function (log) {
+            console.timeEnd(log);
+        };
+        console.logGroup = function (log) {
+            console.group(log);
+        };
+        console.logGroupEnd = function () {
+            console.groupEnd();
+        };
+        console.logError = function (log) {
+            console.error(log);
+        };
+    }
+    //\
 
-        //settings
-        var storeModule = this,
-            store = settings.store,
-            watched = new Array();
-        //\
-
-        //console
-        if (settings.console != true) {
-            console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = () => {
-                return false;
-            };
-        } else {
-            console.logStore = log => {
-                console.log(log);
-            };
-            console.logTime = log => {
-                console.time(log);
-            };
-            console.logTimeEnd = log => {
-                console.timeEnd(log);
-            };
-            console.logGroup = log => {
-                console.group(log);
-            };
-            console.logGroupEnd = () => {
-                console.groupEnd();
-            };
-            console.logError = log => {
-                console.error(log);
-            };
-        }
-        //\
-
-        var onWatch = (caller, path, change, method) => {
-            let parts = path.split('.');
-            let table = parts[0];
-            if (watched[table] !== undefined) {
-                watched[table].forEach(fullpath => {
-                    let parts = fullpath.split('~');
-                    let watchedPath = parts[1],
-                        watcherName = parts[0];
-                    if (watched[table][fullpath] !== undefined) {
-                        let reaction = watched[table][fullpath]['reaction'],
-                            watcher = watched[table][fullpath]['watcher'],
-                            value = storeModule.get({
-                            name: '~store'
-                        }, watchedPath),
-                            logWatch = 'Store => Watch ',
-                            logWatcher = 'Watcher: ' + watcherName,
-                            logPath = 'Path: ' + watchedPath,
-                            logValue = 'Value:',
-                            logChange = 'Change',
-                            logReaction = 'Reaction: ' + reaction,
-                            logMethod = 'Method: ' + method,
-                            _return = {
-                            'caller': caller,
-                            'path': path,
-                            'value': value,
-                            'change': change,
-                            'method': method
-                        };
-                        console.logGroup(logWatch);
-                        console.logStore(logWatcher);
-                        console.logStore(logPath);
-                        console.logStore(logValue);
-                        console.logStore(value);
-                        console.logStore(logChange);
-                        console.logStore(change);
-                        console.logStore(logMethod);
-                        console.logStore(logReaction);
-                        if (watcher[reaction] !== undefined) {
-                            watcher[reaction].apply(watcher, [_return]);
-                        } else if (typeof reaction == 'function') {
-                            reaction.apply(watcher, [_return]);
-                        }
-                        console.logGroupEnd();
+    var onWatch = function onWatch(caller, path, change, method) {
+        var parts = path.split('.');
+        var table = parts[0];
+        if (watched[table] !== undefined) {
+            watched[table].forEach(function (fullpath) {
+                var parts = fullpath.split('~');
+                var watchedPath = parts[1],
+                    watcherName = parts[0];
+                if (watched[table][fullpath] !== undefined) {
+                    var reaction = watched[table][fullpath]['reaction'],
+                        watcher = watched[table][fullpath]['watcher'],
+                        value = storeModule.get({
+                        name: '~store'
+                    }, watchedPath),
+                        logWatch = 'Store => Watch ',
+                        logWatcher = 'Watcher: ' + watcherName,
+                        logPath = 'Path: ' + watchedPath,
+                        logValue = 'Value:',
+                        logChange = 'Change',
+                        logReaction = 'Reaction: ' + reaction,
+                        logMethod = 'Method: ' + method,
+                        _return = {
+                        'caller': caller,
+                        'path': path,
+                        'value': value,
+                        'change': change,
+                        'method': method
+                    };
+                    console.logGroup(logWatch);
+                    console.logStore(logWatcher);
+                    console.logStore(logPath);
+                    console.logStore(logValue);
+                    console.logStore(value);
+                    console.logStore(logChange);
+                    console.logStore(change);
+                    console.logStore(logMethod);
+                    console.logStore(logReaction);
+                    if (watcher[reaction] !== undefined) {
+                        watcher[reaction].apply(watcher, [_return]);
+                    } else if (typeof reaction == 'function') {
+                        reaction.apply(watcher, [_return]);
                     }
-                });
-                console.logGroupEnd();
-            } else {
-                console.logGroupEnd();
-            }
-        };
-
-        //GET ALL STORE
-        this.getAll = () => {
-            return JSON.parse(store.str());
-        };
-
-        //GET
-        this.get = (caller, path) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            if (caller.name !== '~store') {
-                console.logGroup('Store => GET');
-            }
-            let value = __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.get(JSON.parse(store.str()), path);
-            if (value === undefined) {
-                return;
-            }
-            if (caller.name !== '~store') {
-                console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
-                console.logGroupEnd();
-            }
-            return value;
-        };
-
-        //SET
-        this.set = (caller, path, value) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => SET');
-            let prevValue = this.get({
-                name: '~store'
-            }, path);
-            if (prevValue) {
-                if (prevValue.str() == value.str()) {
-                    console.logStore(logcaller);
-                    console.logStore('Skipped: nothig changed');
                     console.logGroupEnd();
-                    return;
                 }
-            }
-            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, value);
+            });
+            console.logGroupEnd();
+        } else {
+            console.logGroupEnd();
+        }
+    };
+
+    //GET ALL STORE
+    this.getAll = function () {
+        return JSON.parse(store.str());
+    };
+
+    //GET
+    this.get = function (caller, path) {
+        var callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        if (caller.name !== '~store') {
+            console.logGroup('Store => GET');
+        }
+        var value = _lodash2.default.get(JSON.parse(store.str()), path);
+        if (value === undefined) {
+            return;
+        }
+        if (caller.name !== '~store') {
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, value, 'set');
-        };
+        }
+        return value;
+    };
 
-        //PUSH
-        this.push = (caller, path, value) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => PUSH');
-            let array = this.get({
-                name: '~store'
-            }, path);
-            let prevValue = array;
-            if (Array.isArray(array) === false) {
-                console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
-                console.logError('Skipped: The path store.' + path + 'is not array');
-                console.logGroupEnd();
-                return;
-            }
+    //SET
+    this.set = function (caller, path, value) {
+        var callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        console.logGroup('Store => SET');
+        var prevValue = _this.get({
+            name: '~store'
+        }, path);
+        if (prevValue) {
             if (prevValue.str() == value.str()) {
                 console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
                 console.logStore('Skipped: nothig changed');
                 console.logGroupEnd();
                 return;
             }
-            array.push(value);
-            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, array);
+        }
+        _lodash2.default.set(store, path, value);
+        console.logStore(logcaller);
+        console.logStore(logPath);
+        console.logStore('Value:');
+        console.logStore(value);
+        console.logGroupEnd();
+        onWatch(caller, path, value, 'set');
+    };
+
+    //PUSH
+    this.push = function (caller, path, value) {
+        var callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        console.logGroup('Store => PUSH');
+        var array = _this.get({
+            name: '~store'
+        }, path);
+        var prevValue = array;
+        if (Array.isArray(array) === false) {
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
             console.logStore(value);
+            console.logError('Skipped: The path store.' + path + 'is not array');
             console.logGroupEnd();
-            onWatch(caller, path, value, 'push');
-        };
-        //\
-
-        //REMOVE 
-        this.remove = (caller, path, value) => {
-            let callerName = caller.name || caller.constructor.name,
-                logPath = 'Path: store.' + path;
-            let logcaller = 'Caller: ' + callerName;
-            console.logGroup('Store => REMOVE');
-            let array = this.get({
-                name: '~store'
-            }, path);
-            if (Array.isArray(array) === false) {
-                console.logStore(logcaller);
-                console.logStore(logPath);
-                console.logStore('Value:');
-                console.logStore(value);
-                console.logError('Skipped: The path store.' + path + 'is not array');
-                console.logGroupEnd();
-                return;
-            }
-            let newArray = array.filter(item => {
-                if (value) return item.str() != value.str();
-            });
-            __WEBPACK_IMPORTED_MODULE_0__examples_constrjs_watchable_store_example_node_modules_lodash___default.a.set(store, path, newArray);
+            return;
+        }
+        if (prevValue.str() == value.str()) {
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
             console.logStore(value);
+            console.logStore('Skipped: nothig changed');
             console.logGroupEnd();
-            onWatch(caller, path, value, 'remove');
-        };
-        //\
+            return;
+        }
+        array.push(value);
+        _lodash2.default.set(store, path, array);
+        console.logStore(logcaller);
+        console.logStore(logPath);
+        console.logStore('Value:');
+        console.logStore(value);
+        console.logGroupEnd();
+        onWatch(caller, path, value, 'push');
+    };
+    //\
 
-        //WATCH
-        this.watch = (watcher, path, reaction) => {
-            let watcherName = watcher.name || watcher.constructor.name,
-                paths = path;
-            if (Array.isArray(path) === false) {
-                paths = [path];
+    //REMOVE 
+    this.remove = function (caller, path, value) {
+        var callerName = caller.name || caller.constructor.name,
+            logPath = 'Path: store.' + path;
+        var logcaller = 'Caller: ' + callerName;
+        console.logGroup('Store => REMOVE');
+        var array = _this.get({
+            name: '~store'
+        }, path);
+        if (Array.isArray(array) === false) {
+            console.logStore(logcaller);
+            console.logStore(logPath);
+            console.logStore('Value:');
+            console.logStore(value);
+            console.logError('Skipped: The path store.' + path + 'is not array');
+            console.logGroupEnd();
+            return;
+        }
+        var newArray = array.filter(function (item) {
+            if (value) return item.str() != value.str();
+        });
+        _lodash2.default.set(store, path, newArray);
+        console.logStore(logcaller);
+        console.logStore(logPath);
+        console.logStore('Value:');
+        console.logStore(value);
+        console.logGroupEnd();
+        onWatch(caller, path, value, 'remove');
+    };
+    //\
+
+    //WATCH
+    this.watch = function (watcher, path, reaction) {
+        var watcherName = watcher.name || watcher.constructor.name,
+            paths = path;
+        if (Array.isArray(path) === false) {
+            paths = [path];
+        }
+        paths.forEach(function (path) {
+            var fullpath = watcherName + "~" + path;
+            var parts = path.split('.');
+            var table = parts[0];
+            if (watched[table] === undefined) {
+                watched[table] = [];
             }
-            paths.forEach(path => {
-                let fullpath = watcherName + "~" + path;
-                let parts = path.split('.');
-                let table = parts[0];
-                if (watched[table] === undefined) {
-                    watched[table] = [];
-                }
-                if (watched[table].indexOf(fullpath) == -1) {
-                    watched[table].push(fullpath);
-                    watched[table][fullpath] = {
-                        reaction: reaction,
-                        watcher: watcher
-                    };
-                }
-            });
-        };
-        //\
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["StoreModule"] = StoreModule;
-
+            if (watched[table].indexOf(fullpath) == -1) {
+                watched[table].push(fullpath);
+                watched[table][fullpath] = {
+                    reaction: reaction,
+                    watcher: watcher
+                };
+            }
+        });
+    };
+    //\
+};
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(2);
-
 var _constrjsDom = __webpack_require__(1);
 
-var _store = __webpack_require__(3);
+var _constrjsStore = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(4);
-//import { StoreModule } from '@zbigiman/constrjs.store.module';
+__webpack_require__(3);
+//import 'mdn-polyfills/NodeList.forEach';
+
+//import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
 // Creating the App
 var App = function App() {
@@ -450,7 +472,7 @@ var App = function App() {
     //\
 
     // *** Creating app store: StoreModule instance ***       
-    app.store = new _store.StoreModule({
+    app.store = new _constrjsStore.StoreModule({
         store: {
             booksTable: [{
                 id: 1,
@@ -707,24 +729,7 @@ var App = function App() {
 new App();
 
 /***/ }),
-<<<<<<< HEAD:examples/store-module-example/compiled/app.bundle.js
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 10 */
-=======
-/* 6 */
->>>>>>> master:examples/constrjs-watchable-store-example/compiled/app.bundle.js
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10174,10 +10179,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)(module)))
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10207,7 +10212,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
