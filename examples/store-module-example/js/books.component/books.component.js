@@ -1,9 +1,10 @@
+import { StoreService } from '../store.service/store.service';
+
 export class BooksComponent {
-    constructor(app) {       
-
-        this.app = app;
-        var self = this;
-
+    constructor(store) {    
+        
+        var self = this;        
+        self.store = store;
         // Render Books Store List:
         this.renderBooksList = (data) => {
             let books = data.value;
@@ -44,8 +45,8 @@ export class BooksComponent {
         self.addToCart = (bookId) => {
 
             // *** StoreModule get ***
-            // app.store.get(caller, table)
-            let books = self.app.store.get(self.app, 'booksTable');
+            // store.get(caller, table)
+            let books = self.store.get(self, 'booksTable');
             //\
 
             let selectedBook = books.filter((book) => {
@@ -53,16 +54,32 @@ export class BooksComponent {
             })[0];
 
             // *** StoreModule push ***
-            // app.store.push(caller, table, value)
-            self.app.store.push(self.app, 'cartTable', selectedBook);
+            // store.push(caller, table, value)
+            self.store.push(self, 'cartTable', selectedBook);
             //\
 
             // *** StoreModule remove ***
-            // app.store.remove(caller, table, value)
-            self.app.store.remove(self.app, 'booksTable', selectedBook);
+            // store.remove(caller, table, value)
+            self.store.remove(self, 'booksTable', selectedBook);
             //\
         }
         //\
+
+        // Watching booksTable:
+
+        // *** StoreModule watch ***
+        // self.store.watch(caller, table , function*)
+        // *function name: string || function(data){}
+       self.store.watch(self, 'booksTable', 'renderBooksList');
+
+         // self.store.get(caller, table)
+         let booksTable = self.store.get(self, 'booksTable');
+         self.renderBooksList({
+             value: booksTable
+         });
+         //\
+
+
     }
 
 }

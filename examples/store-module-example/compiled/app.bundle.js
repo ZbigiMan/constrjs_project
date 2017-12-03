@@ -63,17 +63,64 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
+"use strict";
 
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.StoreService = undefined;
+
+var _constrjsStore = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var StoreService = exports.StoreService = function StoreService() {
+    _classCallCheck(this, StoreService);
+
+    this.store = new _constrjsStore.StoreModule({
+        store: {
+            booksTable: [{
+                id: 1,
+                title: 'Some Book',
+                author: 'Some Author',
+                description: 'About Some Book',
+                price: '$0.11'
+            }, {
+                id: 2,
+                title: 'Other Book',
+                author: 'Other Author',
+                description: 'About Other Book',
+                price: '$0.09'
+            }, {
+                id: 3,
+                title: 'Another Book',
+                author: 'Another Author',
+                description: 'Another Some Book',
+                price: '$0.39'
+            }, {
+                id: 4,
+                title: 'Some Else Book',
+                author: 'Some Else Author',
+                description: 'About Some Else Book',
+                price: '$0.21'
+            }],
+            cartTable: new Array(),
+            searchTable: {
+                searchInput: String,
+                searchResults: new Array()
+            }
+        },
+        console: true // show/hide StoreModule logs
+    });
+};
 
 /***/ }),
 /* 1 */
@@ -85,101 +132,9 @@ module.exports = __webpack_amd_options__;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// DOMModule
-// ES6+ DOM elements manipulation | constrjs project
-// Author Zbigi Man Zbigniew Stępniewski 2017
-var DOMModule = exports.DOMModule = function () {
-    function DOMModule() {
-        _classCallCheck(this, DOMModule);
-    }
-
-    _createClass(DOMModule, [{
-        key: 'hasClass',
-
-        // addClass, removeClass
-        //Thanks to: http://jaketrent.com/post/addremove-classes-raw-javascript/
-        value: function hasClass(el, className) {
-            if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
-        }
-    }, {
-        key: 'addClass',
-        value: function addClass(elements, className) {
-            if (elements.length === undefined) {
-                elements = [elements];
-            }
-
-            elements.forEach(function (el) {
-                if (el.classList) el.classList.add(className);else if (!this.hasClass(el, className)) el.className += " " + className;
-            });
-        }
-    }, {
-        key: 'removeClass',
-        value: function removeClass(elements, className) {
-
-            if (elements.length === undefined) {
-                elements = [elements];
-            }
-
-            elements.forEach(function (el) {
-                if (el.classList) el.classList.remove(className);else if (this.hasClass(el, className)) {
-                    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-                    el.className = el.className.replace(reg, ' ');
-                }
-            });
-        }
-        //\ addClass, removeClass
-
-        // Get parents
-
-    }, {
-        key: 'getParents',
-        value: function getParents(el) {
-            var parents = [];
-            while (el) {
-                parents.unshift(el);
-                el = el.parentNode;
-            }
-            return parents;
-        }
-        //\
-
-        // Refresh
-
-    }, {
-        key: 'refresh',
-        value: function refresh(elements) {
-            if (elements.length === undefined) {
-                elements = [elements];
-            }
-            elements.forEach(function (el) {
-                el.innerHTML = el.innerHTML;
-            });
-        }
-        //\
-
-    }]);
-
-    return DOMModule;
-}();
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.StoreModule = undefined;
 
-var _lodash = __webpack_require__(5);
+var _lodash = __webpack_require__(8);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -436,10 +391,105 @@ var StoreModule = exports.StoreModule = function StoreModule(settings) {
 };
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BooksComponent = undefined;
+
+var _store = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
+    var _this = this;
+
+    _classCallCheck(this, BooksComponent);
+
+    var self = this;
+    self.store = store;
+    // Render Books Store List:
+    this.renderBooksList = function (data) {
+        var books = data.value;
+        var booksList = '';
+        if (books.length > 0) {
+            books.forEach(function (book) {
+                booksList += '<li>\n                <h1>' + book.title + '</h1>\n                <h3>' + book.author + '</h3>                    \n                <p>' + book.description + '</p>\n                <h4 class="--color-green">Price: ' + book.price + '</h4>\n                <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                <div class="hr"></div>\n            </li>';
+            });
+        } else {
+            booksList = '<li><h2>Sold Out</h2></li>';
+        }
+        var BooksOutput = document.querySelector('.books-store-output');
+        BooksOutput.innerHTML = booksList;
+
+        // "Add to Cart" button event delegation:
+        BooksOutput.addEventListener('click', _this.btnAddToCartClick);
+        //\
+    };
+    //\
+
+    // "Add to Cart" button event delegation:
+    this.btnAddToCartClick = function (event) {
+        if (event.target.className.indexOf('btn__add-to-cart') != -1) {
+            var bookId = event.target.getAttribute('data-book-id');
+            self.addToCart(bookId);
+        }
+    };
+    //\
+
+    // Add to Cart Function:
+    self.addToCart = function (bookId) {
+
+        // *** StoreModule get ***
+        // store.get(caller, table)
+        var books = self.store.get(self, 'booksTable');
+        //\
+
+        var selectedBook = books.filter(function (book) {
+            return book.id == bookId;
+        })[0];
+
+        // *** StoreModule push ***
+        // store.push(caller, table, value)
+        self.store.push(self, 'cartTable', selectedBook);
+        //\
+
+        // *** StoreModule remove ***
+        // store.remove(caller, table, value)
+        self.store.remove(self, 'booksTable', selectedBook);
+        //\
+    };
+    //\
+
+    // Watching booksTable:
+
+    // *** StoreModule watch ***
+    // self.store.watch(caller, table , function*)
+    // *function name: string || function(data){}
+    self.store.watch(self, 'booksTable', 'renderBooksList');
+
+    // self.store.get(caller, table)
+    var booksTable = self.store.get(self, 'booksTable');
+    self.renderBooksList({
+        value: booksTable
+    });
+    //\
+
+};
 
 /***/ }),
 /* 4 */
@@ -448,15 +498,208 @@ var StoreModule = exports.StoreModule = function StoreModule(settings) {
 "use strict";
 
 
-var _constrjsDom = __webpack_require__(1);
-
-var _constrjsStore = __webpack_require__(2);
-
-var _books = __webpack_require__(13);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(3);
+var CartComponent = exports.CartComponent = function CartComponent(store) {
+    _classCallCheck(this, CartComponent);
+
+    var self = this;
+
+    self.store = store;
+
+    // Render Cart List:
+    self.renderCartList = function (data) {
+
+        console.log('render cart');
+
+        var books = data.value;
+        var booksList = '';
+        if (books.length > 0) {
+            books.forEach(function (book) {
+                booksList += '<li>\n                        <h1>' + book.title + '</h1>\n                        <h2>' + book.author + '</h2>                   \n                        <h4 class="--color-green">Price: ' + book.price + '</h4>\n                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                        <div class="hr"></div>\n                    </li>';
+            });
+        } else {
+            booksList = '<li><h2>Your Cart is empty.</h1></l2>';
+        }
+
+        var cartOutput = document.querySelector('.cart-output');
+        cartOutput.innerHTML = booksList;
+
+        // "Remove from Cart" button event delegation:
+        cartOutput.addEventListener('click', self.btnRemoveFromCartClick);
+        //\
+    };
+    //\
+
+    // "Remove from Cart" button event delegation:
+    self.btnRemoveFromCartClick = function (event) {
+        if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
+            var bookId = event.target.getAttribute('data-book-id');
+            self.removeFromCart(bookId);
+        }
+    };
+    //\
+
+    //Remove from Cart Function:
+    self.removeFromCart = function (bookId) {
+
+        // *** StoreModule get ***
+        // self.store.get(caller, table)
+        var books = self.store.get(self, 'cartTable');
+        //\
+
+        var selectedBook = books.filter(function (book) {
+            return book.id == bookId;
+        })[0];
+
+        // *** StoreModule remove ***
+        // self.store.remove(caller, table, value)
+        self.store.remove(self, 'cartTable', selectedBook);
+        //\
+
+        // *** StoreModule push ***
+        // self.store.push(caller, table, value)
+        self.store.push(self, 'booksTable', selectedBook);
+        //\
+    };
+    //\
+
+    //Watching cartTable:
+
+    // *** StoreModule watch ***
+    // self.store.watch(caller, table , function*)
+    // *function name: string || function() 
+    self.store.watch(self, 'cartTable', 'renderCartList');
+    //\   
+
+    var cartTable = self.store.get(self, 'cartTable');
+    self.renderCartList({
+        value: cartTable
+    });
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// DOMModule
+// ES6+ DOM elements manipulation | constrjs project
+// Author Zbigi Man Zbigniew Stępniewski 2017
+var DOMModule = exports.DOMModule = function () {
+    function DOMModule() {
+        _classCallCheck(this, DOMModule);
+    }
+
+    _createClass(DOMModule, [{
+        key: 'hasClass',
+
+        // addClass, removeClass
+        //Thanks to: http://jaketrent.com/post/addremove-classes-raw-javascript/
+        value: function hasClass(el, className) {
+            if (el.classList) return el.classList.contains(className);else return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+        }
+    }, {
+        key: 'addClass',
+        value: function addClass(elements, className) {
+            if (elements.length === undefined) {
+                elements = [elements];
+            }
+
+            elements.forEach(function (el) {
+                if (el.classList) el.classList.add(className);else if (!this.hasClass(el, className)) el.className += " " + className;
+            });
+        }
+    }, {
+        key: 'removeClass',
+        value: function removeClass(elements, className) {
+
+            if (elements.length === undefined) {
+                elements = [elements];
+            }
+
+            elements.forEach(function (el) {
+                if (el.classList) el.classList.remove(className);else if (this.hasClass(el, className)) {
+                    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                    el.className = el.className.replace(reg, ' ');
+                }
+            });
+        }
+        //\ addClass, removeClass
+
+        // Get parents
+
+    }, {
+        key: 'getParents',
+        value: function getParents(el) {
+            var parents = [];
+            while (el) {
+                parents.unshift(el);
+                el = el.parentNode;
+            }
+            return parents;
+        }
+        //\
+
+        // Refresh
+
+    }, {
+        key: 'refresh',
+        value: function refresh(elements) {
+            if (elements.length === undefined) {
+                elements = [elements];
+            }
+            elements.forEach(function (el) {
+                el.innerHTML = el.innerHTML;
+            });
+        }
+        //\
+
+    }]);
+
+    return DOMModule;
+}();
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _constrjsDom = __webpack_require__(5);
+
+var _constrjsStore = __webpack_require__(1);
+
+var _store = __webpack_require__(0);
+
+var _books = __webpack_require__(3);
+
+var _cart = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(6);
 //import 'mdn-polyfills/NodeList.forEach';
 
 //import { StoreModule } from '../../../source/constrjs.store.module/store.module';
@@ -469,128 +712,18 @@ var App = function App() {
         var app = this;
         //\
 
-        // DOModule instance - DOM elements manipulation methods:
-        app.DOMModule = new _constrjsDom.DOMModule();
-        //\
-
-        // *** Creating app store: StoreModule instance ***       
-        app.store = new _constrjsStore.StoreModule({
-                store: {
-                        booksTable: [{
-                                id: 1,
-                                title: 'Some Book',
-                                author: 'Some Author',
-                                description: 'About Some Book',
-                                price: '$0.11'
-                        }, {
-                                id: 2,
-                                title: 'Other Book',
-                                author: 'Other Author',
-                                description: 'About Other Book',
-                                price: '$0.09'
-                        }, {
-                                id: 3,
-                                title: 'Another Book',
-                                author: 'Another Author',
-                                description: 'Another Some Book',
-                                price: '$0.39'
-                        }, {
-                                id: 4,
-                                title: 'Some Else Book',
-                                author: 'Some Else Author',
-                                description: 'About Some Else Book',
-                                price: '$0.21'
-                        }],
-                        cartTable: new Array(),
-                        searchTable: {
-                                searchInput: String,
-                                searchResults: new Array()
-                        }
-                },
-                console: false // show/hide StoreModule logs
-        });
-        //\
+        // Store
+        app.storeService = new _store.StoreService();
+        app.store = app.storeService.store;
+        //
 
         // Components
 
-        app.booksComponent = new _books.BooksComponent(app);
-
+        app.booksComponent = new _books.BooksComponent(app.store);
+        app.cartComponent = new _cart.CartComponent(app.store);
         //\
 
-        // App methods:
-
-        // Render Cart List:
-        app.renderCartList = function (data) {
-                var books = data.value;
-                var booksList = '';
-                if (books.length > 0) {
-                        books.forEach(function (book) {
-                                booksList += '<li>\n                        <h1>' + book.title + '</h1>\n                        <h2>' + book.author + '</h2>                   \n                        <h4 class="--color-green">Price: ' + book.price + '</h4>\n                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                        <div class="hr"></div>\n                    </li>';
-                        });
-                } else {
-                        booksList = '<li><h2>Your Cart is empty.</h1></l2>';
-                }
-
-                var cartOutput = document.querySelector('.cart-output');
-                cartOutput.innerHTML = booksList;
-
-                // "Remove from Cart" button event delegation:
-                cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
-                //\
-        };
-        //\
-
-        // "Remove from Cart" button event delegation:
-        app.btnRemoveFromCartClick = function (event) {
-                if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
-                        var bookId = event.target.getAttribute('data-book-id');
-                        app.removeFromCart(bookId);
-                }
-        };
-        //\
-
-
-        //Remove from Cart Function:
-        app.removeFromCart = function (bookId) {
-
-                // *** StoreModule get ***
-                // app.store.get(caller, table)
-                var books = app.store.get(app, 'cartTable');
-                //\
-
-                var selectedBook = books.filter(function (book) {
-                        return book.id == bookId;
-                })[0];
-
-                // *** StoreModule remove ***
-                // app.store.remove(caller, table, value)
-                app.store.remove(app, 'cartTable', selectedBook);
-                //\
-
-                // *** StoreModule push ***
-                // app.store.push(caller, table, value)
-                app.store.push(app, 'booksTable', selectedBook);
-                //\
-        };
-        //\
-
-        // Watching booksTable:
-
-        // *** StoreModule watch ***
-        // app.store.watch(caller, table , function*)
-        // *function name: string || function(data){}
-        app.store.watch(app.booksComponent, 'booksTable', 'renderBooksList');
-
-        //\
-
-        //Watching cartTable:
-
-        // *** StoreModule watch ***
-        // app.store.watch(caller, table , function*)
-        // *function name: string || function() 
-        app.store.watch(app, 'cartTable', 'renderCartList');
-        //\        
-
+        app.DOMModule = new _constrjsDom.DOMModule();
 
         //Show Search Bar:
         app.toggleVal = function (val) {
@@ -655,29 +788,7 @@ var App = function App() {
         // app.store.watch(caller, table , function*)
         // *function name: string || function() 
         app.store.watch(app.booksComponent, 'searchTable.searchResults', 'renderBooksList');
-        //\      
-
-        // Initial functions:
-
-        // Render Books Store List:
-
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var booksTable = app.store.get(app, 'booksTable');
-        app.booksComponent.renderBooksList({
-                value: booksTable
-        });
-        //\
-
-        // Render Cart List:
-
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var cartTable = app.store.get(app, 'cartTable');
-        app.renderCartList({
-                value: cartTable
-        });
-        //\
+        //\     
 };
 
 //Starting the App:
@@ -686,7 +797,7 @@ var App = function App() {
 new App();
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10124,7 +10235,7 @@ LazyWrapper.prototype.clone=lazyClone;LazyWrapper.prototype.reverse=lazyReverse;
 lodash.prototype.at=wrapperAt;lodash.prototype.chain=wrapperChain;lodash.prototype.commit=wrapperCommit;lodash.prototype.next=wrapperNext;lodash.prototype.plant=wrapperPlant;lodash.prototype.reverse=wrapperReverse;lodash.prototype.toJSON=lodash.prototype.valueOf=lodash.prototype.value=wrapperValue;// Add lazy aliases.
 lodash.prototype.first=lodash.prototype.head;if(symIterator){lodash.prototype[symIterator]=wrapperToIterator;}return lodash;};/*--------------------------------------------------------------------------*/// Export lodash.
 var _=runInContext();// Some AMD build optimizers, like r.js, check for condition patterns like:
-if("function"=='function'&&_typeof(__webpack_require__(0))=='object'&&__webpack_require__(0)){// Expose Lodash on the global object to prevent errors when Lodash is
+if("function"=='function'&&_typeof(__webpack_require__(2))=='object'&&__webpack_require__(2)){// Expose Lodash on the global object to prevent errors when Lodash is
 // loaded by a script tag in the presence of an AMD loader.
 // See http://requirejs.org/docs/errors.html#mismatch for more details.
 // Use `_.noConflict` to remove Lodash from the global object.
@@ -10136,10 +10247,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(10)(module)))
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10169,7 +10280,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10196,86 +10307,6 @@ module.exports = function (module) {
 		module.webpackPolyfill = 1;
 	}
 	return module;
-};
-
-/***/ }),
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var BooksComponent = exports.BooksComponent = function BooksComponent(app) {
-    var _this = this;
-
-    _classCallCheck(this, BooksComponent);
-
-    this.app = app;
-    var self = this;
-
-    // Render Books Store List:
-    this.renderBooksList = function (data) {
-        var books = data.value;
-        var booksList = '';
-        if (books.length > 0) {
-            books.forEach(function (book) {
-                booksList += '<li>\n                <h1>' + book.title + '</h1>\n                <h3>' + book.author + '</h3>                    \n                <p>' + book.description + '</p>\n                <h4 class="--color-green">Price: ' + book.price + '</h4>\n                <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                <div class="hr"></div>\n            </li>';
-            });
-        } else {
-            booksList = '<li><h2>Sold Out</h2></li>';
-        }
-        var BooksOutput = document.querySelector('.books-store-output');
-        BooksOutput.innerHTML = booksList;
-
-        // "Add to Cart" button event delegation:
-        BooksOutput.addEventListener('click', _this.btnAddToCartClick);
-        //\
-    };
-    //\
-
-    // "Add to Cart" button event delegation:
-    this.btnAddToCartClick = function (event) {
-        if (event.target.className.indexOf('btn__add-to-cart') != -1) {
-            var bookId = event.target.getAttribute('data-book-id');
-            self.addToCart(bookId);
-        }
-    };
-    //\
-
-    // Add to Cart Function:
-    self.addToCart = function (bookId) {
-
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var books = self.app.store.get(self.app, 'booksTable');
-        //\
-
-        var selectedBook = books.filter(function (book) {
-            return book.id == bookId;
-        })[0];
-
-        // *** StoreModule push ***
-        // app.store.push(caller, table, value)
-        self.app.store.push(self.app, 'cartTable', selectedBook);
-        //\
-
-        // *** StoreModule remove ***
-        // app.store.remove(caller, table, value)
-        self.app.store.remove(self.app, 'booksTable', selectedBook);
-        //\
-    };
-    //\
 };
 
 /***/ })
