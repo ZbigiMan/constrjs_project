@@ -452,6 +452,8 @@ var _constrjsDom = __webpack_require__(1);
 
 var _constrjsStore = __webpack_require__(2);
 
+var _books = __webpack_require__(13);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(3);
@@ -461,266 +463,221 @@ __webpack_require__(3);
 
 // Creating the App
 var App = function App() {
-    _classCallCheck(this, App);
+        _classCallCheck(this, App);
 
-    // App instance:
-    var app = this;
-    //\
-
-    // DOModule instance - DOM elements manipulation methods:
-    app.DOMModule = new _constrjsDom.DOMModule();
-    //\
-
-    // *** Creating app store: StoreModule instance ***       
-    app.store = new _constrjsStore.StoreModule({
-        store: {
-            booksTable: [{
-                id: 1,
-                title: 'Some Book',
-                author: 'Some Author',
-                description: 'About Some Book',
-                price: '$0.11'
-            }, {
-                id: 2,
-                title: 'Other Book',
-                author: 'Other Author',
-                description: 'About Other Book',
-                price: '$0.09'
-            }, {
-                id: 3,
-                title: 'Another Book',
-                author: 'Another Author',
-                description: 'Another Some Book',
-                price: '$0.39'
-            }, {
-                id: 4,
-                title: 'Some Else Book',
-                author: 'Some Else Author',
-                description: 'About Some Else Book',
-                price: '$0.21'
-            }],
-            cartTable: new Array(),
-            searchTable: {
-                searchInput: String,
-                searchResults: new Array()
-            }
-        },
-        console: true // show/hide StoreModule logs
-    });
-    //\
-
-    // App methods:
-
-    // Render Books Store List:
-    app.renderBooksStoreList = function (data) {
-        var books = data.value;
-        var booksList = '';
-        if (books.length > 0) {
-            books.forEach(function (book) {
-                booksList += '<li>\n                    <h1>' + book.title + '</h1>\n                    <h3>' + book.author + '</h3>                    \n                    <p>' + book.description + '</p>\n                    <h4 class="--color-green">Price: ' + book.price + '</h4>\n                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                    <div class="hr"></div>\n                </li>';
-            });
-        } else {
-            booksList = '<li><h2>Sold Out</h2></li>';
-        }
-        var booksStoreOutput = document.querySelector('.books-store-output');
-        booksStoreOutput.innerHTML = booksList;
-
-        // "Add to Cart" button event delegation:
-        booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
+        // App instance:
+        var app = this;
         //\
-    };
-    //\
 
-    // "Add to Cart" button event delegation:
-    app.btnAddToCartClick = function (event) {
-        if (event.target.className.indexOf('btn__add-to-cart') != -1) {
-            var bookId = event.target.getAttribute('data-book-id');
-            app.addToCart(bookId);
-        }
-    };
-    //\
+        // DOModule instance - DOM elements manipulation methods:
+        app.DOMModule = new _constrjsDom.DOMModule();
+        //\
 
-    // Render Cart List:
-    app.renderCartList = function (data) {
-        var books = data.value;
-        var booksList = '';
-        if (books.length > 0) {
-            books.forEach(function (book) {
-                booksList += '<li>\n                        <h1>' + book.title + '</h1>\n                        <h2>' + book.author + '</h2>                   \n                        <h4 class="--color-green">Price: ' + book.price + '</h4>\n                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                        <div class="hr"></div>\n                    </li>';
-            });
-        } else {
-            booksList = '<li><h2>Your Cart is empty.</h1></l2>';
-        }
+        // *** Creating app store: StoreModule instance ***       
+        app.store = new _constrjsStore.StoreModule({
+                store: {
+                        booksTable: [{
+                                id: 1,
+                                title: 'Some Book',
+                                author: 'Some Author',
+                                description: 'About Some Book',
+                                price: '$0.11'
+                        }, {
+                                id: 2,
+                                title: 'Other Book',
+                                author: 'Other Author',
+                                description: 'About Other Book',
+                                price: '$0.09'
+                        }, {
+                                id: 3,
+                                title: 'Another Book',
+                                author: 'Another Author',
+                                description: 'Another Some Book',
+                                price: '$0.39'
+                        }, {
+                                id: 4,
+                                title: 'Some Else Book',
+                                author: 'Some Else Author',
+                                description: 'About Some Else Book',
+                                price: '$0.21'
+                        }],
+                        cartTable: new Array(),
+                        searchTable: {
+                                searchInput: String,
+                                searchResults: new Array()
+                        }
+                },
+                console: false // show/hide StoreModule logs
+        });
+        //\
 
-        var cartOutput = document.querySelector('.cart-output');
-        cartOutput.innerHTML = booksList;
+        // Components
+
+        app.booksComponent = new _books.BooksComponent(app);
+
+        //\
+
+        // App methods:
+
+        // Render Cart List:
+        app.renderCartList = function (data) {
+                var books = data.value;
+                var booksList = '';
+                if (books.length > 0) {
+                        books.forEach(function (book) {
+                                booksList += '<li>\n                        <h1>' + book.title + '</h1>\n                        <h2>' + book.author + '</h2>                   \n                        <h4 class="--color-green">Price: ' + book.price + '</h4>\n                        <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="' + book.id + '">Remove</button>\n                        <div class="hr"></div>\n                    </li>';
+                        });
+                } else {
+                        booksList = '<li><h2>Your Cart is empty.</h1></l2>';
+                }
+
+                var cartOutput = document.querySelector('.cart-output');
+                cartOutput.innerHTML = booksList;
+
+                // "Remove from Cart" button event delegation:
+                cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
+                //\
+        };
+        //\
 
         // "Remove from Cart" button event delegation:
-        cartOutput.addEventListener('click', app.btnRemoveFromCartClick);
-        //\
-    };
-    //\
-
-    // "Remove from Cart" button event delegation:
-    app.btnRemoveFromCartClick = function (event) {
-        if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
-            var bookId = event.target.getAttribute('data-book-id');
-            app.removeFromCart(bookId);
-        }
-    };
-    //\
-
-    // Add to Cart Function:
-    app.addToCart = function (bookId) {
-
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var books = app.store.get(app, 'booksTable');
+        app.btnRemoveFromCartClick = function (event) {
+                if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
+                        var bookId = event.target.getAttribute('data-book-id');
+                        app.removeFromCart(bookId);
+                }
+        };
         //\
 
-        var selectedBook = books.filter(function (book) {
-            return book.id == bookId;
-        })[0];
 
-        // *** StoreModule push ***
-        // app.store.push(caller, table, value)
-        app.store.push(app, 'cartTable', selectedBook);
+        //Remove from Cart Function:
+        app.removeFromCart = function (bookId) {
+
+                // *** StoreModule get ***
+                // app.store.get(caller, table)
+                var books = app.store.get(app, 'cartTable');
+                //\
+
+                var selectedBook = books.filter(function (book) {
+                        return book.id == bookId;
+                })[0];
+
+                // *** StoreModule remove ***
+                // app.store.remove(caller, table, value)
+                app.store.remove(app, 'cartTable', selectedBook);
+                //\
+
+                // *** StoreModule push ***
+                // app.store.push(caller, table, value)
+                app.store.push(app, 'booksTable', selectedBook);
+                //\
+        };
         //\
 
-        // *** StoreModule remove ***
-        // app.store.remove(caller, table, value)
-        app.store.remove(app, 'booksTable', selectedBook);
-        //\
-    };
-    //\
+        // Watching booksTable:
 
-    //Remove from Cart Function:
-    app.removeFromCart = function (bookId) {
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function(data){}
+        app.store.watch(app.booksComponent, 'booksTable', 'renderBooksList');
 
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var books = app.store.get(app, 'cartTable');
         //\
 
-        var selectedBook = books.filter(function (book) {
-            return book.id == bookId;
-        })[0];
+        //Watching cartTable:
 
-        // *** StoreModule remove ***
-        // app.store.remove(caller, table, value)
-        app.store.remove(app, 'cartTable', selectedBook);
-        //\
-
-        // *** StoreModule push ***
-        // app.store.push(caller, table, value)
-        app.store.push(app, 'booksTable', selectedBook);
-        //\
-    };
-    //\
-
-    // Watching booksTable:
-
-    // *** StoreModule watch ***
-    // app.store.watch(caller, table , function*)
-    // *function name: string || function(data){}
-    app.store.watch(app, 'booksTable', 'renderBooksStoreList');
-    //\
-
-    //Watching cartTable:
-
-    // *** StoreModule watch ***
-    // app.store.watch(caller, table , function*)
-    // *function name: string || function() 
-    app.store.watch(app, 'cartTable', 'renderCartList');
-    //\        
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function() 
+        app.store.watch(app, 'cartTable', 'renderCartList');
+        //\        
 
 
-    //Show Search Bar:
-    app.toggleVal = function (val) {
-        return !val;
-    };
-    var showSearch = false;
-    document.querySelector('#search').addEventListener('click', function (event) {
-        showSearch = app.toggleVal(showSearch);
-        var searchBar = document.querySelector('.search-bar');
+        //Show Search Bar:
+        app.toggleVal = function (val) {
+                return !val;
+        };
+        var showSearch = false;
+        document.querySelector('#search').addEventListener('click', function (event) {
+                showSearch = app.toggleVal(showSearch);
+                var searchBar = document.querySelector('.search-bar');
 
-        if (showSearch === true) {
-            app.DOMModule.addClass(searchBar, 'search-bar--visible');
-            app.DOMModule.addClass(document.body, 'search-bar--visible');
-            document.querySelector('#searchInput').focus();
-        } else {
-            app.DOMModule.removeClass(searchBar, 'search-bar--visible');
-            app.DOMModule.removeClass(document.body, 'search-bar--visible');
-        }
-    });
-    //\
-
-    //Search function:
-
-    //Search Input event listener:
-    document.querySelector('#searchInput').addEventListener('keyup', function (event) {
-
-        // *** StoreModule set ***
-        // app.store.set(caller, table , value)
-        app.store.set(app, 'searchTable.searchInput', event.target.value);
-        //\
-    });
-
-    //Watching Search Input:
-
-    // *** StoreModule watch ***
-    // app.store.watch(caller, table , function*)
-    // *function name: string || function(data) 
-    app.store.watch(app, 'searchTable.searchInput', function (data) {
-        var searchQuery = data.value;
-        // *** StoreModule get ***
-        // app.store.get(caller, table)
-        var books = app.store.get(app, 'booksTable');
-        //\
-
-        var searchResults = books.filter(function (book) {
-            if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
+                if (showSearch === true) {
+                        app.DOMModule.addClass(searchBar, 'search-bar--visible');
+                        app.DOMModule.addClass(document.body, 'search-bar--visible');
+                        document.querySelector('#searchInput').focus();
+                } else {
+                        app.DOMModule.removeClass(searchBar, 'search-bar--visible');
+                        app.DOMModule.removeClass(document.body, 'search-bar--visible');
+                }
         });
-        if (searchResults.length === 0) {
-            searchResults = books;
-        }
-
-        // *** StoreModule set ***
-        // app.store.set(caller, table , value)
-        app.store.set(app, 'searchTable.searchResults', searchResults);
         //\
-    });
-    //\ 
 
-    //Watching Search Result:
+        //Search function:
 
-    // *** StoreModule watch ***
-    // app.store.watch(caller, table , function*)
-    // *function name: string || function() 
-    app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
-    //\      
+        //Search Input event listener:
+        document.querySelector('#searchInput').addEventListener('keyup', function (event) {
 
-    // Initial functions:
+                // *** StoreModule set ***
+                // app.store.set(caller, table , value)
+                app.store.set(app, 'searchTable.searchInput', event.target.value);
+                //\
+        });
 
-    // Render Books Store List:
+        //Watching Search Input:
 
-    // *** StoreModule get ***
-    // app.store.get(caller, table)
-    var booksTable = app.store.get(app, 'booksTable');
-    app.renderBooksStoreList({
-        value: booksTable
-    });
-    //\
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function(data) 
+        app.store.watch(app, 'searchTable.searchInput', function (data) {
+                var searchQuery = data.value;
+                // *** StoreModule get ***
+                // app.store.get(caller, table)
+                var books = app.store.get(app, 'booksTable');
+                //\
 
-    // Render Cart List:
+                var searchResults = books.filter(function (book) {
+                        if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
+                });
+                if (searchResults.length === 0) {
+                        searchResults = books;
+                }
 
-    // *** StoreModule get ***
-    // app.store.get(caller, table)
-    var cartTable = app.store.get(app, 'cartTable');
-    app.renderCartList({
-        value: cartTable
-    });
-    //\
+                // *** StoreModule set ***
+                // app.store.set(caller, table , value)
+                app.store.set(app, 'searchTable.searchResults', searchResults);
+                //\
+        });
+        //\ 
+
+        //Watching Search Result:
+
+        // *** StoreModule watch ***
+        // app.store.watch(caller, table , function*)
+        // *function name: string || function() 
+        app.store.watch(app.booksComponent, 'searchTable.searchResults', 'renderBooksList');
+        //\      
+
+        // Initial functions:
+
+        // Render Books Store List:
+
+        // *** StoreModule get ***
+        // app.store.get(caller, table)
+        var booksTable = app.store.get(app, 'booksTable');
+        app.booksComponent.renderBooksList({
+                value: booksTable
+        });
+        //\
+
+        // Render Cart List:
+
+        // *** StoreModule get ***
+        // app.store.get(caller, table)
+        var cartTable = app.store.get(app, 'cartTable');
+        app.renderCartList({
+                value: cartTable
+        });
+        //\
 };
 
 //Starting the App:
@@ -10239,6 +10196,86 @@ module.exports = function (module) {
 		module.webpackPolyfill = 1;
 	}
 	return module;
+};
+
+/***/ }),
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BooksComponent = exports.BooksComponent = function BooksComponent(app) {
+    var _this = this;
+
+    _classCallCheck(this, BooksComponent);
+
+    this.app = app;
+    var self = this;
+
+    // Render Books Store List:
+    this.renderBooksList = function (data) {
+        var books = data.value;
+        var booksList = '';
+        if (books.length > 0) {
+            books.forEach(function (book) {
+                booksList += '<li>\n                <h1>' + book.title + '</h1>\n                <h3>' + book.author + '</h3>                    \n                <p>' + book.description + '</p>\n                <h4 class="--color-green">Price: ' + book.price + '</h4>\n                <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="' + book.id + '">Add to cart</button>\n                <div class="hr"></div>\n            </li>';
+            });
+        } else {
+            booksList = '<li><h2>Sold Out</h2></li>';
+        }
+        var BooksOutput = document.querySelector('.books-store-output');
+        BooksOutput.innerHTML = booksList;
+
+        // "Add to Cart" button event delegation:
+        BooksOutput.addEventListener('click', _this.btnAddToCartClick);
+        //\
+    };
+    //\
+
+    // "Add to Cart" button event delegation:
+    this.btnAddToCartClick = function (event) {
+        if (event.target.className.indexOf('btn__add-to-cart') != -1) {
+            var bookId = event.target.getAttribute('data-book-id');
+            self.addToCart(bookId);
+        }
+    };
+    //\
+
+    // Add to Cart Function:
+    self.addToCart = function (bookId) {
+
+        // *** StoreModule get ***
+        // app.store.get(caller, table)
+        var books = self.app.store.get(self.app, 'booksTable');
+        //\
+
+        var selectedBook = books.filter(function (book) {
+            return book.id == bookId;
+        })[0];
+
+        // *** StoreModule push ***
+        // app.store.push(caller, table, value)
+        self.app.store.push(self.app, 'cartTable', selectedBook);
+        //\
+
+        // *** StoreModule remove ***
+        // app.store.remove(caller, table, value)
+        self.app.store.remove(self.app, 'booksTable', selectedBook);
+        //\
+    };
+    //\
 };
 
 /***/ })

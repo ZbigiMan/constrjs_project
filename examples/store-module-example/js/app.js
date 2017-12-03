@@ -5,6 +5,8 @@ import { DOMModule } from '@zbigiman/constrjs.dom.module';
 import { StoreModule } from '@zbigiman/constrjs.store.module';
 //import { StoreModule } from '../../../source/constrjs.store.module/store.module';
 
+import { BooksComponent } from './books.component/books.component';
+
 // Creating the App
 class App {
     constructor() {
@@ -51,47 +53,17 @@ class App {
                     searchResults: new Array()
                 }
             },
-            console: true// show/hide StoreModule logs
+            console: false// show/hide StoreModule logs
         });
         //\
 
+        // Components
+
+        app.booksComponent = new BooksComponent(app);
+
+        //\
+
         // App methods:
-
-        // Render Books Store List:
-        app.renderBooksStoreList = (data) => {
-            let books = data.value;
-            let booksList = ''
-            if (books.length > 0) {
-                books.forEach((book) => {
-                    booksList += `<li>
-                    <h1>${book.title}</h1>
-                    <h3>${book.author}</h3>                    
-                    <p>${book.description}</p>
-                    <h4 class="--color-green">Price: ${book.price}</h4>
-                    <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="${book.id}">Add to cart</button>
-                    <div class="hr"></div>
-                </li>`;
-                });
-            } else {
-                booksList = '<li><h2>Sold Out</h2></li>';
-            }
-            let booksStoreOutput = document.querySelector('.books-store-output');
-            booksStoreOutput.innerHTML = booksList;
-
-            // "Add to Cart" button event delegation:
-            booksStoreOutput.addEventListener('click', app.btnAddToCartClick);
-            //\
-        }
-        //\
-
-        // "Add to Cart" button event delegation:
-        app.btnAddToCartClick = (event) => {
-            if (event.target.className.indexOf('btn__add-to-cart') != -1) {
-                let bookId = event.target.getAttribute('data-book-id');
-                app.addToCart(bookId);
-            }
-        }
-        //\
 
         // Render Cart List:
         app.renderCartList = (data) => {
@@ -129,29 +101,7 @@ class App {
         }
         //\
 
-        // Add to Cart Function:
-        app.addToCart = (bookId) => {
-
-            // *** StoreModule get ***
-            // app.store.get(caller, table)
-            let books = app.store.get(app, 'booksTable');
-            //\
-
-            let selectedBook = books.filter((book) => {
-                return book.id == bookId;
-            })[0];
-
-            // *** StoreModule push ***
-            // app.store.push(caller, table, value)
-            app.store.push(app, 'cartTable', selectedBook);
-            //\
-
-            // *** StoreModule remove ***
-            // app.store.remove(caller, table, value)
-            app.store.remove(app, 'booksTable', selectedBook);
-            //\
-        }
-        //\
+        
 
         //Remove from Cart Function:
         app.removeFromCart = (bookId) => {
@@ -182,7 +132,8 @@ class App {
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
         // *function name: string || function(data){}
-        app.store.watch(app, 'booksTable', 'renderBooksStoreList');
+       app.store.watch(app.booksComponent, 'booksTable', 'renderBooksList');
+
         //\
 
         //Watching cartTable:
@@ -259,7 +210,7 @@ class App {
         // *** StoreModule watch ***
         // app.store.watch(caller, table , function*)
         // *function name: string || function() 
-        app.store.watch(app, 'searchTable.searchResults', 'renderBooksStoreList');
+        app.store.watch(app.booksComponent, 'searchTable.searchResults', 'renderBooksList');
         //\      
 
         // Initial functions:
@@ -269,7 +220,7 @@ class App {
         // *** StoreModule get ***
         // app.store.get(caller, table)
         let booksTable = app.store.get(app, 'booksTable');
-        app.renderBooksStoreList({
+        app.booksComponent.renderBooksList({
             value: booksTable
         });
         //\
