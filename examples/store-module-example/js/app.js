@@ -19,12 +19,12 @@ class App {
         //\
 
         // Store
-        app.storeService = new StoreService();    
+        var storeService = new StoreService();    
         //\
 
         //app settings
         app.settings = {
-            store: app.storeService.store
+            store: storeService.store
         }
         //\
 

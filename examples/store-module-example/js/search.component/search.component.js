@@ -5,7 +5,6 @@ export class SearchComponent {
     constructor(appSettings) {
 
         var self = this;
-
         self.store = appSettings.store;
 
         self.DOMModule = new DOMModule();
