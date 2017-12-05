@@ -412,11 +412,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
+var BooksComponent = exports.BooksComponent = function BooksComponent(appSettings) {
     _classCallCheck(this, BooksComponent);
 
     var self = this;
-    self.store = store;
+    self.store = appSettings.store;
 
     // Render Books Store List:
     this.renderBooksList = function (data) {
@@ -503,11 +503,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var CartComponent = exports.CartComponent = function CartComponent(store) {
+var CartComponent = exports.CartComponent = function CartComponent(appSettings) {
     _classCallCheck(this, CartComponent);
 
     var self = this;
-    self.store = store;
+    self.store = appSettings.store;
 
     // Render Cart List:
     self.renderCartList = function (data) {
@@ -713,13 +713,17 @@ var App = function App() {
 
         // Store
         app.storeService = new _store.StoreService();
-        app.store = app.storeService.store;
-        //
+        //\
 
-        // Components
-        app.booksComponent = new _books.BooksComponent(app.store);
-        app.cartComponent = new _cart.CartComponent(app.store);
-        app.searchComponent = new _search.SearchComponent(app.store);
+        //app settings
+        app.settings = {
+                store: app.storeService.store
+                //\
+
+                // Components
+        };app.booksComponent = new _books.BooksComponent(app.settings);
+        app.cartComponent = new _cart.CartComponent(app.settings);
+        app.searchComponent = new _search.SearchComponent(app.settings);
         //\
 };
 
@@ -10261,12 +10265,12 @@ var _constrjsDom = __webpack_require__(5);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SearchComponent = exports.SearchComponent = function SearchComponent(store) {
+var SearchComponent = exports.SearchComponent = function SearchComponent(appSettings) {
         _classCallCheck(this, SearchComponent);
 
         var self = this;
 
-        self.store = store;
+        self.store = appSettings.store;
 
         self.DOMModule = new _constrjsDom.DOMModule();
 

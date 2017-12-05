@@ -1,9 +1,9 @@
 export class BooksComponent {
 
-    constructor(store) {
+    constructor(appSettings) {
 
         var self = this;
-        self.store = store;
+        self.store = appSettings.store;
 
         // Render Books Store List:
         this.renderBooksList = (data) => {

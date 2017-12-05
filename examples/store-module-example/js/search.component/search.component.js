@@ -2,11 +2,11 @@ import { DOMModule } from '@zbigiman/constrjs.dom.module';
 
 export class SearchComponent {
 
-    constructor(store) {
+    constructor(appSettings) {
 
         var self = this;
 
-        self.store = store;
+        self.store = appSettings.store;
 
         self.DOMModule = new DOMModule();
 
@@ -61,7 +61,7 @@ export class SearchComponent {
             if (searchResults.length === 0) {
                 searchResults = books;
             }
-            
+
             // *** StoreModule set ***
             // self.store.set(caller, table , value)
             self.store.set(self, 'searchTable.searchResults', searchResults);

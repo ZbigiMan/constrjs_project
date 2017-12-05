@@ -1,10 +1,10 @@
 
 export class CartComponent {
 
-    constructor(store) {
+    constructor(appSettings) {
 
         var self = this;        
-        self.store = store;
+        self.store = appSettings.store;
 
         // Render Cart List:
         self.renderCartList = (data) => {           

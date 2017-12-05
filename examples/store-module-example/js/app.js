@@ -19,16 +19,21 @@ class App {
         //\
 
         // Store
-        app.storeService = new StoreService();
-        app.store = app.storeService.store;
-        //
+        app.storeService = new StoreService();    
+        //\
+
+        //app settings
+        app.settings = {
+            store: app.storeService.store
+        }
+        //\
 
         // Components
-        app.booksComponent = new BooksComponent(app.store);
-        app.cartComponent = new CartComponent(app.store);
-        app.searchComponent = new SearchComponent(app.store);
+        app.booksComponent = new BooksComponent(app.settings);
+        app.cartComponent = new CartComponent(app.settings);
+        app.searchComponent = new SearchComponent(app.settings);
         //\
-               
+
     }
 }
 
