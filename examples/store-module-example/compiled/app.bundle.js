@@ -409,19 +409,15 @@ module.exports = __webpack_amd_options__;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.BooksComponent = undefined;
-
-var _store = __webpack_require__(0);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
-    var _this = this;
-
     _classCallCheck(this, BooksComponent);
 
     var self = this;
     self.store = store;
+
     // Render Books Store List:
     this.renderBooksList = function (data) {
         var books = data.value;
@@ -437,13 +433,13 @@ var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
         BooksOutput.innerHTML = booksList;
 
         // "Add to Cart" button event delegation:
-        BooksOutput.addEventListener('click', _this.btnAddToCartClick);
+        BooksOutput.addEventListener('click', self.btnAddToCartClick);
         //\
     };
     //\
 
     // "Add to Cart" button event delegation:
-    this.btnAddToCartClick = function (event) {
+    self.btnAddToCartClick = function (event) {
         if (event.target.className.indexOf('btn__add-to-cart') != -1) {
             var bookId = event.target.getAttribute('data-book-id');
             self.addToCart(bookId);
@@ -475,12 +471,8 @@ var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
     };
     //\
 
-    // Watching booksTable:
 
-    // *** StoreModule watch ***
-    // self.store.watch(caller, table , function*)
-    // *function name: string || function(data){}
-    self.store.watch(self, 'booksTable', 'renderBooksList');
+    //Initial functions:
 
     // self.store.get(caller, table)
     var booksTable = self.store.get(self, 'booksTable');
@@ -489,6 +481,13 @@ var BooksComponent = exports.BooksComponent = function BooksComponent(store) {
     });
     //\
 
+    // Watching for changes:
+
+    // self.store.watch(caller, table , function*)
+    // *function name: string || function(data){}
+    self.store.watch(self, 'booksTable', 'renderBooksList');
+    self.store.watch(self, 'searchTable.searchResults', 'renderBooksList');
+    //\
 };
 
 /***/ }),
@@ -508,13 +507,10 @@ var CartComponent = exports.CartComponent = function CartComponent(store) {
     _classCallCheck(this, CartComponent);
 
     var self = this;
-
     self.store = store;
 
     // Render Cart List:
     self.renderCartList = function (data) {
-
-        console.log('render cart');
 
         var books = data.value;
         var booksList = '';
@@ -568,7 +564,14 @@ var CartComponent = exports.CartComponent = function CartComponent(store) {
     };
     //\
 
-    //Watching cartTable:
+    //Initial functions
+
+    var cartTable = self.store.get(self, 'cartTable');
+    self.renderCartList({
+        value: cartTable
+    });
+
+    // Watching for changes
 
     // *** StoreModule watch ***
     // self.store.watch(caller, table , function*)
@@ -576,10 +579,6 @@ var CartComponent = exports.CartComponent = function CartComponent(store) {
     self.store.watch(self, 'cartTable', 'renderCartList');
     //\   
 
-    var cartTable = self.store.get(self, 'cartTable');
-    self.renderCartList({
-        value: cartTable
-    });
 };
 
 /***/ }),
@@ -687,8 +686,6 @@ var DOMModule = exports.DOMModule = function () {
 "use strict";
 
 
-var _constrjsDom = __webpack_require__(5);
-
 var _constrjsStore = __webpack_require__(1);
 
 var _store = __webpack_require__(0);
@@ -696,6 +693,8 @@ var _store = __webpack_require__(0);
 var _books = __webpack_require__(3);
 
 var _cart = __webpack_require__(4);
+
+var _search = __webpack_require__(15);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -718,77 +717,10 @@ var App = function App() {
         //
 
         // Components
-
         app.booksComponent = new _books.BooksComponent(app.store);
         app.cartComponent = new _cart.CartComponent(app.store);
+        app.searchComponent = new _search.SearchComponent(app.store);
         //\
-
-        app.DOMModule = new _constrjsDom.DOMModule();
-
-        //Show Search Bar:
-        app.toggleVal = function (val) {
-                return !val;
-        };
-        var showSearch = false;
-        document.querySelector('#search').addEventListener('click', function (event) {
-                showSearch = app.toggleVal(showSearch);
-                var searchBar = document.querySelector('.search-bar');
-
-                if (showSearch === true) {
-                        app.DOMModule.addClass(searchBar, 'search-bar--visible');
-                        app.DOMModule.addClass(document.body, 'search-bar--visible');
-                        document.querySelector('#searchInput').focus();
-                } else {
-                        app.DOMModule.removeClass(searchBar, 'search-bar--visible');
-                        app.DOMModule.removeClass(document.body, 'search-bar--visible');
-                }
-        });
-        //\
-
-        //Search function:
-
-        //Search Input event listener:
-        document.querySelector('#searchInput').addEventListener('keyup', function (event) {
-
-                // *** StoreModule set ***
-                // app.store.set(caller, table , value)
-                app.store.set(app, 'searchTable.searchInput', event.target.value);
-                //\
-        });
-
-        //Watching Search Input:
-
-        // *** StoreModule watch ***
-        // app.store.watch(caller, table , function*)
-        // *function name: string || function(data) 
-        app.store.watch(app, 'searchTable.searchInput', function (data) {
-                var searchQuery = data.value;
-                // *** StoreModule get ***
-                // app.store.get(caller, table)
-                var books = app.store.get(app, 'booksTable');
-                //\
-
-                var searchResults = books.filter(function (book) {
-                        if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
-                });
-                if (searchResults.length === 0) {
-                        searchResults = books;
-                }
-
-                // *** StoreModule set ***
-                // app.store.set(caller, table , value)
-                app.store.set(app, 'searchTable.searchResults', searchResults);
-                //\
-        });
-        //\ 
-
-        //Watching Search Result:
-
-        // *** StoreModule watch ***
-        // app.store.watch(caller, table , function*)
-        // *function name: string || function() 
-        app.store.watch(app.booksComponent, 'searchTable.searchResults', 'renderBooksList');
-        //\     
 };
 
 //Starting the App:
@@ -10307,6 +10239,93 @@ module.exports = function (module) {
 		module.webpackPolyfill = 1;
 	}
 	return module;
+};
+
+/***/ }),
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+        value: true
+});
+exports.SearchComponent = undefined;
+
+var _constrjsDom = __webpack_require__(5);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SearchComponent = exports.SearchComponent = function SearchComponent(store) {
+        _classCallCheck(this, SearchComponent);
+
+        var self = this;
+
+        self.store = store;
+
+        self.DOMModule = new _constrjsDom.DOMModule();
+
+        //Show Search Bar:
+        self.toggleVal = function (val) {
+                return !val;
+        };
+        var showSearch = false;
+        document.querySelector('#search').addEventListener('click', function (event) {
+                showSearch = self.toggleVal(showSearch);
+                var searchBar = document.querySelector('.search-bar');
+
+                if (showSearch === true) {
+                        self.DOMModule.addClass(searchBar, 'search-bar--visible');
+                        self.DOMModule.addClass(document.body, 'search-bar--visible');
+                        document.querySelector('#searchInput').focus();
+                } else {
+                        self.DOMModule.removeClass(searchBar, 'search-bar--visible');
+                        self.DOMModule.removeClass(document.body, 'search-bar--visible');
+                }
+        });
+        //\
+
+        //Search function:
+
+        //Search Input event listener:
+        document.querySelector('#searchInput').addEventListener('keyup', function (event) {
+
+                // *** StoreModule set ***
+                // self.store.set(caller, table , value)
+                self.store.set(self, 'searchTable.searchInput', event.target.value);
+                //\
+        });
+
+        //Watching Search Input:
+
+        // *** StoreModule watch ***
+        // self.store.watch(caller, table , function*)
+        // *function name: string || function(data) 
+        self.store.watch(self, 'searchTable.searchInput', function (data) {
+                var searchQuery = data.value;
+                // *** StoreModule get ***
+                // self.store.get(caller, table)
+                var books = self.store.get(self, 'booksTable');
+                //\
+
+                var searchResults = books.filter(function (book) {
+                        if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) return book.title;
+                });
+                if (searchResults.length === 0) {
+                        searchResults = books;
+                }
+
+                // *** StoreModule set ***
+                // self.store.set(caller, table , value)
+                self.store.set(self, 'searchTable.searchResults', searchResults);
+                //\
+        });
+        //\ 
 };
 
 /***/ })

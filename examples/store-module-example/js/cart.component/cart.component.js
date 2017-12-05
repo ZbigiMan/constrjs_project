@@ -1,15 +1,13 @@
 
 export class CartComponent {
+
     constructor(store) {
 
-        var self = this;
-        
+        var self = this;        
         self.store = store;
 
         // Render Cart List:
-        self.renderCartList = (data) => {
-
-            console.log('render cart');
+        self.renderCartList = (data) => {           
 
             let books = data.value;
             let booksList = '';
@@ -69,7 +67,14 @@ export class CartComponent {
         }
         //\
 
-         //Watching cartTable:
+         //Initial functions
+      
+        let cartTable = self.store.get(self, 'cartTable');
+        self.renderCartList({
+            value: cartTable
+        });
+
+        // Watching for changes
 
         // *** StoreModule watch ***
         // self.store.watch(caller, table , function*)
@@ -77,10 +82,6 @@ export class CartComponent {
         self.store.watch(self, 'cartTable', 'renderCartList');
         //\   
 
-        let cartTable = self.store.get(self, 'cartTable');
-        self.renderCartList({
-            value: cartTable
-        });
 
     }
 }

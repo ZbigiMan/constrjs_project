@@ -1,10 +1,10 @@
-import { StoreService } from '../store.service/store.service';
-
 export class BooksComponent {
-    constructor(store) {    
-        
-        var self = this;        
+
+    constructor(store) {
+
+        var self = this;
         self.store = store;
+
         // Render Books Store List:
         this.renderBooksList = (data) => {
             let books = data.value;
@@ -27,13 +27,13 @@ export class BooksComponent {
             BooksOutput.innerHTML = booksList;
 
             // "Add to Cart" button event delegation:
-            BooksOutput.addEventListener('click', this.btnAddToCartClick);
+            BooksOutput.addEventListener('click', self.btnAddToCartClick);
             //\
         }
         //\
 
         // "Add to Cart" button event delegation:
-        this.btnAddToCartClick = (event) => {
+        self.btnAddToCartClick = (event) => {
             if (event.target.className.indexOf('btn__add-to-cart') != -1) {
                 let bookId = event.target.getAttribute('data-book-id');
                 self.addToCart(bookId);
@@ -64,22 +64,24 @@ export class BooksComponent {
             //\
         }
         //\
+        
+        
+        //Initial functions:
 
-        // Watching booksTable:
+        // self.store.get(caller, table)
+        let booksTable = self.store.get(self, 'booksTable');
+        self.renderBooksList({
+            value: booksTable
+        });
+        //\
 
-        // *** StoreModule watch ***
+        // Watching for changes:
+
         // self.store.watch(caller, table , function*)
         // *function name: string || function(data){}
-       self.store.watch(self, 'booksTable', 'renderBooksList');
-
-         // self.store.get(caller, table)
-         let booksTable = self.store.get(self, 'booksTable');
-         self.renderBooksList({
-             value: booksTable
-         });
-         //\
-
-
+        self.store.watch(self, 'booksTable', 'renderBooksList');
+        self.store.watch(self, 'searchTable.searchResults', 'renderBooksList');
+        //\
     }
 
 }
