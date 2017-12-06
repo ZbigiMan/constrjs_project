@@ -1,2 +1,5 @@
 */**/node_modules/
 */**/compiled
+examples/store-module-example/package-lock\.json
+
+examples/router-module-example/package-lock\.json
