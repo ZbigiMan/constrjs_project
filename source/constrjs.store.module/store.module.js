@@ -2,7 +2,7 @@
 // ES6+ watchable store | constrjs project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
 export class StoreModule {
-    constructor(settings) {
+    constructor(settings) {        
 
         //Prototypes
         Object.prototype.str = function () {

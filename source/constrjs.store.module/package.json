@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.store.module",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "ES6+ watchable store, constrjs project",
   "main": "store.module.js",
   "scripts": {

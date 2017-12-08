@@ -1,8 +1,8 @@
-//import { StoreModule } from '@zbigiman/constrjs.store.module';
-import { StoreModule } from '../../../../source/constrjs.store.module/store.module';
+import { StoreModule } from '@zbigiman/constrjs.store.module';
+//import { StoreModule } from '../../../../source/constrjs.store.module/store.module';
 
 export class StoreService{
-    constructor(){
+    constructor(){        
         this.store = new StoreModule({
             store: {
                 booksTable: [{
@@ -36,7 +36,7 @@ export class StoreService{
                     searchResults: new Array()
                 }
             },
-            console: true// show/hide StoreModule logs
+            console: false// show/hide StoreModule logs
         });
     }
 }

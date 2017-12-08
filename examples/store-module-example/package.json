@@ -27,7 +27,7 @@
     "webpack": "2.6.1",
     "@zbigiman/constrjs.dom.module": "^1.0.4",
     "@zbigiman/constrjs.router.module": "^1.0.7",
-    "@zbigiman/constrjs.store.module": "^1.0.4"
+    "@zbigiman/constrjs.store.module": "^1.0.5"
   },
   "dependencies": {
     "mdn-polyfills": "^5.2.0"

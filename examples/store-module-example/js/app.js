@@ -2,7 +2,6 @@ require("../styles/main.scss");
 //import 'mdn-polyfills/NodeList.forEach';
 
 import { StoreService } from './store.service/store.service';
-
 import { BooksComponent } from './books.component/books.component';
 import { CartComponent } from './cart.component/cart.component';
 import { SearchComponent } from './search.component/search.component';
