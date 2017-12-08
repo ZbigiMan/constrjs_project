@@ -16,8 +16,7 @@
   ],
   "author": "Zbigi Man Zbigniew Stępniewski",
   "license": "ISC",
-  "dependencies": {
-    "lodash": "^4.17.4"
+  "dependencies": {    
   },
   "repository": {
     "type": "git",

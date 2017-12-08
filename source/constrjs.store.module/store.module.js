@@ -1,14 +1,28 @@
 // StoreModule
 // ES6+ watchable store | constrjs project
 // Author: Zbigi Man Zbigniew Stępniewski 2017
-import _ from 'lodash';
-//import _ from '../../examples/store-module-example/node_modules/lodash'
 export class StoreModule {
     constructor(settings) {
 
         //Prototypes
         Object.prototype.str = function () {
             return JSON.stringify(this);
+        }
+
+        Object.prototype.imut = function () {
+            return JSON.parse(this.str());
+        }
+
+        Object.prototype.get = function (path) {
+            var obj = this;
+            var getter = new Function("obj", "return obj." + path + ";");
+            return getter(store);
+        }
+
+        Object.prototype.set = function (path, value) {
+            var obj = this;
+            var setter = new Function("obj", "value", "obj." + path + " = value;");
+            return setter(store, value);
         }
         //\
 
@@ -109,7 +123,7 @@ export class StoreModule {
             if (caller.name !== '~store') {
                 console.logGroup('Store => GET');
             }
-            let value = _.get(JSON.parse(store.str()), path);
+            let value = store.get(path).imut();
             if (value === undefined) {
                 return;
             }
@@ -140,7 +154,7 @@ export class StoreModule {
                     return;
                 }
             }
-            _.set(store, path, value);
+            store.set(path, value);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
@@ -178,7 +192,7 @@ export class StoreModule {
                 return;
             }
             array.push(value);
-            _.set(store, path, array);
+            store.set(path, array);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
@@ -209,7 +223,7 @@ export class StoreModule {
             let newArray = array.filter((item) => {
                 if (value) return item.str() != value.str();
             });
-            _.set(store, path, newArray);
+            store.set(path, newArray);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
