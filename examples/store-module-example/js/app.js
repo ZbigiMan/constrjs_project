@@ -1,9 +1,6 @@
 require("../styles/main.scss");
 //import 'mdn-polyfills/NodeList.forEach';
 
-import { StoreModule } from '@zbigiman/constrjs.store.module';
-//import { StoreModule } from '../../../source/constrjs.store.module/store.module';
-
 import { StoreService } from './store.service/store.service';
 
 import { BooksComponent } from './books.component/books.component';
