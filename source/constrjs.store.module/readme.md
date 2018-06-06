@@ -1,7 +1,6 @@
 ### ES6+ watchable store | constrjs project
 # Idea: 
 ### One watchable source of truth = controlled app flow  
-
 I know we have rxjs, observables, promises... but why do not simplify it? Just create immutable data object and watch changes of it?
 
 ## Introduction:
@@ -136,4 +135,13 @@ app.store.watch(app, 'searchTable.searchInput', (data) => {
 });
 ```
 
+## StoreModule Code Example:
+
+```
+$ git clone https://github.com/ZbigiMan/constrjs_project.git
+$ cd examples/store-module-example
+$ npm i
+$ npm start
+```
+### See more here: https://github.com/ZbigiMan/constrjs_project 
 #### Use at your own risk

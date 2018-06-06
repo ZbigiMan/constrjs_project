@@ -1,6 +1,6 @@
 {
   "name": "@zbigiman/constrjs.store.module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "ES6+ watchable store, constrjs project",
   "main": "store.module.js",
   "scripts": {
@@ -16,7 +16,7 @@
   ],
   "author": "Zbigi Man Zbigniew Stępniewski",
   "license": "ISC",
-  "dependencies": {    
+  "dependencies": {
   },
   "repository": {
     "type": "git",
