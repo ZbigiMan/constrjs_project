@@ -12,7 +12,7 @@
 
     <script>
         var url = document.location.href;
-        var routerModuleRoot
+        var routerModuleBase
         if (url.indexOf('localhost') != -1 || url.indexOf('127.0.0.1') != -1) {
             routerModuleBase = 'http://localhost:8080';
         } else {
@@ -76,9 +76,9 @@
 
     <footer class="footer container container--wide">
         <div class="container --padding-standard --text-center">
-            <h5>&copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC, use at your own risk</h5>
-            <img src="assets/img/constrjs-logo-white.svg" alt="constrjs logo" class="footer__logo-image">
+            <img src="assets/img/constrjs-logo-web.svg" alt="constrjs logo" class="footer__logo-image">
             <h5 class="footer__logo"><span class="logo">constrjs <sub>project</sub></span></h5>
+            <h5>&copy; Zbigi Man Zbigniew Stępniewski 2017, Licence ISC, use at your own risk</h5>
         </div>
     </footer>
     <script src="./compiled/app.bundle.js"></script>

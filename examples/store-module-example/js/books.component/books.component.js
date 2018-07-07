@@ -1,9 +1,9 @@
 export class BooksComponent {
 
-    constructor(appSettings) {
+    constructor(shared) {
 
         var self = this;
-        self.store = appSettings.store;
+        self.store = shared.store;
 
         // Render Books Store List:
         this.renderBooksList = (data) => {
@@ -13,7 +13,7 @@ export class BooksComponent {
                 books.forEach((book) => {
                     booksList += `<li>
                 <h1>${book.title}</h1>
-                <h3>${book.author}</h3>                    
+                <h3>${book.author}</h3>
                 <p>${book.description}</p>
                 <h4 class="--color-green">Price: ${book.price}</h4>
                 <button class="btn btn--secondary btn--blue btn__add-to-cart" type="button" data-book-id="${book.id}">Add to cart</button>
@@ -64,8 +64,7 @@ export class BooksComponent {
             //\
         }
         //\
-        
-        
+
         //Initial functions:
 
         // self.store.get(caller, table)
@@ -83,5 +82,4 @@ export class BooksComponent {
         self.store.watch(self, 'searchTable.searchResults', 'renderBooksList');
         //\
     }
-
 }

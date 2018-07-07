@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -138,10 +138,10 @@ body {
 The layout structure:
 
 .container
-    .content        
+    .content
         .row .row--flex
             .col
-                .content            
+                .content
 */
 .container {
   position: relative;
@@ -195,7 +195,7 @@ The layout structure:
     .col {
       width: 100%; } }
 
-/* 
+/*
 End of the layout structrue
 */
 /*
@@ -383,17 +383,17 @@ header {
 .main {
   color: #95918c;
   padding: 4.375em 0;
-  min-height: 80%; }
+  min-height: calc(100% - 215px); }
   .main .content {
     border-radius: 0.25em; }
 
 .footer {
   background: #01a797;
   color: #fff;
-  min-height: 15%; }
+  height: 215px; }
   .footer .footer__logo-image {
     margin-top: 1.25em;
-    width: 40px; }
+    width: 80px; }
 
 .main h1 {
   padding-bottom: 0.3125em; }

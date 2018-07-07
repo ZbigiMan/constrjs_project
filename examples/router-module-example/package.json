@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "live-server --host=localhost --ignore=node_modules --port=8080 --cors",
     "watch": "webpack -w",
-    "start": "concurrently \"npm run watch\" \"npm run serve\""
+    "start": "run-p watch serve"
   },
   "author": "Zbigi Man Zbigniew Stępniewski ",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "@zbigiman/constrjs.dom.module": "^1.0.4"
   },
   "dependencies": {
-    "mdn-polyfills": "^3.5.0"
+    "mdn-polyfills": "^3.5.0",
+    "npm-run-all": "^4.1.3"
   }
 }

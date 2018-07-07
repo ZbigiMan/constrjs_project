@@ -7,59 +7,65 @@ export class StoreModule {
         //Prototypes
         Object.prototype.str = function () {
             return JSON.stringify(this);
-        };
+        }
 
         Object.prototype.imut = function () {
-            return JSON.parse(this.str());
-        };
+            let _this;
+            try {
+                _this = JSON.parse(this.str());
+            } catch(e) {
+                _this = this;
+            }
+            return _this;
+        }
 
         Object.prototype.get = function (path) {
             var obj = this;
             var getter = new Function("obj", "return obj." + path + ";");
             return getter(store);
-        };
+        }
 
         Object.prototype.set = function (path, value) {
             var obj = this;
             var setter = new Function("obj", "value", "obj." + path + " = value;");
             return setter(store, value);
-        };
+        }
         //\
 
         //settings
         var storeModule = this,
             store = settings.store,
-            watched = [];
+            watched = new Array();
         //\
 
         //console
         if (settings.console != true) {
             console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = () => {
                 return false;
-            };
+            }
         } else {
             console.logStore = (log) => {
                 console.log(log);
-            };
+            }
             console.logTime = (log) => {
                 console.time(log);
-            };
+            }
             console.logTimeEnd = (log) => {
                 console.timeEnd(log);
-            };
+            }
             console.logGroup = (log) => {
                 console.group(log);
-            };
+            }
             console.logGroupEnd = () => {
                 console.groupEnd();
-            };
+            }
             console.logError = (log) => {
                 console.error(log);
-            };
+            }
         }
         //\
 
-        var onWatch = (caller, path, oldValue, newValue, method) => {
+        var onWatch = (caller, path, change, method) => {
             let parts = path.split('.');
             let table = parts[0];
             if (watched[table] !== undefined) {
@@ -68,46 +74,52 @@ export class StoreModule {
                     let watchedPath = parts[1],
                         watcherName = parts[0];
                     if (watched[table][fullpath] !== undefined) {
-                        let reaction = watched[table][fullpath].reaction,
-                            watcher = watched[table][fullpath].watcher,
+                        let reaction = watched[table][fullpath]['reaction'],
+                            watcher = watched[table][fullpath]['watcher'],
+                            value = storeModule.get({
+                                name: '~store'
+                            }, watchedPath),
                             logWatch = 'Store => Watch ',
                             logWatcher = 'Watcher: ' + watcherName,
                             logPath = 'Path: ' + watchedPath,
-                            logValue = 'Old value:',
-                            logChange = 'New value',
+                            logValue = 'Value:',
+                            logChange = 'Change',
                             logReaction = 'Reaction: ' + reaction,
                             logMethod = 'Method: ' + method,
                             _return = {
                                 'caller': caller,
                                 'path': path,
-                                'oldValue': oldValue,
-                                'newValue': newValue,
+                                'value': value,
+                                'change': change,
                                 'method': method
                             };
                         console.logGroup(logWatch);
                         console.logStore(logWatcher);
                         console.logStore(logPath);
                         console.logStore(logValue);
-                        console.logStore(oldValue);
+                        console.logStore(value);
                         console.logStore(logChange);
-                        console.logStore(newValue);
+                        console.logStore(change);
                         console.logStore(logMethod);
                         console.logStore(logReaction);
-                        console.logGroupEnd();
                         if (watcher[reaction] !== undefined) {
                             watcher[reaction].apply(watcher, [_return]);
                         } else if (typeof reaction == 'function') {
                             reaction.apply(watcher, [_return]);
                         }
+                        console.logGroupEnd();
                     }
                 });
+                console.logGroupEnd();
+            } else {
+                console.logGroupEnd();
             }
-        };
+        }
 
         //GET ALL STORE
         this.getAll = () => {
             return JSON.parse(store.str());
-        };
+        }
 
         //GET
         this.get = (caller, path) => {
@@ -129,7 +141,7 @@ export class StoreModule {
                 console.logGroupEnd();
             }
             return value;
-        };
+        }
 
         //SET
         this.set = (caller, path, value) => {
@@ -137,11 +149,11 @@ export class StoreModule {
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            let oldValue = this.get({
+            let prevValue = this.get({
                 name: '~store'
             }, path);
-            if (oldValue) {
-                if (oldValue.str() == value.str()) {
+            if (prevValue) {
+                if (prevValue.str() == value.str()) {
                     console.logStore(logcaller);
                     console.logStore('Skipped: nothig changed');
                     console.logGroupEnd();
@@ -154,8 +166,8 @@ export class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, oldValue, value, 'set');
-        };
+            onWatch(caller, path, value, 'set');
+        }
 
         //PUSH
         this.push = (caller, path, value) => {
@@ -166,7 +178,7 @@ export class StoreModule {
             let array = this.get({
                 name: '~store'
             }, path);
-            let oldValue = array;
+            let prevValue = array;
             if (Array.isArray(array) === false) {
                 console.logStore(logcaller);
                 console.logStore(logPath);
@@ -176,7 +188,7 @@ export class StoreModule {
                 console.logGroupEnd();
                 return;
             }
-            if (oldValue.str() == value.str()) {
+            if (prevValue.str() == value.str()) {
                 console.logStore(logcaller);
                 console.logStore(logPath);
                 console.logStore('Value:');
@@ -192,7 +204,7 @@ export class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, oldValue, value, 'push');
+            onWatch(caller, path, value, 'push');
         };
         //\
 
@@ -223,8 +235,8 @@ export class StoreModule {
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
-            onWatch(caller, path, oldValue, value, 'remove');
-        };
+            onWatch(caller, path, value, 'remove');
+        }
         //\
 
         //WATCH
@@ -246,10 +258,10 @@ export class StoreModule {
                     watched[table][fullpath] = {
                         reaction: reaction,
                         watcher: watcher
-                    };
+                    }
                 }
             });
-        };
+        }
         //\
     }
 }

@@ -2,11 +2,11 @@
     border: 0 none;
     outline: none;
     border-radius: em(3);
-    padding: em(10) em(20);    
+    padding: em(10) em(20);
     font-weight: $font-weight-bold;
     text-transform: uppercase;
     min-width: 100px;
-    text-align: center;    
+    text-align: center;
     cursor: pointer;
     &:hover {
         opacity: 0.8;
@@ -14,12 +14,12 @@
     transition: all 0.4s ease;
 }
 
-.btn--primary {     
-    font-size: em($font-size-medium);    
+.btn--primary {
+    font-size: em($font-size-medium);
 }
 
-.btn--secondary {    
-    font-size: em($font-size-smaller);     
+.btn--secondary {
+    font-size: em($font-size-smaller);
 }
 
 .btn--wide {
@@ -45,7 +45,7 @@
 .btn--outline {
     border: 1px solid $color-almost-white;
     color: $color-gray;
-    background: transparent;    
+    background: transparent;
 }
 .btn--outline-blue{
     border-color: $color-blue;
