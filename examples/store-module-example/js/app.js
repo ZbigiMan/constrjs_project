@@ -14,20 +14,20 @@ class App {
         var app = this;
         //\
 
-        // Store
-        var storeService = new StoreService();    
+        // Store service
+        var storeService = new StoreService();
         //\
 
-        //app settings
-        app.settings = {
+        //app shared
+        app.shared = {
             store: storeService.store
         }
         //\
 
         // Components
-        app.booksComponent = new BooksComponent(app.settings);
-        app.cartComponent = new CartComponent(app.settings);
-        app.searchComponent = new SearchComponent(app.settings);
+        app.booksComponent = new BooksComponent(app.shared);
+        app.cartComponent = new CartComponent(app.shared);
+        app.searchComponent = new SearchComponent(app.shared);
         //\
 
     }

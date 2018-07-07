@@ -1,12 +1,14 @@
 export class CartComponent {
 
-    constructor(appSettings) {
+    constructor(shared) {
 
-        var self = this;        
-        self.store = appSettings.store;
+        var self = this;
+        self.store = shared.store;
 
         // Render Cart List:
-        self.renderCartList = (data) => {           
+        self.renderCartList = (data) => {
+
+            console.log(data);
 
             let books = data.value;
             let booksList = '';
@@ -14,7 +16,7 @@ export class CartComponent {
                 books.forEach((book) => {
                     booksList += `<li>
                         <h1>${book.title}</h1>
-                        <h2>${book.author}</h2>                   
+                        <h2>${book.author}</h2>
                         <h4 class="--color-green">Price: ${book.price}</h4>
                         <button class="btn btn--secondary btn--outline btn--outline-red btn__remove-from-cart" type="button" data-book-id="${book.id}">Remove</button>
                         <div class="hr"></div>
@@ -67,7 +69,7 @@ export class CartComponent {
         //\
 
          //Initial functions
-      
+
         let cartTable = self.store.get(self, 'cartTable');
         self.renderCartList({
             value: cartTable
@@ -77,9 +79,9 @@ export class CartComponent {
 
         // *** StoreModule watch ***
         // self.store.watch(caller, table , function*)
-        // *function name: string || function() 
+        // *function name: string || function()
         self.store.watch(self, 'cartTable', 'renderCartList');
-        //\   
+        //\
 
 
     }

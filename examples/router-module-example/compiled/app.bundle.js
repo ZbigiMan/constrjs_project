@@ -264,41 +264,42 @@ var App = function App() {
     _classCallCheck(this, App);
 
     var app = this;
-    //Init Router        
+
+    // Init Router
     app.router = new _constrjsRouter.RouterModule({
         base: routerModuleBase,
         error404: function error404() {
             app.router.navigate('');
         },
-        SPAEmulation: true
+        SPAEmulation: true // Adds /# to base url
     });
-    //\Init Router
+    //\ Init Router
 
     app.mainRouterOutput = document.querySelector('#main-router-output');
 
-    //Add routes
+    // Add routes
     app.router.add([{
         '': function _() {
             app.router.navigate('/home');
         }
     }, {
         '/home': function home() {
-            app.mainRouterOutput.innerHTML = '<h1>Home</h1>                    \n                    <p>\n                    Duis adipisicing velit velit laboris consequat quis sunt ullamco qui nulla cupidatat fugiat officia minim. Proident aute sint Lorem fugiat dolore consequat excepteur duis elit laboris nostrud ad irure. Dolor deserunt esse cillum pariatur fugiat culpa commodo in. Laborum deserunt occaecat ad ipsum anim. Velit amet minim ad sunt aliqua laboris sunt aute.\n                    </p>';
+            app.mainRouterOutput.innerHTML = '<h1>Home</h1>\n                    <p>\n                    Duis adipisicing velit velit laboris consequat quis sunt ullamco qui nulla cupidatat fugiat officia minim. Proident aute sint Lorem fugiat dolore consequat excepteur duis elit laboris nostrud ad irure. Dolor deserunt esse cillum pariatur fugiat culpa commodo in. Laborum deserunt occaecat ad ipsum anim. Velit amet minim ad sunt aliqua laboris sunt aute.\n                    </p>';
         }
     }, {
         '/about': function about() {
-            app.mainRouterOutput.innerHTML = '<h1>About</h1>                    \n                    <p>\n                    In sint sunt amet cillum in dolore est. Id adipisicing mollit cillum duis eiusmod aute. Deserunt sit consequat ad dolor minim sit enim fugiat cupidatat proident ea adipisicing ea occaecat.\n                    </p>';
+            app.mainRouterOutput.innerHTML = '<h1>About</h1>\n                    <p>\n                    In sint sunt amet cillum in dolore est. Id adipisicing mollit cillum duis eiusmod aute. Deserunt sit consequat ad dolor minim sit enim fugiat cupidatat proident ea adipisicing ea occaecat.\n                    </p>';
         }
     }, {
         '/about/:option': function aboutOption(data) {
-            app.mainRouterOutput.innerHTML = '<h1>About ' + data.option + '</h1>                    \n                    <p>\n                    Velit id aliqua labore nisi ipsum amet. Aute laboris in ut velit cupidatat nisi culpa duis adipisicing fugiat. Ex nulla ea ipsum consequat dolor pariatur. Ullamco eiusmod quis sunt ut duis qui. Ut anim excepteur amet quis sit laboris minim quis. Do minim id dolor voluptate sint mollit irure minim consequat.\n                    </p>';
+            app.mainRouterOutput.innerHTML = '<h1>About ' + data.option + '</h1>\n                    <p>\n                    Velit id aliqua labore nisi ipsum amet. Aute laboris in ut velit cupidatat nisi culpa duis adipisicing fugiat. Ex nulla ea ipsum consequat dolor pariatur. Ullamco eiusmod quis sunt ut duis qui. Ut anim excepteur amet quis sit laboris minim quis. Do minim id dolor voluptate sint mollit irure minim consequat.\n                    </p>';
         }
     }, {
         '/option/:id': function optionId(data) {
-            app.mainRouterOutput.innerHTML = '<h1>Option ' + data.id + '</h1>                    \n                    <p>\n                    Mollit excepteur voluptate aute velit dolor ad. Proident labore reprehenderit sit aute. Officia cillum aute veniam proident irure aliquip elit elit quis ad excepteur do et nisi.\n                    </p>';
+            app.mainRouterOutput.innerHTML = '<h1>Option ' + data.id + '</h1>\n                    <p>\n                    Mollit excepteur voluptate aute velit dolor ad. Proident labore reprehenderit sit aute. Officia cillum aute veniam proident irure aliquip elit elit quis ad excepteur do et nisi.\n                    </p>';
         }
     }]);
-    //\Add routes        
+    //\Add routes
 };
 
 new App();

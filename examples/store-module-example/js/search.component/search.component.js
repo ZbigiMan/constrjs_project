@@ -2,10 +2,10 @@ import { DOMModule } from '@zbigiman/constrjs.dom.module';
 
 export class SearchComponent {
 
-    constructor(appSettings) {
+    constructor(shared) {
 
         var self = this;
-        self.store = appSettings.store;
+        self.store = shared.store;
 
         self.DOMModule = new DOMModule();
 
@@ -67,7 +67,7 @@ export class SearchComponent {
             //\
 
         });
-        //\ 
+        //\
 
     }
 }

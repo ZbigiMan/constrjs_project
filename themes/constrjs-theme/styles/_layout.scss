@@ -13,10 +13,10 @@ body {
 The layout structure:
 
 .container
-    .content        
+    .content
         .row .row--flex
             .col
-                .content            
+                .content
 */
 
 //Continer
@@ -52,6 +52,7 @@ The layout structure:
 }
 
 //\
+
 //Content
 .content {
     position: relative;
@@ -66,6 +67,7 @@ The layout structure:
 }
 
 //\
+
 //Row
 .row {
     position: relative;
@@ -78,6 +80,7 @@ The layout structure:
 }
 
 //\
+
 //Column
 .col {
     box-sizing: border-box;
@@ -88,10 +91,9 @@ The layout structure:
 
 //\
 
-/* 
+/*
 End of the layout structrue
 */
-
 
 /*
 The layout elements:

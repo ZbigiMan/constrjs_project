@@ -68,7 +68,7 @@ header {
                 ul {
                     .navbar-item {
                         a {
-                            border: 0 none; 
+                            border: 0 none;
                             border-top: 1px solid $color-darken-gray;
                         }
                     }
@@ -104,7 +104,7 @@ header {
 .main {
     color: $color-gray;
     padding: em(70) 0;
-    min-height: 80%;
+    min-height: calc(100% - 215px);
     .content {
         border-radius: em(4);
     }
@@ -113,9 +113,9 @@ header {
 .footer {
     background: $color-green;
     color: $color-white;
-    min-height: 15%;
+    height: 215px;
     .footer__logo-image {
         margin-top: em(20);
-        width: 40px;
+        width: 80px;
     }
 }
