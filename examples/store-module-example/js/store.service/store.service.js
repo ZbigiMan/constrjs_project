@@ -31,10 +31,10 @@ export class StoreService{
                     description: 'About Some Else Book',
                     price: '$0.21'
                 }],
-                cartTable: new Array(),
+                cartTable: [],
                 searchTable: {
                     searchInput: String,
-                    searchResults: new Array()
+                    searchResults: []
                 }
             },
             console: true// show/hide StoreModule logs

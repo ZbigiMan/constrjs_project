@@ -5,8 +5,8 @@ export class BooksComponent {
         var self = this;
         self.store = shared.store;
 
-        // Render Books Store List:
-        this.renderBooksList = (data) => {
+        // Render Books List
+        self.renderBooksList = (data) => {
             let books = data.value;
             let booksList = ''
             if (books.length > 0) {
@@ -26,60 +26,37 @@ export class BooksComponent {
             let BooksOutput = document.querySelector('.books-store-output');
             BooksOutput.innerHTML = booksList;
 
-            // "Add to Cart" button event delegation:
             BooksOutput.addEventListener('click', self.btnAddToCartClick);
-            //\
-        }
-        //\
-
-        // "Add to Cart" button event delegation:
+            
+        };
+        
         self.btnAddToCartClick = (event) => {
             if (event.target.className.indexOf('btn__add-to-cart') != -1) {
                 let bookId = event.target.getAttribute('data-book-id');
                 self.addToCart(bookId);
             }
-        }
-        //\
-
-        // Add to Cart Function:
+        };
+        
+        // Add to Cart
         self.addToCart = (bookId) => {
 
-            // *** StoreModule get ***
-            // store.get(caller, table)
             let books = self.store.get(self, 'booksTable');
-            //\
 
             let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
 
-            // *** StoreModule push ***
-            // store.push(caller, table, value)
-            self.store.push(self, 'cartTable', selectedBook);
-            //\
-
-            // *** StoreModule remove ***
-            // store.remove(caller, table, value)
-            self.store.remove(self, 'booksTable', selectedBook);
-            //\
-        }
-        //\
-
-        //Initial functions:
-
-        // self.store.get(caller, table)
+            self.store.push(self, 'cartTable', selectedBook);            
+            self.store.remove(self, 'booksTable', selectedBook);           
+        };
+      
+        //Initial functions    
         let booksTable = self.store.get(self, 'booksTable');
         self.renderBooksList({
             value: booksTable
         });
-        //\
-
-        // Watching for changes:
-
-        // self.store.watch(caller, table , function*)
-        // *function name: string || function(data){}
+        
         self.store.watch(self, 'booksTable', 'renderBooksList');
-        self.store.watch(self, 'searchTable.searchResults', 'renderBooksList');
-        //\
+        self.store.watch(self, 'searchTable.searchResults', 'renderBooksList');        
     }
 }

@@ -9,10 +9,11 @@ export class SearchComponent {
 
         self.DOMModule = new DOMModule();
 
-        //Show Search Bar:
+        // Show Search Bar:
         self.toggleVal = (val) => {
             return !val;
-        }
+        };
+
         var showSearch = false;
         document.querySelector('#search').addEventListener('click', (event) => {
             showSearch = self.toggleVal(showSearch);
@@ -27,32 +28,20 @@ export class SearchComponent {
                 self.DOMModule.removeClass(document.body, 'search-bar--visible');
             }
         });
-        //\
+       
+        // Search function:
 
-        //Search function:
-
-        //Search Input event listener:
-        document.querySelector('#searchInput').addEventListener('keyup', (event) => {
-
-            // *** StoreModule set ***
-            // self.store.set(caller, table , value)
-            self.store.set(self, 'searchTable.searchInput', event.target.value);
-            //\
-
+        // Search Input event listener:
+        document.querySelector('#searchInput').addEventListener('keyup', (event) => {          
+            self.store.set(self, 'searchTable.searchInput', event.target.value);          
         });
 
-        //Watching Search Input:
-
-        // *** StoreModule watch ***
-        // self.store.watch(caller, table , function*)
-        // *function name: string || function(data) 
+        // Watching Search Input:       
         self.store.watch(self, 'searchTable.searchInput', (data) => {
-            let searchQuery = data.value;
-            // *** StoreModule get ***
-            // self.store.get(caller, table)
+            
+            let searchQuery = data.value;          
             let books = self.store.get(self, 'booksTable');
-            //\
-
+            
             let searchResults = books.filter((book) => {
                 if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
                     return book.title;
@@ -61,13 +50,9 @@ export class SearchComponent {
                 searchResults = books;
             }
 
-            // *** StoreModule set ***
-            // self.store.set(caller, table , value)
-            self.store.set(self, 'searchTable.searchResults', searchResults);
-            //\
+            self.store.set(self, 'searchTable.searchResults', searchResults);           
 
-        });
-        //\
+        });    
 
     }
 }

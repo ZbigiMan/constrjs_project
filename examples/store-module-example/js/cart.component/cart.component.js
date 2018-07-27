@@ -5,10 +5,8 @@ export class CartComponent {
         var self = this;
         self.store = shared.store;
 
-        // Render Cart List:
+        // Render Cart List
         self.renderCartList = (data) => {
-
-            console.log(data);
 
             let books = data.value;
             let booksList = '';
@@ -29,60 +27,39 @@ export class CartComponent {
             let cartOutput = document.querySelector('.cart-output');
             cartOutput.innerHTML = booksList;
 
-            // "Remove from Cart" button event delegation:
-            cartOutput.addEventListener('click', self.btnRemoveFromCartClick);
-            //\
-        }
-        //\
-
-        // "Remove from Cart" button event delegation:
+            cartOutput.addEventListener('click', self.btnRemoveFromCartClick);            
+        };
+        
+        // "Remove from Cart" button event delegation
         self.btnRemoveFromCartClick = (event) => {
             if (event.target.className.indexOf('btn__remove-from-cart') != -1) {
                 let bookId = event.target.getAttribute('data-book-id');
                 self.removeFromCart(bookId);
             }
-        }
-        //\
+        };   
 
-        //Remove from Cart Function:
+        // Remove from Cart Function
         self.removeFromCart = (bookId) => {
 
-            // *** StoreModule get ***
-            // self.store.get(caller, table)
             let books = self.store.get(self, 'cartTable');
-            //\
-
+          
             let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
-
-            // *** StoreModule remove ***
-            // self.store.remove(caller, table, value)
-            self.store.remove(self, 'cartTable', selectedBook);
-            //\
-
-            // *** StoreModule push ***
-            // self.store.push(caller, table, value)
+           
+            self.store.remove(self, 'cartTable', selectedBook);           
             self.store.push(self, 'booksTable', selectedBook);
-            //\
-        }
-        //\
-
+            
+        };
+       
          //Initial functions
 
         let cartTable = self.store.get(self, 'cartTable');
         self.renderCartList({
             value: cartTable
         });
-
-        // Watching for changes
-
-        // *** StoreModule watch ***
-        // self.store.watch(caller, table , function*)
-        // *function name: string || function()
-        self.store.watch(self, 'cartTable', 'renderCartList');
-        //\
-
+       
+        self.store.watch(self, 'cartTable', 'renderCartList');   
 
     }
 }
