@@ -5,27 +5,27 @@ export class StoreModule {
     constructor(settings) {
 
         //Prototypes
-        Object.prototype.str = function () {
+        Object.prototype.Str = function () {
             return JSON.stringify(this);
         }
 
-        Object.prototype.imut = function () {
+        Object.prototype.Imut = function () {
             let _this;
             try {
-                _this = JSON.parse(this.str());
+                _this = JSON.parse(this.Str());
             } catch(e) {
                 _this = this;
             }
             return _this;
         }
 
-        Object.prototype.get = function (path) {
+        Object.prototype.Get = function (path) {
             var obj = this;
             var getter = new Function("obj", "return obj." + path + ";");
             return getter(store);
         }
 
-        Object.prototype.set = function (path, value) {
+        Object.prototype.Set = function (path, value) {
             var obj = this;
             var setter = new Function("obj", "value", "obj." + path + " = value;");
             return setter(store, value);
@@ -35,33 +35,33 @@ export class StoreModule {
         //settings
         var storeModule = this,
             store = settings.store,
-            watched = new Array();
+            watched = [];
         //\
 
         //console
         if (settings.console != true) {
             console.logStore = console.logTime = console.logTimeEnd = console.logGroup = console.logGroupEnd = console.logError = () => {
                 return false;
-            }
+            };
         } else {
             console.logStore = (log) => {
                 console.log(log);
-            }
+            };
             console.logTime = (log) => {
                 console.time(log);
-            }
+            };
             console.logTimeEnd = (log) => {
                 console.timeEnd(log);
-            }
+            };
             console.logGroup = (log) => {
                 console.group(log);
-            }
+            };
             console.logGroupEnd = () => {
                 console.groupEnd();
-            }
+            };
             console.logError = (log) => {
                 console.error(log);
-            }
+            };
         }
         //\
 
@@ -76,7 +76,7 @@ export class StoreModule {
                     if (watched[table][fullpath] !== undefined) {
                         let reaction = watched[table][fullpath]['reaction'],
                             watcher = watched[table][fullpath]['watcher'],
-                            value = storeModule.get({
+                            value = storeModule.Get({
                                 name: '~store'
                             }, watchedPath),
                             logWatch = 'Store => Watch ',
@@ -114,22 +114,22 @@ export class StoreModule {
             } else {
                 console.logGroupEnd();
             }
-        }
+        };
 
         //GET ALL STORE
-        this.getAll = () => {
-            return JSON.parse(store.str());
+        this.GetAll = () => {
+            return JSON.parse(store.Str());
         }
 
         //GET
-        this.get = (caller, path) => {
+        this.Get = (caller, path) => {
             let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             if (caller.name !== '~store') {
                 console.logGroup('Store => GET');
             }
-            let value = store.get(path).imut();
+            let value = store.Get(path).Imut();
             if (value === undefined) {
                 return;
             }
@@ -141,41 +141,41 @@ export class StoreModule {
                 console.logGroupEnd();
             }
             return value;
-        }
+        };
 
         //SET
-        this.set = (caller, path, value) => {
+        this.Set = (caller, path, value) => {
             let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => SET');
-            let prevValue = this.get({
+            let prevValue = this.Get({
                 name: '~store'
             }, path);
             if (prevValue) {
-                if (prevValue.str() == value.str()) {
+                if (prevValue.Str() == value.Str()) {
                     console.logStore(logcaller);
                     console.logStore('Skipped: nothig changed');
                     console.logGroupEnd();
                     return;
                 }
             }
-            store.set(path, value);
+            store.Set(path, value);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
             onWatch(caller, path, value, 'set');
-        }
+        };
 
         //PUSH
-        this.push = (caller, path, value) => {
+        this.Push = (caller, path, value) => {
             let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => PUSH');
-            let array = this.get({
+            let array = this.Get({
                 name: '~store'
             }, path);
             let prevValue = array;
@@ -188,7 +188,7 @@ export class StoreModule {
                 console.logGroupEnd();
                 return;
             }
-            if (prevValue.str() == value.str()) {
+            if (prevValue.Str() == value.Str()) {
                 console.logStore(logcaller);
                 console.logStore(logPath);
                 console.logStore('Value:');
@@ -198,7 +198,7 @@ export class StoreModule {
                 return;
             }
             array.push(value);
-            store.set(path, array);
+            store.Set(path, array);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
@@ -209,12 +209,12 @@ export class StoreModule {
         //\
 
         //REMOVE
-        this.remove = (caller, path, value) => {
+        this.Remove = (caller, path, value) => {
             let callerName = caller.name || caller.constructor.name,
                 logPath = 'Path: store.' + path;
             let logcaller = 'Caller: ' + callerName;
             console.logGroup('Store => REMOVE');
-            let array = this.get({
+            let array = this.Get({
                 name: '~store'
             }, path);
             if (Array.isArray(array) === false) {
@@ -227,20 +227,20 @@ export class StoreModule {
                 return;
             }
             let newArray = array.filter((item) => {
-                if (value) return item.str() != value.str();
+                if (value) return item.Str() != value.Str();
             });
-            store.set(path, newArray);
+            store.Set(path, newArray);
             console.logStore(logcaller);
             console.logStore(logPath);
             console.logStore('Value:');
             console.logStore(value);
             console.logGroupEnd();
             onWatch(caller, path, value, 'remove');
-        }
+        };
         //\
 
         //WATCH
-        this.watch = (watcher, path, reaction) => {
+        this.Watch = (watcher, path, reaction) => {
             let watcherName = watcher.name || watcher.constructor.name,
                 paths = path;
             if (Array.isArray(path) === false) {
@@ -261,7 +261,7 @@ export class StoreModule {
                     }
                 }
             });
-        }
+        };
         //\
     }
 }

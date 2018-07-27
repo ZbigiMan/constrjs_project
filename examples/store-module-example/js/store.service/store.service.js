@@ -1,5 +1,5 @@
-import { StoreModule } from '@zbigiman/constrjs.store.module';
-// import { StoreModule } from '../../../../source/constrjs.store.module/store.module';
+// import { StoreModule } from '@zbigiman/constrjs.store.module';
+import { StoreModule } from '../../../../source/constrjs.store.module/store.module';
 
 
 export class StoreService{

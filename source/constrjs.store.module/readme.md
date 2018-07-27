@@ -85,37 +85,37 @@ class App {
 
 ## Methods:
 
-### get 
+### Get 
 
 ```javascript
-// app.store.get(caller, table)
-let books = app.store.get(app, 'booksTable');
+// app.store.Get(caller, table)
+let books = app.store.Get(app, 'booksTable');
 ```
 
-### set
+### Set
 ```javascript
-// app.store.set(caller, table , value)
-app.store.set(app, 'searchTable.searchInput', event.target.value);
+// app.store.Set(caller, table , value)
+app.store.Set(app, 'searchTable.searchInput', event.target.value);
 ```
 
-### push
+### Push
 ```javascript
- // app.store.push(caller, table, value)
-app.store.push(app, 'cartTable', selectedBook);
+ // app.store.Push(caller, table, value)
+app.store.Push(app, 'cartTable', selectedBook);
 ```
 
-### remove
+### Remove
 ```javascript
-// app.store.remove(caller, table, value)
-app.store.remove(app, 'cartTable', selectedBook);
+// app.store.Remove(caller, table, value)
+app.store.Remove(app, 'cartTable', selectedBook);
 ```
 
-### watch
+### Watch
 #### example 1:
 ```javascript
-// app.store.watch(caller, table , function*)
+// app.store.Watch(caller, table , function*)
 // *function name: string || function(data){ ... }
-app.store.watch(app, 'booksTable', 'renderBooksStoreList');
+app.store.Watch(app, 'booksTable', 'renderBooksStoreList');
 app.renderBooksStoreList = (data) => {
     let books = data.value;
     /*
@@ -125,9 +125,9 @@ app.renderBooksStoreList = (data) => {
 ```
 #### example 2:
 ```javascript
-// app.store.watch(caller, table , function*)
+// app.store.Watch(caller, table , function*)
 // *function name: string || function(data){ ... }
-app.store.watch(app, 'searchTable.searchInput', (data) => {
+app.store.Watch(app, 'searchTable.searchInput', (data) => {
     let searchQuery = data.value;
     /*
     ...

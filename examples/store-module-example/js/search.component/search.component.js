@@ -33,14 +33,14 @@ export class SearchComponent {
 
         // Search Input event listener:
         document.querySelector('#searchInput').addEventListener('keyup', (event) => {          
-            self.store.set(self, 'searchTable.searchInput', event.target.value);          
+            self.store.Set(self, 'searchTable.searchInput', event.target.value);          
         });
 
         // Watching Search Input:       
-        self.store.watch(self, 'searchTable.searchInput', (data) => {
+        self.store.Watch(self, 'searchTable.searchInput', (data) => {
             
             let searchQuery = data.value;          
-            let books = self.store.get(self, 'booksTable');
+            let books = self.store.Get(self, 'booksTable');
             
             let searchResults = books.filter((book) => {
                 if (book.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
@@ -50,7 +50,7 @@ export class SearchComponent {
                 searchResults = books;
             }
 
-            self.store.set(self, 'searchTable.searchResults', searchResults);           
+            self.store.Set(self, 'searchTable.searchResults', searchResults);           
 
         });    
 

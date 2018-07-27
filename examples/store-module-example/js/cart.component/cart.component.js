@@ -41,25 +41,25 @@ export class CartComponent {
         // Remove from Cart Function
         self.removeFromCart = (bookId) => {
 
-            let books = self.store.get(self, 'cartTable');
+            let books = self.store.Get(self, 'cartTable');
           
             let selectedBook = books.filter((book) => {
                 return book.id == bookId;
             })[0];
            
-            self.store.remove(self, 'cartTable', selectedBook);           
-            self.store.push(self, 'booksTable', selectedBook);
+            self.store.Remove(self, 'cartTable', selectedBook);           
+            self.store.Push(self, 'booksTable', selectedBook);
             
         };
        
          //Initial functions
 
-        let cartTable = self.store.get(self, 'cartTable');
+        let cartTable = self.store.Get(self, 'cartTable');
         self.renderCartList({
             value: cartTable
         });
        
-        self.store.watch(self, 'cartTable', 'renderCartList');   
+        self.store.Watch(self, 'cartTable', 'renderCartList');   
 
     }
 }
